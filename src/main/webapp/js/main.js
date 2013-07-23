@@ -15,8 +15,6 @@ require.config({
         backbone_relational : '../vendor/backbone-relational/backbone-relational',
         backbone_bootstrap_modal : '../vendor/backbone.bootstrap-modal/src/backbone.bootstrap-modal',
 
-        less : '../vendor/less.js/dist/less-1.4.1',
-
         // for drag/drop
         jquery_ui : '../vendor/jquery-ui/ui/jquery-ui',
 

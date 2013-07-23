@@ -4,6 +4,7 @@ ARG1=$1
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BASE_DIR=$SCRIPT_DIR/..
 ASSETS_DIR=$BASE_DIR/assets
+VENDOR_DIR=$BASE_DIR/src/main/webapp/vendor
 
 DOWNLOAD_CMD="curl -L -J -O"
 
@@ -47,6 +48,17 @@ download_FUSEKI() {
     info_download sesame $FUSEKI_VERSION $FUSEKI_URL $ASSETS_DIR
     $DOWNLOAD_CMD $FUSEKI_URL
 }
+download_BOWER_DEPS() {
+    cd $ASSETS_DIR
+    BOWER_DEPS_REPO="https://github.com/kba/dm2e-gui-bower-deps.git"
+    info_download sesame "latest" $BOWER_DEPS_REPO $ASSETS_DIR
+    rm -fr $ASSETS_DIR/bower-deps
+    rm -fr $VENDOR_DIR
+    git clone --depth 1 $BOWER_DEPS_REPO $ASSETS_DIR/bower-deps
+    mkdir -p $VENDOR_DIR
+    cp -r $ASSETS_DIR/bower-deps/vendor/* $VENDOR_DIR
+    cp $ASSETS_DIR/.gitignore $VENDOR_DIR
+}
 
 if [ "$ARG1" = 'josso' ];then
     download_JOSSO
@@ -56,10 +68,13 @@ elif [ "$ARG1" = 'tomcat' ];then
     # download_SESAME
 elif [ "$ARG1" = 'fuseki' ];then
     download_FUSEKI
+elif [ "$ARG1" = 'bower-deps' ];then
+    download_BOWER_DEPS
 elif [ "$ARG1" = 'all' ];then
     download_TOMCAT
     download_JOSSO
     download_FUSEKI
+    download_BOWER_DEPS
     # download_SESAME
 else
     echo "Usage: "

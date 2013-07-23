@@ -8,7 +8,6 @@ define([
 	'text!templates/layout.html',
 
 	// these are just loaded for use in other views/models/whatever
-    'less',
 	'bootstrap',
 	'jquery_ui',
 	'backbone_bootstrap_modal',
