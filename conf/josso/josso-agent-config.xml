@@ -65,14 +65,7 @@
 
                 <agent:partner-apps>
 
-					<!--dm2ePartnerapp-->
-                    <agent:partner-app id="dm2eUserManager" context="/userManager" defaultResource="/index.jsp"/>
-
-                    <!-- Simple definition of a partner application -->
-					<!--
-                    <agent:partner-app id="MySimplePartnerApp" context="/simple-partnerapp"/>
-                    -->
-                    <agent:partner-app id="remoteApp" context="/partnerapp" defaultResource="/index.jsp">
+                    <agent:partner-app id="omnom-gui" context="/" defaultResource="/index.html">
 
                         <!-- The vhost is an ooptional feature:
                         Specify the Host/Virtual Host where this application is runnig
