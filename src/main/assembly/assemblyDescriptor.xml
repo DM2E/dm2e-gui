@@ -1,0 +1,34 @@
+<assembly>
+    <id>deploy</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <baseDirectory>${project.build.finalName}-deploy</baseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>${tomcat.dir.build}</directory>
+            <outputDirectory>/tomcat</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${fuseki.dir.build}</directory>
+            <outputDirectory>/fuseki</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${fuseki.dir.data}</directory>
+            <outputDirectory>/fuseki-data</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/bin</directory>
+            <outputDirectory>/bin</outputDirectory>
+        </fileSet>
+    </fileSets>
+    <!-- <dependencySets> -->
+        <!-- <dependencySet> -->
+            <!-- <outputDirectory>/webapps/omnom</outputDirectory> -->
+            <!-- <includes> -->
+                <!-- <include>${project.groupId}:${project.artifactId}</include> -->
+            <!-- </includes> -->
+            <!-- <unpack>true</unpack> -->
+        <!-- </dependencySet> -->
+    <!-- </dependencySets> -->
+</assembly>

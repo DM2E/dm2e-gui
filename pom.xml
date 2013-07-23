@@ -1,0 +1,710 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>eu.dm2e.ws</groupId>
+  <artifactId>dm2e-gui</artifactId>
+  <packaging>war</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>dm2e-gui Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <jersey-version>2.0-m12-1</jersey-version>
+    <exec.mainClass.override>eu.dm2e.ws.gui.GuiConsole</exec.mainClass.override>
+    <dir.assets>${basedir}/assets</dir.assets>
+
+    <version.sesame>2.7.3</version.sesame>
+
+    <version.fuseki>0.2.7</version.fuseki>
+    <fuseki.archive.file>${project.build.directory}/jena-fuseki-${version.fuseki}.zip</fuseki.archive.file>
+    <fuseki.dir.build>${project.build.directory}/fuseki-${version.fuseki}</fuseki.dir.build>
+    <fuseki.dir.data>${project.build.directory}/fuseki-data</fuseki.dir.data>
+
+    <version.tomcat>7.0.42</version.tomcat>
+    <tomcat.dir.conf>${basedir}/conf/tomcat7</tomcat.dir.conf>
+    <tomcat.archive.file>${project.build.directory}/apache-tomcat-${version.tomcat}.zip</tomcat.archive.file>
+    <tomcat.dir.build>${project.build.directory}/tomcat</tomcat.dir.build>
+
+    <version.josso>1.8.7</version.josso>
+    <josso.dir.conf>${basedir}/conf/josso</josso.dir.conf>
+    <josso.archive.file>${project.build.directory}/josso-${version.josso}.zip</josso.archive.file>
+    <josso.dir.build>${project.build.directory}/josso-${version.josso}</josso.dir.build>
+
+  </properties>
+  <build>
+    <finalName>dm2e-gui</finalName>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+        <configuration>
+          <packagingExcludes>**/.git</packagingExcludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.2.1.jbossorg-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <mainClass>${exec.mainClass.override}</mainClass>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.6</version>
+
+        <executions>
+          <execution>
+            <id>patch-tomcat-with-josso</id>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+
+            <configuration>
+              <target>
+
+                <echo message="Copying bin/ dir" />
+                <copy todir="${project.build.directory}/bin">
+                  <fileset dir="${basedir}/src/main/bin">
+                    <include name="**" />
+                  </fileset>
+                </copy>
+
+                <echo message="Unpacking Fuseki" />
+                <unzip src="${dir.assets}/jena-fuseki-${version.fuseki}-distribution.zip" dest="${project.build.directory}" />
+                <move file="${project.build.directory}/jena-fuseki-${version.fuseki}" tofile="${fuseki.dir.build}" />
+
+                <echo message="Create Fuseki TDB datadir" />
+                <mkdir dir="${fuseki.dir.data}" />
+
+                <echo message="Unpacking JOSSO ${version.josso}" />
+                <unzip src="${dir.assets}/josso-${version.josso}.zip" dest="${project.build.directory}" />
+
+                <echo message="Re-packaging ${tomcat.archive.file}..." />
+                <unzip src="${dir.assets}/apache-tomcat-${version.tomcat}.zip" dest="${project.build.directory}" />
+                <move file="${project.build.directory}/apache-tomcat-${version.tomcat}" tofile="${tomcat.dir.build}" />
+
+                <!-- Remove the default webapps -->
+                <delete dir="${tomcat.dir.build}/webapps/docs" />
+                <delete dir="${tomcat.dir.build}/webapps/manager" />
+                <delete dir="${tomcat.dir.build}/webapps/host-manager" />
+                <delete dir="${tomcat.dir.build}/webapps/examples" />
+                <delete dir="${tomcat.dir.build}/webapps/ROOT" />
+
+                <!-- Install josso deps -->
+                <echo message="Copying required JOSSO libs from ${josso.dir.build} to ${tomcat.dir.build}/lib" />
+                <copy todir="${tomcat.dir.build}/lib">
+                  <fileset dir="${josso.dir.build}/lib">
+                    <include name="FastInfoset-1.2.3.jar" />
+                    <include name="XmlSchema-1.4.5.jar" />
+                    <include name="activation-1.1.jar" />
+                    <include name="aopalliance-1.0.jar" />
+                    <include name="asm-2.2.3.jar" />
+                    <include name="axis-1.4-wl81fix.jar" />
+                    <include name="axis-1.4.jar" />
+                    <include name="axis-ant-1.4.jar" />
+                    <include name="axis-jaxrpc-1.4.jar" />
+                    <include name="axis-saaj-1.4.jar" />
+                    <include name="axis-wsdl4j-1.5.1.jar" />
+                    <include name="commons-beanutils-1.6.1.jar" />
+                    <include name="commons-codec-1.3.jar" />
+                    <include name="commons-collections-3.0.jar" />
+                    <include name="commons-digester-1.5.jar" />
+                    <include name="commons-discovery-0.2.jar" />
+                    <include name="commons-httpclient-3.1.jar" />
+                    <include name="commons-lang-2.0.jar" />
+                    <include name="commons-logging-1.1.1.jar" />
+                    <include name="commons-logging-api-1.0.4.jar" />
+                    <include name="commons-modeler-1.1.jar" />
+                    <include name="cxf-api-2.2.2.jar" />
+                    <include name="cxf-common-schemas-2.2.2.jar" />
+                    <include name="cxf-common-utilities-2.2.2.jar" />
+                    <include name="cxf-rt-bindings-soap-2.2.2.jar" />
+                    <include name="cxf-rt-bindings-xml-2.2.2.jar" />
+                    <include name="cxf-rt-core-2.2.2.jar" />
+                    <include name="cxf-rt-databinding-jaxb-2.2.2.jar" />
+                    <include name="cxf-rt-frontend-jaxws-2.2.2.jar" />
+                    <include name="cxf-rt-frontend-simple-2.2.2.jar" />
+                    <include name="cxf-rt-ws-addr-2.2.2.jar" />
+                    <include name="cxf-tools-common-2.2.2.jar" />
+                    <include name="geronimo-activation_1.1_spec-1.0.2.jar" />
+                    <include name="geronimo-annotation_1.0_spec-1.1.1.jar" />
+                    <include name="geronimo-javamail_1.4_spec-1.6.jar" />
+                    <include name="geronimo-jaxws_2.1_spec-1.0.jar" />
+                    <include name="geronimo-stax-api_1.0_spec-1.0.1.jar" />
+                    <include name="geronimo-ws-metadata_2.0_spec-1.1.2.jar" />
+                    <include name="jaxb-api-2.1.jar" />
+                    <include name="jaxb-impl-2.1.9.jar" />
+                    <include name="neethi-2.0.4.jar" />
+                    <include name="portal-identity-lib-2.7.1.GA.jar" />
+                    <include name="saaj-api-1.3.jar" />
+                    <include name="saaj-impl-1.3.2.jar" />
+                    <include name="spring-aop-2.5.5.jar" />
+                    <include name="spring-beans-2.5.5.jar" />
+                    <include name="spring-context-2.5.5.jar" />
+                    <include name="spring-core-2.5.5.jar" />
+                    <include name="wsdl4j-1.6.2.jar" />
+                    <include name="wstx-asl-3.2.8.jar" />
+                    <include name="xbean-spring-3.4.3.jar" />
+                    <include name="xml-resolver-1.2.jar" />
+                  </fileset>
+                  <fileset dir="${josso.dir.build}/dist/agents/bin">
+                    <include name="josso-agent-shared-1.8.7.jar" />
+                    <include name="josso-agents-bin-1.8.7-axis.jar" />
+                  </fileset>
+                  <fileset dir="${josso.dir.build}/dist/agents/lib">
+                    <include name="josso-tomcat70-agent-1.8.7.jar" />
+                  </fileset>
+                </copy>
+
+                <echo message="Copying jaas.conf from JOSSO" />
+                <copy file="${josso.dir.build}/dist/agents/config/tc70/jaas.conf" todir="${tomcat.dir.build}/conf" />
+
+                <!-- <echo message="Copying setenv.sh from JOSSO" /> -->
+                <!-- <copy file="${josso.dir.build}/dist/agents/config/tc70/setenv.sh" todir="${tomcat.dir.build}/bin" /> -->
+
+                <echo message="Copying custom josso-agent-config.xml" />
+                <copy file="${josso.dir.conf}/josso-agent-config.xml" todir="${tomcat.dir.build}/lib" />
+
+                <echo message="Copying custom server.xml" />
+                <copy file="${tomcat.dir.conf}/server.xml" todir="${tomcat.dir.build}/conf" />
+
+                <echo message="Copying custom setenv.sh" />
+                <copy file="${tomcat.dir.conf}/setenv.sh" todir="${tomcat.dir.build}/bin" overwrite="true"/>
+
+                <echo message="Copy dm2e webapp to $CATALINA_HOME/webapps and rename to ROOT" />
+                <copy todir="${tomcat.dir.build}/webapps/ROOT">
+                  <fileset dir="${project.build.directory}/${project.artifactId}">
+                    <include name="**" />
+                  </fileset>
+                </copy>
+
+                <!-- <echo message="Copy OpenRDF WAR to $CATALINA_HOME" /> -->
+                <!-- <copy file="${dir.assets}/sesame-http-server-${version.sesame}.war" tofile="${tomcat.dir.build}/webapps/sesame.war" /> -->
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/assemblyDescriptor.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>
+
+      <!-- <plugin> -->
+        <!-- <groupId>org.codehaus.mojo</groupId> -->
+        <!-- <artifactId>build-helper-maven-plugin</artifactId> -->
+        <!-- <version>1.6</version> -->
+        <!-- <executions> -->
+          <!-- <execution> -->
+            <!-- <id>attach-artifacts</id> -->
+            <!-- <phase>package</phase> -->
+            <!-- <goals> -->
+              <!-- <goal>attach-artifact</goal> -->
+              <!-- </goals> -->
+            <!-- <configuration> -->
+              <!-- <artifacts> -->
+                <!-- <artifact> -->
+                  <!-- <file>${tomcat.archive.file}</file> -->
+                  <!-- <type>zip</type> -->
+                  <!-- </artifact> -->
+                <!-- </artifacts> -->
+              <!-- </configuration> -->
+            <!-- </execution> -->
+          <!-- </executions> -->
+        <!-- </plugin> -->
+    </plugins>
+  </build>
+  <distributionManagement>
+    <snapshotRepository>
+      <name>LSKI Snapshot Repository</name>
+      <id>lski-snapshots</id>
+      <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <name>LSKI Repository</name>
+      <id>lski-releases</id>
+      <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
+    </repository>
+  </distributionManagement>
+  <pluginRepositories>
+    <pluginRepository>
+      <name>LSKI Snapshot Repository</name>
+      <id>lski-snapshots</id>
+      <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>jacoco-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+  <repositories>
+    <repository>
+      <id>m2.java.net</id>
+      <name>Java.net Maven 2 Repository</name>
+      <url>http://download.java.net/maven/2</url>
+      <layout>default</layout>
+    </repository>
+    <repository>
+      <id>glassfish.java.net</id>
+      <name>GlassFish Maven Repository</name>
+      <url>http://download.java.net/maven/glassfish</url>
+      <layout>default</layout>
+    </repository>
+    <repository>
+      <name>Local Maven 2 Repository at University of Mannheim (DWS - Group)</name>
+      <id>lski</id>
+      <url>https://breda.informatik.uni-mannheim.de/nexus/content/groups/public/</url>
+    </repository>
+    <repository>
+      <name>LSKI Snapshot Repository</name>
+      <id>lski-snapshots</id>
+      <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>mvnrepository</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-server</artifactId>
+      <version>${jersey-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>${jersey-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.0.9</version>
+    </dependency>
+    <dependency>
+      <groupId>eu.dm2e.ws</groupId>
+      <artifactId>dm2e-ws</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>
+<!-- 
+vim: sw=2
+-->
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.007  000.007: --- VIM STARTING ---
+000.657  000.650: Allocated generic buffers
+000.783  000.126: locale set
+000.803  000.020: GUI prepared
+000.806  000.003: clipboard setup
+000.816  000.010: window checked
+001.318  000.502: inits 1
+001.327  000.009: parsing arguments
+001.328  000.001: expanding arguments
+001.341  000.013: shell init
+001.616  000.275: Termcap init
+001.661  000.045: inits 2
+001.812  000.151: init highlight
+002.100  000.130  000.130: sourcing /usr/share/vim/vimfiles/archlinux.vim
+002.144  000.269  000.139: sourcing /etc/vimrc
+003.592  000.535  000.535: sourcing /home/kb/.vim/autoload/pathogen.vim
+097.851  000.576  000.576: sourcing /home/kb/.vim/bundle/vim-colorscheme-krxt/colors/krxt-256.vim
+098.830  000.179  000.179: sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+099.228  000.153  000.153: sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+099.618  001.237  000.905: sourcing /home/kb/.vim/bundle/vim-colorscheme-krxt/colors/krxt-256.vim
+099.704  001.460  000.223: sourcing /usr/share/vim/vim73/syntax/synload.vim
+099.970  000.231  000.231: sourcing /home/kb/.vim/filetype.vim
+116.659  000.022  000.022: sourcing /home/kb/.vim/ftdetect/asciidoc_filetype.vim
+116.723  000.042  000.042: sourcing /home/kb/.vim/ftdetect/clojure.vim
+116.746  000.005  000.005: sourcing /home/kb/.vim/ftdetect/dokuwiki.vim
+116.828  000.065  000.065: sourcing /home/kb/.vim/ftdetect/epl.vim
+116.938  000.092  000.092: sourcing /home/kb/.vim/ftdetect/haml.vim
+117.283  000.327  000.327: sourcing /home/kb/.vim/ftdetect/ifm.vim
+117.375  000.067  000.067: sourcing /home/kb/.vim/ftdetect/uzbl.vim
+117.425  000.031  000.031: sourcing /home/kb/.vim/ftdetect/vo_base.vim
+117.617  000.037  000.037: sourcing /home/kb/.vim/bundle/scala-vim/ftdetect/scala.vim
+117.876  000.162  000.162: sourcing /home/kb/.vim/bundle/vim-javascript/ftdetect/javascript.vim
+117.949  000.036  000.036: sourcing /home/kb/.vim/bundle/vim-less/ftdetect/less.vim
+118.044  000.038  000.038: sourcing /home/kb/.vim/bundle/vim-orgmode/ftdetect/org.vim
+118.288  000.172  000.172: sourcing /usr/share/vim/vimfiles/ftdetect/asciidoc.vim
+118.376  000.067  000.067: sourcing /usr/share/vim/vimfiles/ftdetect/conkyrc.vim
+118.511  018.390  017.227: sourcing /usr/share/vim/vim73/filetype.vim
+118.555  020.499  000.418: sourcing /usr/share/vim/vim73/syntax/syntax.vim
+119.652  001.069  001.069: sourcing /home/kb/.vim/filetype.vim
+119.812  000.010  000.010: sourcing /usr/share/vim/vim73/filetype.vim
+120.967  001.121  001.121: sourcing /home/kb/.vim/ftplugin.vim
+121.155  000.036  000.036: sourcing /usr/share/vim/vim73/ftplugin.vim
+121.347  000.031  000.031: sourcing /usr/share/vim/vim73/indent.vim
+122.553  001.170  001.170: sourcing /home/kb/.vim/filetype.vim
+122.709  000.009  000.009: sourcing /usr/share/vim/vim73/filetype.vim
+123.591  121.388  096.332: sourcing $HOME/.vimrc
+123.601  000.132: sourcing vimrc file(s)
+124.827  000.720  000.720: sourcing /home/kb/.vim/plugin/02tlib.vim
+124.895  000.044  000.044: sourcing /home/kb/.vim/plugin/AnsiEscPlugin.vim
+125.045  000.129  000.129: sourcing /home/kb/.vim/plugin/BlockComment.vim
+125.746  000.681  000.681: sourcing /home/kb/.vim/plugin/DirDiff.vim
+125.917  000.148  000.148: sourcing /home/kb/.vim/plugin/FindFile.vim
+126.104  000.165  000.165: sourcing /home/kb/.vim/plugin/LatexParFormat.vim
+126.249  000.123  000.123: sourcing /home/kb/.vim/plugin/RecentFiles.vim
+126.874  000.603  000.603: sourcing /home/kb/.vim/plugin/archive_viewer.vim
+127.726  000.829  000.829: sourcing /home/kb/.vim/plugin/autocomplpop.vim
+128.276  000.522  000.522: sourcing /home/kb/.vim/plugin/backgroundColor.vim
+129.290  000.991  000.991: sourcing /home/kb/.vim/plugin/bufexplorer.vim
+129.976  000.660  000.660: sourcing /home/kb/.vim/plugin/calendar.vim
+130.230  000.229  000.229: sourcing /home/kb/.vim/plugin/cmdline-complete.vim
+130.413  000.157  000.157: sourcing /home/kb/.vim/plugin/filebrowser.vim
+130.500  000.064  000.064: sourcing /home/kb/.vim/plugin/getscriptPlugin.vim
+131.318  000.759  000.759: sourcing /home/kb/.vim/plugin/gnupg.vim
+131.414  000.071  000.071: sourcing /home/kb/.vim/plugin/histwinPlugin.vim
+131.750  000.316  000.316: sourcing /home/kb/.vim/plugin/ikiwiki.vim
+132.020  000.248  000.248: sourcing /home/kb/.vim/plugin/info.vim
+132.218  000.170  000.170: sourcing /home/kb/.vim/plugin/justify.vim
+132.506  000.266  000.266: sourcing /home/kb/.vim/plugin/mastermind.vim
+132.658  000.130  000.130: sourcing /home/kb/.vim/plugin/modeliner.vim
+133.138  000.459  000.459: sourcing /home/kb/.vim/plugin/netrwPlugin.vim
+133.261  000.091  000.091: sourcing /home/kb/.vim/plugin/pydoc.vim
+133.381  000.092  000.092: sourcing /home/kb/.vim/plugin/remoteOpen.vim
+133.433  000.026  000.026: sourcing /home/kb/.vim/plugin/renamec.vim
+133.817  000.357  000.357: sourcing /home/kb/.vim/plugin/session_dialog.vim
+133.892  000.048  000.048: sourcing /home/kb/.vim/plugin/slime.vim
+134.484  000.566  000.566: sourcing /home/kb/.vim/plugin/surround.vim
+134.663  000.147  000.147: sourcing /home/kb/.vim/plugin/tabname.vim
+135.188  000.497  000.497: sourcing /home/kb/.vim/plugin/taglist.vim
+135.258  000.041  000.041: sourcing /home/kb/.vim/plugin/tail.vim
+135.324  000.040  000.040: sourcing /home/kb/.vim/plugin/toansi.vim
+135.424  000.076  000.076: sourcing /home/kb/.vim/plugin/vifm.vim
+137.281  001.834  001.834: sourcing /home/kb/.vim/plugin/vimExplorer.vim
+137.422  000.108  000.108: sourcing /home/kb/.vim/plugin/vimballPlugin.vim
+138.048  000.596  000.596: sourcing /home/kb/.vim/plugin/vimcommander.vim
+138.276  000.196  000.196: sourcing /home/kb/.vim/plugin/vo_checkbox.vim
+138.578  000.213  000.213: sourcing /home/kb/.vim/autoload/tlib/buffer.vim
+138.714  000.095  000.095: sourcing /home/kb/.vim/autoload/tlib/autocmdgroup.vim
+138.784  000.483  000.175: sourcing /home/kb/.vim/plugin/vxbuflist.vim
+138.852  000.042  000.042: sourcing /home/kb/.vim/plugin/vxcolors.vim
+139.100  000.219  000.219: sourcing /home/kb/.vim/plugin/vxrecentfile.vim
+139.197  000.071  000.071: sourcing /home/kb/.vim/plugin/vxtextmenu.vim
+139.296  000.017  000.017: sourcing /home/kb/.vim/bundle/AnsiEsc.vim/plugin/AnsiEscPlugin.vim
+139.719  000.399  000.399: sourcing /home/kb/.vim/bundle/AnsiEsc.vim/plugin/cecutil.vim
+140.596  000.810  000.810: sourcing /home/kb/.vim/bundle/CamelCaseMotion/plugin/camelcasemotion.vim
+141.226  000.566  000.566: sourcing /home/kb/.vim/bundle/IMAP/plugin/imaps.vim
+165.552  024.239  024.239: sourcing /home/kb/.vim/bundle/LustyJuggler/plugin/lusty-juggler.vim
+165.713  000.042  000.042: sourcing /home/kb/.vim/bundle/ManPageView/plugin/cecutil.vim
+165.981  000.238  000.238: sourcing /home/kb/.vim/bundle/ManPageView/plugin/manpageviewPlugin.vim
+166.172  000.130  000.130: sourcing /home/kb/.vim/bundle/ZoomWin/plugin/ZoomWinPlugin.vim
+167.392  001.159  001.159: sourcing /home/kb/.vim/bundle/a.vim/plugin/a.vim
+167.666  000.125  000.125: sourcing /home/kb/.vim/bundle/ack.vim/plugin/ack.vim
+173.866  006.110  006.110: sourcing /home/kb/.vim/bundle/command-t/plugin/command-t.vim
+175.041  001.036  001.036: sourcing /home/kb/.vim/bundle/csapprox/plugin/CSApprox.vim
+175.795  000.393  000.393: sourcing /home/kb/.vim/bundle/ctrlp.vim/autoload/ctrlp/mrufiles.vim
+175.982  000.864  000.471: sourcing /home/kb/.vim/bundle/ctrlp.vim/plugin/ctrlp.vim
+180.044  003.999  003.999: sourcing /home/kb/.vim/bundle/fugitive/plugin/fugitive.vim
+180.164  000.055  000.055: sourcing /home/kb/.vim/bundle/gundo/plugin/gundo.vim
+184.423  004.198  004.198: sourcing /home/kb/.vim/bundle/nerdcommenter/plugin/NERD_commenter.vim
+185.806  000.772  000.772: sourcing /home/kb/.vim/bundle/nerdtree/autoload/nerdtree.vim
+186.825  000.360  000.360: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/path.vim
+187.044  000.103  000.103: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/menu_controller.vim
+187.226  000.079  000.079: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/menu_item.vim
+187.409  000.083  000.083: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/key_map.vim
+187.675  000.171  000.171: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/bookmark.vim
+188.052  000.251  000.251: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/tree_file_node.vim
+188.473  000.310  000.310: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/tree_dir_node.vim
+188.719  000.141  000.141: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/opener.vim
+188.992  000.174  000.174: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/creator.vim
+197.274  000.094  000.094: sourcing /home/kb/.vim/bundle/nerdtree/nerdtree_plugin/exec_menuitem.vim
+197.642  000.336  000.336: sourcing /home/kb/.vim/bundle/nerdtree/nerdtree_plugin/fs_menu.vim
+198.162  000.302  000.302: sourcing /home/kb/.vim/bundle/vim-nerdtree-tabs/nerdtree_plugin/vim-nerdtree-tabs.vim
+198.301  013.653  010.477: sourcing /home/kb/.vim/bundle/nerdtree/plugin/NERD_tree.vim
+198.516  000.186  000.186: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/bookmark.vim
+198.722  000.181  000.181: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/creator.vim
+198.830  000.084  000.084: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/key_map.vim
+198.959  000.105  000.105: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/menu_controller.vim
+199.051  000.069  000.069: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/menu_item.vim
+199.217  000.142  000.142: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/opener.vim
+199.632  000.392  000.392: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/path.vim
+199.976  000.318  000.318: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/tree_dir_node.vim
+200.262  000.258  000.258: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/tree_file_node.vim
+202.875  002.547  002.547: sourcing /home/kb/.vim/bundle/perl-support.vim/plugin/perl-support.vim
+203.016  000.056  000.056: sourcing /home/kb/.vim/bundle/scala-vim/plugin/31-create-scala.vim
+203.454  000.377  000.377: sourcing /home/kb/.vim/bundle/snipmate.vim/plugin/snipMate.vim
+204.529  000.969  000.969: sourcing /home/kb/.vim/bundle/utl.vim/plugin/utl.vim
+204.769  000.200  000.200: sourcing /home/kb/.vim/bundle/utl.vim/plugin/utl_rc.vim
+205.163  000.365  000.365: sourcing /home/kb/.vim/bundle/utl.vim/plugin/utl_scm.vim
+205.370  000.173  000.173: sourcing /home/kb/.vim/bundle/utl.vim/plugin/utl_uri.vim
+206.098  000.659  000.659: sourcing /home/kb/.vim/bundle/vim-abolish/plugin/abolish.vim
+208.465  002.274  002.274: sourcing /home/kb/.vim/bundle/vim-align/plugin/AlignMapsPlugin.vim
+208.593  000.092  000.092: sourcing /home/kb/.vim/bundle/vim-align/plugin/AlignPlugin.vim
+208.651  000.028  000.028: sourcing /home/kb/.vim/bundle/vim-align/plugin/cecutil.vim
+208.940  000.193  000.193: sourcing /home/kb/.vim/bundle/vim-drawit/plugin/DrawItPlugin.vim
+208.993  000.023  000.023: sourcing /home/kb/.vim/bundle/vim-drawit/plugin/cecutil.vim
+209.059  000.011  000.011: sourcing /home/kb/.vim/bundle/vim-fugitive/plugin/fugitive.vim
+209.705  000.566  000.566: sourcing /home/kb/.vim/bundle/vim-matchit/plugin/matchit.vim
+209.854  000.035  000.035: sourcing /home/kb/.vim/bundle/vim-session/plugin/session.vim
+209.922  000.012  000.012: sourcing /home/kb/.vim/bundle/vim-surround/plugin/surround.vim
+210.178  000.203  000.203: sourcing /home/kb/.vim/bundle/vim-taglist-plus/plugin/taglist-plus.vim
+212.700  002.464  002.464: sourcing /home/kb/.vim/bundle/vim-unimpaired/plugin/unimpaired.vim
+213.077  000.089  000.089: sourcing /home/kb/.vim/bundle/voom/plugin/voom.vim
+257.884  044.740  044.740: sourcing /usr/share/vim/vimfiles/plugin/powerline.vim
+258.226  000.094  000.094: sourcing /usr/share/vim/vim73/plugin/getscriptPlugin.vim
+258.720  000.460  000.460: sourcing /usr/share/vim/vim73/plugin/gzip.vim
+259.002  000.248  000.248: sourcing /usr/share/vim/vim73/plugin/matchparen.vim
+259.062  000.024  000.024: sourcing /usr/share/vim/vim73/plugin/netrwPlugin.vim
+259.149  000.056  000.056: sourcing /usr/share/vim/vim73/plugin/rrhelper.vim
+259.221  000.041  000.041: sourcing /usr/share/vim/vim73/plugin/spellfile.vim
+259.465  000.213  000.213: sourcing /usr/share/vim/vim73/plugin/tarPlugin.vim
+259.611  000.113  000.113: sourcing /usr/share/vim/vim73/plugin/tohtml.vim
+259.687  000.023  000.023: sourcing /usr/share/vim/vim73/plugin/vimballPlugin.vim
+259.937  000.221  000.221: sourcing /usr/share/vim/vim73/plugin/zipPlugin.vim
+277.610  000.035  000.035: sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+277.762  017.730  017.695: sourcing /home/kb/.vim/bundle/csapprox/after/plugin/CSApprox.vim
+278.501  000.654  000.654: sourcing /home/kb/.vim/bundle/snipmate.vim/after/plugin/snipMate.vim
+278.979  000.387  000.387: sourcing /home/kb/.vim/after/plugin/highlight.vim
+279.346  000.292  000.292: sourcing /home/kb/.vim/plugin/vo_checkbox.vim
+279.355  000.338  000.046: sourcing /home/kb/.vim/after/plugin/vo_base.vim
+279.361  005.693: loading plugins
+279.997  000.636: inits 3
+280.232  000.235: reading viminfo
+282.085  001.853: setup clipboard
+282.107  000.022: setting raw mode
+282.147  000.040: start termcap
+282.220  000.073: clearing screen
+282.809  000.589: opening buffers
+283.116  000.307: BufEnter autocommands
+283.120  000.004: editing files in windows
+295.016  011.896: VimEnter autocommands
+295.020  000.004: before starting main loop
+297.902  002.882: first screen update
+297.904  000.002: --- VIM STARTED ---
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.007  000.007: --- VIM STARTING ---
+000.100  000.093: Allocated generic buffers
+000.180  000.080: locale set
+000.197  000.017: GUI prepared
+000.200  000.003: clipboard setup
+000.209  000.009: window checked
+000.633  000.424: inits 1
+000.639  000.006: parsing arguments
+000.640  000.001: expanding arguments
+000.650  000.010: shell init
+000.904  000.254: Termcap init
+000.950  000.046: inits 2
+001.059  000.109: init highlight
+001.284  000.115  000.115: sourcing /usr/share/vim/vimfiles/archlinux.vim
+001.314  000.211  000.096: sourcing /etc/vimrc
+001.823  000.329  000.329: sourcing /home/kb/.vim/autoload/pathogen.vim
+4617.007  000.712  000.712: sourcing /home/kb/.vim/bundle/vim-colorscheme-krxt/colors/krxt-256.vim
+4618.203  000.223  000.223: sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+4618.699  000.189  000.189: sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+4619.195  001.540  001.128: sourcing /home/kb/.vim/bundle/vim-colorscheme-krxt/colors/krxt-256.vim
+4619.304  001.804  000.264: sourcing /usr/share/vim/vim73/syntax/synload.vim
+4619.638  000.290  000.290: sourcing /home/kb/.vim/filetype.vim
+4640.069  000.026  000.026: sourcing /home/kb/.vim/ftdetect/asciidoc_filetype.vim
+4640.148  000.053  000.053: sourcing /home/kb/.vim/ftdetect/clojure.vim
+4640.176  000.005  000.005: sourcing /home/kb/.vim/ftdetect/dokuwiki.vim
+4640.278  000.081  000.081: sourcing /home/kb/.vim/ftdetect/epl.vim
+4640.415  000.115  000.115: sourcing /home/kb/.vim/ftdetect/haml.vim
+4640.826  000.387  000.387: sourcing /home/kb/.vim/ftdetect/ifm.vim
+4640.934  000.083  000.083: sourcing /home/kb/.vim/ftdetect/uzbl.vim
+4640.997  000.039  000.039: sourcing /home/kb/.vim/ftdetect/vo_base.vim
+4641.233  000.047  000.047: sourcing /home/kb/.vim/bundle/scala-vim/ftdetect/scala.vim
+4641.554  000.202  000.202: sourcing /home/kb/.vim/bundle/vim-javascript/ftdetect/javascript.vim
+4641.647  000.046  000.046: sourcing /home/kb/.vim/bundle/vim-less/ftdetect/less.vim
+4641.763  000.048  000.048: sourcing /home/kb/.vim/bundle/vim-orgmode/ftdetect/org.vim
+4642.066  000.214  000.214: sourcing /usr/share/vim/vimfiles/ftdetect/asciidoc.vim
+4642.177  000.085  000.085: sourcing /usr/share/vim/vimfiles/ftdetect/conkyrc.vim
+4642.335  022.506  021.075: sourcing /usr/share/vim/vim73/filetype.vim
+4642.386  025.125  000.525: sourcing /usr/share/vim/vim73/syntax/syntax.vim
+4643.743  001.325  001.325: sourcing /home/kb/.vim/filetype.vim
+4643.941  000.012  000.012: sourcing /usr/share/vim/vim73/filetype.vim
+4645.349  001.365  001.365: sourcing /home/kb/.vim/ftplugin.vim
+4645.606  000.069  000.069: sourcing /usr/share/vim/vim73/ftplugin.vim
+4645.856  000.040  000.040: sourcing /usr/share/vim/vim73/indent.vim
+4647.370  001.470  001.470: sourcing /home/kb/.vim/filetype.vim
+4647.565  000.012  000.012: sourcing /usr/share/vim/vim73/filetype.vim
+4648.629  4647.274  4616.815: sourcing $HOME/.vimrc
+4648.638  000.094: sourcing vimrc file(s)
+4650.167  000.895  000.895: sourcing /home/kb/.vim/plugin/02tlib.vim
+4650.252  000.055  000.055: sourcing /home/kb/.vim/plugin/AnsiEscPlugin.vim
+4650.439  000.162  000.162: sourcing /home/kb/.vim/plugin/BlockComment.vim
+4651.317  000.854  000.854: sourcing /home/kb/.vim/plugin/DirDiff.vim
+4651.530  000.183  000.183: sourcing /home/kb/.vim/plugin/FindFile.vim
+4651.763  000.206  000.206: sourcing /home/kb/.vim/plugin/LatexParFormat.vim
+4651.942  000.152  000.152: sourcing /home/kb/.vim/plugin/RecentFiles.vim
+4652.724  000.754  000.754: sourcing /home/kb/.vim/plugin/archive_viewer.vim
+4653.707  000.955  000.955: sourcing /home/kb/.vim/plugin/autocomplpop.vim
+4654.393  000.654  000.654: sourcing /home/kb/.vim/plugin/backgroundColor.vim
+4655.651  001.229  001.229: sourcing /home/kb/.vim/plugin/bufexplorer.vim
+4656.510  000.827  000.827: sourcing /home/kb/.vim/plugin/calendar.vim
+4656.826  000.286  000.286: sourcing /home/kb/.vim/plugin/cmdline-complete.vim
+4657.055  000.196  000.196: sourcing /home/kb/.vim/plugin/filebrowser.vim
+4657.166  000.081  000.081: sourcing /home/kb/.vim/plugin/getscriptPlugin.vim
+4658.165  000.952  000.952: sourcing /home/kb/.vim/plugin/gnupg.vim
+4658.282  000.086  000.086: sourcing /home/kb/.vim/plugin/histwinPlugin.vim
+4658.696  000.388  000.388: sourcing /home/kb/.vim/plugin/ikiwiki.vim
+4659.014  000.292  000.292: sourcing /home/kb/.vim/plugin/info.vim
+4659.260  000.212  000.212: sourcing /home/kb/.vim/plugin/justify.vim
+4659.622  000.332  000.332: sourcing /home/kb/.vim/plugin/mastermind.vim
+4659.812  000.163  000.163: sourcing /home/kb/.vim/plugin/modeliner.vim
+4660.407  000.570  000.570: sourcing /home/kb/.vim/plugin/netrwPlugin.vim
+4660.561  000.114  000.114: sourcing /home/kb/.vim/plugin/pydoc.vim
+4660.713  000.117  000.117: sourcing /home/kb/.vim/plugin/remoteOpen.vim
+4660.777  000.032  000.032: sourcing /home/kb/.vim/plugin/renamec.vim
+4661.264  000.449  000.449: sourcing /home/kb/.vim/plugin/session_dialog.vim
+4661.350  000.052  000.052: sourcing /home/kb/.vim/plugin/slime.vim
+4662.050  000.669  000.669: sourcing /home/kb/.vim/plugin/surround.vim
+4662.292  000.205  000.205: sourcing /home/kb/.vim/plugin/tabname.vim
+4662.953  000.612  000.612: sourcing /home/kb/.vim/plugin/taglist.vim
+4663.043  000.052  000.052: sourcing /home/kb/.vim/plugin/tail.vim
+4663.127  000.050  000.050: sourcing /home/kb/.vim/plugin/toansi.vim
+4663.251  000.094  000.094: sourcing /home/kb/.vim/plugin/vifm.vim
+4665.561  002.280  002.280: sourcing /home/kb/.vim/plugin/vimExplorer.vim
+4665.740  000.135  000.135: sourcing /home/kb/.vim/plugin/vimballPlugin.vim
+4666.535  000.757  000.757: sourcing /home/kb/.vim/plugin/vimcommander.vim
+4666.820  000.247  000.247: sourcing /home/kb/.vim/plugin/vo_checkbox.vim
+4667.202  000.268  000.268: sourcing /home/kb/.vim/autoload/tlib/buffer.vim
+4667.375  000.121  000.121: sourcing /home/kb/.vim/autoload/tlib/autocmdgroup.vim
+4667.450  000.599  000.210: sourcing /home/kb/.vim/plugin/vxbuflist.vim
+4667.528  000.047  000.047: sourcing /home/kb/.vim/plugin/vxcolors.vim
+4667.819  000.258  000.258: sourcing /home/kb/.vim/plugin/vxrecentfile.vim
+4667.934  000.083  000.083: sourcing /home/kb/.vim/plugin/vxtextmenu.vim
+4668.047  000.019  000.019: sourcing /home/kb/.vim/bundle/AnsiEsc.vim/plugin/AnsiEscPlugin.vim
+4668.543  000.466  000.466: sourcing /home/kb/.vim/bundle/AnsiEsc.vim/plugin/cecutil.vim
+4669.616  000.994  000.994: sourcing /home/kb/.vim/bundle/CamelCaseMotion/plugin/camelcasemotion.vim
+4670.394  000.700  000.700: sourcing /home/kb/.vim/bundle/IMAP/plugin/imaps.vim
+4698.975  028.490  028.490: sourcing /home/kb/.vim/bundle/LustyJuggler/plugin/lusty-juggler.vim
+4699.163  000.048  000.048: sourcing /home/kb/.vim/bundle/ManPageView/plugin/cecutil.vim
+4699.471  000.270  000.270: sourcing /home/kb/.vim/bundle/ManPageView/plugin/manpageviewPlugin.vim
+4699.704  000.151  000.151: sourcing /home/kb/.vim/bundle/ZoomWin/plugin/ZoomWinPlugin.vim
+4701.156  001.375  001.375: sourcing /home/kb/.vim/bundle/a.vim/plugin/a.vim
+4701.368  000.132  000.132: sourcing /home/kb/.vim/bundle/ack.vim/plugin/ack.vim
+4708.602  007.133  007.133: sourcing /home/kb/.vim/bundle/command-t/plugin/command-t.vim
+4709.990  001.281  001.281: sourcing /home/kb/.vim/bundle/csapprox/plugin/CSApprox.vim
+4710.974  000.602  000.602: sourcing /home/kb/.vim/bundle/ctrlp.vim/autoload/ctrlp/mrufiles.vim
+4711.196  001.123  000.521: sourcing /home/kb/.vim/bundle/ctrlp.vim/plugin/ctrlp.vim
+4716.290  005.015  005.015: sourcing /home/kb/.vim/bundle/fugitive/plugin/fugitive.vim
+4716.438  000.067  000.067: sourcing /home/kb/.vim/bundle/gundo/plugin/gundo.vim
+4721.749  005.235  005.235: sourcing /home/kb/.vim/bundle/nerdcommenter/plugin/NERD_commenter.vim
+4723.481  000.965  000.965: sourcing /home/kb/.vim/bundle/nerdtree/autoload/nerdtree.vim
+4724.781  000.453  000.453: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/path.vim
+4725.052  000.129  000.129: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/menu_controller.vim
+4725.272  000.091  000.091: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/menu_item.vim
+4725.501  000.104  000.104: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/key_map.vim
+4725.903  000.221  000.221: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/bookmark.vim
+4726.357  000.319  000.319: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/tree_file_node.vim
+4726.889  000.398  000.398: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/tree_dir_node.vim
+4727.195  000.178  000.178: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/opener.vim
+4727.538  000.218  000.218: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/creator.vim
+4738.121  000.107  000.107: sourcing /home/kb/.vim/bundle/nerdtree/nerdtree_plugin/exec_menuitem.vim
+4738.587  000.426  000.426: sourcing /home/kb/.vim/bundle/nerdtree/nerdtree_plugin/fs_menu.vim
+4739.229  000.374  000.374: sourcing /home/kb/.vim/bundle/vim-nerdtree-tabs/nerdtree_plugin/vim-nerdtree-tabs.vim
+4739.404  017.391  013.408: sourcing /home/kb/.vim/bundle/nerdtree/plugin/NERD_tree.vim
+4739.672  000.231  000.231: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/bookmark.vim
+4739.925  000.221  000.221: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/creator.vim
+4740.063  000.107  000.107: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/key_map.vim
+4740.224  000.131  000.131: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/menu_controller.vim
+4740.339  000.086  000.086: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/menu_item.vim
+4740.548  000.179  000.179: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/opener.vim
+4741.054  000.477  000.477: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/path.vim
+4741.471  000.386  000.386: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/tree_dir_node.vim
+4741.831  000.326  000.326: sourcing /home/kb/.vim/bundle/nerdtree/plugin/nerdtree/tree_file_node.vim
+4744.907  002.990  002.990: sourcing /home/kb/.vim/bundle/perl-support.vim/plugin/perl-support.vim
+4745.104  000.074  000.074: sourcing /home/kb/.vim/bundle/scala-vim/plugin/31-create-scala.vim
+4745.685  000.504  000.504: sourcing /home/kb/.vim/bundle/snipmate.vim/plugin/snipMate.vim
+4747.024  001.203  001.203: sourcing /home/kb/.vim/bundle/utl.vim/plugin/utl.vim
+4747.315  000.249  000.249: sourcing /home/kb/.vim/bundle/utl.vim/plugin/utl_rc.vim
+4747.812  000.463  000.463: sourcing /home/kb/.vim/bundle/utl.vim/plugin/utl_scm.vim
+4748.076  000.222  000.222: sourcing /home/kb/.vim/bundle/utl.vim/plugin/utl_uri.vim
+4748.996  000.835  000.835: sourcing /home/kb/.vim/bundle/vim-abolish/plugin/abolish.vim
+4752.096  002.979  002.979: sourcing /home/kb/.vim/bundle/vim-align/plugin/AlignMapsPlugin.vim
+4752.266  000.126  000.126: sourcing /home/kb/.vim/bundle/vim-align/plugin/AlignPlugin.vim
+4752.345  000.035  000.035: sourcing /home/kb/.vim/bundle/vim-align/plugin/cecutil.vim
+4752.718  000.251  000.251: sourcing /home/kb/.vim/bundle/vim-drawit/plugin/DrawItPlugin.vim
+4752.789  000.032  000.032: sourcing /home/kb/.vim/bundle/vim-drawit/plugin/cecutil.vim
+4752.874  000.014  000.014: sourcing /home/kb/.vim/bundle/vim-fugitive/plugin/fugitive.vim
+4753.683  000.710  000.710: sourcing /home/kb/.vim/bundle/vim-matchit/plugin/matchit.vim
+4753.841  000.043  000.043: sourcing /home/kb/.vim/bundle/vim-session/plugin/session.vim
+4753.925  000.015  000.015: sourcing /home/kb/.vim/bundle/vim-surround/plugin/surround.vim
+4754.244  000.253  000.253: sourcing /home/kb/.vim/bundle/vim-taglist-plus/plugin/taglist-plus.vim
+4757.423  003.111  003.111: sourcing /home/kb/.vim/bundle/vim-unimpaired/plugin/unimpaired.vim
+4757.892  000.115  000.115: sourcing /home/kb/.vim/bundle/voom/plugin/voom.vim
+4809.513  051.537  051.537: sourcing /usr/share/vim/vimfiles/plugin/powerline.vim
+4809.855  000.095  000.095: sourcing /usr/share/vim/vim73/plugin/getscriptPlugin.vim
+4810.355  000.466  000.466: sourcing /usr/share/vim/vim73/plugin/gzip.vim
+4810.631  000.242  000.242: sourcing /usr/share/vim/vim73/plugin/matchparen.vim
+4810.691  000.024  000.024: sourcing /usr/share/vim/vim73/plugin/netrwPlugin.vim
+4810.780  000.057  000.057: sourcing /usr/share/vim/vim73/plugin/rrhelper.vim
+4810.851  000.040  000.040: sourcing /usr/share/vim/vim73/plugin/spellfile.vim
+4811.129  000.224  000.224: sourcing /usr/share/vim/vim73/plugin/tarPlugin.vim
+4811.275  000.114  000.114: sourcing /usr/share/vim/vim73/plugin/tohtml.vim
+4811.328  000.022  000.022: sourcing /usr/share/vim/vim73/plugin/vimballPlugin.vim
+4811.580  000.223  000.223: sourcing /usr/share/vim/vim73/plugin/zipPlugin.vim
+4828.980  000.032  000.032: sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+4829.126  017.452  017.420: sourcing /home/kb/.vim/bundle/csapprox/after/plugin/CSApprox.vim
+4829.876  000.668  000.668: sourcing /home/kb/.vim/bundle/snipmate.vim/after/plugin/snipMate.vim
+4830.291  000.323  000.323: sourcing /home/kb/.vim/after/plugin/highlight.vim
+4830.681  000.294  000.294: sourcing /home/kb/.vim/plugin/vo_checkbox.vim
+4830.690  000.340  000.046: sourcing /home/kb/.vim/after/plugin/vo_base.vim
+4830.696  006.637: loading plugins
+4831.267  000.571: inits 3
+4831.481  000.214: reading viminfo
+4833.192  001.711: setup clipboard
+4833.205  000.013: setting raw mode
+4833.229  000.024: start termcap
+4833.288  000.059: clearing screen
+4833.752  000.464: opening buffers
+4834.055  000.303: BufEnter autocommands
+4834.060  000.005: editing files in windows
+4845.663  011.603: VimEnter autocommands
+4845.668  000.005: before starting main loop
+4848.622  002.954: first screen update
+4848.625  000.003: --- VIM STARTED ---
