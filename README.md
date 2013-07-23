@@ -7,10 +7,7 @@ Build Process
 -------------
 
 ```
-  bash bin/download-assets.sh
-  cd src/main/webapp/
-  bower update
-  cd ../../../
+  bash bin/download-assets.sh all
   mvn package
 ```
 
