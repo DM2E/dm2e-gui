@@ -1,3 +1,3 @@
 #!/bin/bash
-sleep 2
+cd tomcat
 bash bin/catalina.sh start
