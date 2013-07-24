@@ -64,7 +64,7 @@ public class GuiConsole {
 		log.info("Starting Servers.");
 		if (isRunning()) {
 			log.error("Servers Already running.");
-			return;
+			// return;
 		}
 		sendStartCommand();
 		log.info("Started Servers.");
@@ -73,7 +73,7 @@ public class GuiConsole {
 		log.info("Stopping Servers.");
 		if (! isRunning()) {
 			log.warn("Servers aren't Not running.");
-			return;
+			// return;
 		}
 		sendStopCommand();
 		log.info("Stopped Servers.");

@@ -19,27 +19,10 @@ define([
 	WebserviceCollection) {
 
 	var log = logging.getLogger("models.user.UserModel");
-
-	var theDefaults = {
-		fileServices : [
-            'api/file',
-            // Comment the next one out to improve test performance
-//            'api/mint-file'
-        ],
-		configService : 'api/config',
-		workflowService : 'api/workflow',
-		serviceList : [
-			'api/service/xslt',
-			'api/service/xslt-zip',
-			'api/publish',
-			'api/service/demo'
-		]
-	};
 //	theDefaults[NS.getQN("omnom:webservice")] = new WebserviceCollection();
 
 	return RelationalModel.extend({
 
-		defaults : theDefaults,
 		relations : [
             {
                 type : Backbone.HasMany,

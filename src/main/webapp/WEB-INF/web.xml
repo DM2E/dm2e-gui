@@ -22,7 +22,7 @@
     <!-- <servlet-mapping> -->
         <!-- <servlet-name>default</servlet-name> -->
         <!-- <url-pattern>/static/*</url-pattern> -->
-    <!-- </servlet-mapping> -->
+        <!-- </servlet-mapping> -->
 
     <!-- Make omnom JOSSO aware -->
     <login-config>
@@ -36,21 +36,39 @@
 
     </login-config>
 
+    <!-- Open the API for now -->
     <security-constraint>
-        <!-- Sample Security Constraint -->
         <web-resource-collection>
+            <!-- 
+                 this must match one of the values in <ignore-web-resource-collections></ignore-web-resource-collections>
+                 in josso-agent-config.xml
+                 -->
+            <web-resource-name>public-resources</web-resource-name>
 
-            <!-- We're going to protect this resource and make it available only to users in "role1". -->
-            <!-- <web-resource-name>protected-resources</web-resource-name> -->
-            <web-resource-name>*</web-resource-name>
-
-            <url-pattern>/*</url-pattern>
+            <url-pattern>/api/*</url-pattern>
 
             <http-method>HEAD</http-method>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
             <http-method>PUT</http-method>
             <http-method>DELETE</http-method>
+        </web-resource-collection>
+
+    </security-constraint>
+
+    <security-constraint>
+
+        <!-- Protect the omnom GUI  -->
+        <web-resource-collection>
+
+            <!-- [> We're going to protect this resource and make it available only to users in "role1". <] -->
+            <web-resource-name>protected-resources</web-resource-name>
+            <web-resource-name>Omnom GUI</web-resource-name>
+
+            <url-pattern>/index.html</url-pattern>
+            <url-pattern>/api/user/_username</url-pattern>
+
+            <http-method>GET</http-method>
 
         </web-resource-collection>
 
@@ -63,5 +81,5 @@
             <transport-guarantee>NONE</transport-guarantee>
         </user-data-constraint>
 
-    </security-constraint>  
+    </security-constraint>
 </web-app>

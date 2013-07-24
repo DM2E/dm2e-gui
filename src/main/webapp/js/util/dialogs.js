@@ -35,10 +35,10 @@ define([ 'jquery', 'underscore', 'backbone',
 			}).open();
 		},
 
-		errorXHR : function(xhr) {
+		errorXHR : function(xhr, message) {
 			new Backbone.BootstrapModal({
 				title : "Error communicating with server.",
-				content : "Response was " + xhr.status + " " + xhr.statusText,
+				content : message + "\n Response was " + xhr.status + " " + xhr.statusText,
 			}).open();
 		}
 
