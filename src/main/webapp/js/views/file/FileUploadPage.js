@@ -33,7 +33,7 @@ define([
 				var fileInputFile = fileInput.get(0).files[0];
                 console.log(fileInputFile);
 				var fd = new FormData();
-				fd.append("file", fileInput.get(0));
+				fd.append("file", fileInput.get(0).files[0]);
 				console.log(fd);
 				$.ajax({
 					url : 'api/file',
@@ -108,13 +108,14 @@ define([
 
 		renderFileTypeSelection : function() {
 
-			var self = this;
-			
-
 			//noinspection JSUnresolvedFunction
-            _.each(RDFNS.OMNOM_TYPES(), function(prop, url) {
+            _.each(RDFNS.OMNOM_TYPES(), function(url_func, label) {
+                // skip the filetype if it contians lowercase characters or is BASE
+                if (label === 'BASE' || ! /^[^a-z]+$/.test(label))
+                    return;
+                console.log(label);
 				this.$("select#inputFiletype").append($("<option>")
-					.attr("value", prop).append(url));
+					.attr("value", url_func()).append(label));
 			}, this);
 		}
 

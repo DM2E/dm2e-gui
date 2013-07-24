@@ -61,6 +61,7 @@ define([
 			 * Load Webservice List
 			 */
 			this.webserviceCollection = session.get("user").getQN("omnom:webservice");
+            console.log(this.webserviceCollection);
 			this.webserviceListView = Vm.createView(this, 'WebserviceListView', WebserviceListView, {
 				collection : this.webserviceCollection
 			});

@@ -53,9 +53,7 @@ define([
 
 		render : function() {
 
-			this.$el.html(_.template(fileManagerTemplate, {
-				user : userSession.get("user"),
-			}));
+			this.$el.html(this.createHTML(fileManagerTemplate));
 
 			if (this.collection) {
 				this.renderFileList();

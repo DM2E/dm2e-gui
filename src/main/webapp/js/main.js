@@ -69,15 +69,15 @@ require.config({
         'bootstrap_jasny_fileupload' : {
             deps : [ 'jquery' ],
         },
-        'jquery_file_upload' : {
-            deps : [
-                'jquery_ui',
-                'jquery.ui.widget',
-                'bootstrap_jasny_fileupload',
-                'jquery.ui.widget' 
-            ],
-            // exports : "jquery.ui.widget",
-        },
+        // 'jquery_file_upload' : {
+            // deps : [
+                // 'jquery_ui',
+                // 'jquery.ui.widget',
+                // 'bootstrap_jasny_fileupload',
+                // 'jquery.ui.widget' 
+            // ],
+            // // exports : "jquery.ui.widget",
+        // },
         'bootstrap_notify' : {
             deps : [
                 'jquery'

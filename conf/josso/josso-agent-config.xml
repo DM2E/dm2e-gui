@@ -70,7 +70,7 @@
                         <!-- The vhost is an ooptional feature:
                         Specify the Host/Virtual Host where this application is runnig
                         This is useful when configuring multiple security domains. -->
-                        <!-- vhost>localhost</vhost--> <!-- You can configure this as a 'partner-app' element attribute as well -->
+                        <vhost>CHANGE_ME</vhost> <!-- You can configure this as a 'partner-app' element attribute as well -->
 
                         <!-- This is an optional feature :
                         You can reference any web resource collection that should not be subject to SSO protection.

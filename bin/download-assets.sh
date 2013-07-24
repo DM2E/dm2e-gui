@@ -51,7 +51,7 @@ download_FUSEKI() {
 download_BOWER_DEPS() {
     cd $ASSETS_DIR
     BOWER_DEPS_REPO="https://github.com/kba/dm2e-gui-bower-deps.git"
-    info_download sesame "latest" $BOWER_DEPS_REPO $ASSETS_DIR
+    info_download 'bower-deps' "latest" $BOWER_DEPS_REPO $ASSETS_DIR
     rm -fr $ASSETS_DIR/bower-deps
     rm -fr $VENDOR_DIR
     git clone --depth 1 $BOWER_DEPS_REPO $ASSETS_DIR/bower-deps
@@ -78,5 +78,5 @@ elif [ "$ARG1" = 'all' ];then
     # download_SESAME
 else
     echo "Usage: "
-    echo "  $0 (tomcat|josso|fuseki|sesame|all)"
+    echo "  $0 (tomcat|josso|fuseki|sesame|bower-deps|all)"
 fi

@@ -3,9 +3,9 @@
 	<h2>File Manager</h2>
 	Select one of your registered file services:
 	<ul>
-		<% _.each(user.get("fileServices"), function(fileService) { %>
+		<% _.each(rdf_attr("omnom:fileservice", session.user), function(fileService) { %>
 		<li>
-			<a href="#file-list/<%= fileService %>"><%= fileService %></a>
+			<a href="#file-list/<%= fileService.id %>"><%= fileService.id %></a>
 		</li>
 		<% }) %>
 	</ul>

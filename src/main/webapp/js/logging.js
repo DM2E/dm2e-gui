@@ -1,5 +1,5 @@
 define([ 'log4javascript' ], function(log4javascript) {
-	
+
 	var consoleAppender = new log4javascript.BrowserConsoleAppender();
 	// FIXME disable to spit out objects nicely
 	var patternLayout = new log4javascript.PatternLayout("%-5p: [%c] %m");
