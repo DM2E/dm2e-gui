@@ -37,12 +37,13 @@ define([
                 var metaStr = '';
 				metaStr += blank + ' a <' + NS.getQN('omnom:File') + '> .\n';
                 metaStr += blank + ' <' + NS.getQN('omnom:fileOwner') + '> <' + session.get("user").id + '>.\n';
+                metaStr += blank + ' <' + NS.getQN('omnom:fileType') + '> <' + this.$("#inputFiletype").val() + '>.\n';
 				metaStr += blank + ' <' + NS.getQN('dcterms:modified') + '> "' + now.toISOString() + '".\n';
                 console.log(metaStr);
 
 				var fileInput = this.$("input:file");
 				var fileInputFile = fileInput.get(0).files[0];
-                console.log(fileInputFile);
+
 				var fd = new FormData();
 				fd.append("file", fileInput.get(0).files[0]);
 				fd.append("meta", metaStr);
