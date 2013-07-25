@@ -1,3 +1,3 @@
 #!env bash
-bin/stop-fuseki.sh
-bin/start-fuseki.sh
+bash bin/stop-fuseki.sh
+bash bin/start-fuseki.sh

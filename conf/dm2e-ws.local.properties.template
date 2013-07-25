@@ -1,0 +1,5 @@
+dm2e.ws.sparql_endpoint = $$$DM2E_SPARQL_ENDPOINT_QUERY$$$
+dm2e.ws.sparql_endpoint_statements = $$$DM2E_SPARQL_ENDPOINT_UPDATE$$$
+dm2e.ws.server.host = $$$DM2E_HOSTNAME$$$
+dm2e.ws.server.port = $$$DM2E_PORT$$$
+dm2e.ws.base_uri = $$$DM2E_BASE_URI$$$

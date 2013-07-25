@@ -1,0 +1,12 @@
+JAVA_OPTS="$JAVA_OPTS -Djava.security.auth.login.config=$CATALINA_HOME/conf/jaas.conf"
+
+# CHANGE_ME
+if [[ ! -z '$$$DM2E_TEST_PROPERTIES$$$' ]];then
+    JAVA_OPTS="$JAVA_OPTS -Ddm2e-ws.test.properties_file=dm2e.gui.properties"
+fi
+
+
+# Enable the jconsole agent locally
+# JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote"
+
+export JAVA_OPTS

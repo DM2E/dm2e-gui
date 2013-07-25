@@ -86,10 +86,10 @@
          http://tomcat.apache.org/tomcat-7.0-doc/proxy-howto.html 
         kb Tue Jul 23 15:35:16 CEST 2013
     -->
-    <!-- CHANGE_ME: $$$DM2E_HOSTNAME$$$ -->
-     <Connector port="8080" 
-         proxyName="omnom.hu-berlin.de" 
-         proxyPort="80"/>
+    <!-- CHANGE_ME:  -->
+     <Connector port="$$$DM2E_LOCALPORT$$$" 
+         proxyName="$$$DM2E_HOSTNAME$$$" 
+         proxyPort="$$$DM2E_PORT$$$"/>
     <!-- An Engine represents the entry point (within Catalina) that processes
          every request.  The Engine implementation for Tomcat stand alone
          analyzes the HTTP headers included with the request, and passes them

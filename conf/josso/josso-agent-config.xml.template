@@ -34,8 +34,9 @@
     <tc70:agent name="josso-tomcat70-agent" sessionAccessMinInterval="1000">
 
         <!-- Gateway LOGIN and LOGOUT URLs -->
-        <gatewayLoginUrl>http://dm2e-security.rz-berlin.mpg.de/josso/signon/login.do</gatewayLoginUrl>
-        <gatewayLogoutUrl>http://dm2e-security.rz-berlin.mpg.de/josso/signon/logout.do</gatewayLogoutUrl>
+        <gatewayLoginUrl>$$$DM2E_JOSSO_LOGIN$$$</gatewayLoginUrl>
+        <gatewayLogoutUrl>$$$DM2E_JOSSO_LOGOUT$$$</gatewayLogoutUrl>
+        <gatewayLogoutUrl></gatewayLogoutUrl>
         <!--
         <gatewayLoginUrl>http://localhost:8080/josso/signon/login.do</gatewayLoginUrl>
         <gatewayLogoutUrl>http://localhost:8080/josso/signon/logout.do</gatewayLogoutUrl>
@@ -70,9 +71,9 @@
                         <!-- The vhost is an ooptional feature:
                         Specify the Host/Virtual Host where this application is runnig
                         This is useful when configuring multiple security domains. -->
-			<!-- You can configure this as a 'partner-app' element attribute as well -->
-			<!-- CHANGE_ME: $$$DM2E_HOSTNAME$$$ -->
-                        <vhost>omnom.hu-berlin.de</vhost>
+                        <!-- You can configure this as a 'partner-app' element attribute as well -->
+                        <!-- CHANGE_ME:  -->
+                        <vhost>$$$DM2E_HOSTNAME$$$</vhost>
 
                         <!-- This is an optional feature :
                         You can reference any web resource collection that should not be subject to SSO protection.

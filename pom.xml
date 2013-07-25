@@ -12,6 +12,9 @@
     <exec.mainClass.override>eu.dm2e.ws.gui.GuiConsole</exec.mainClass.override>
     <dir.assets>${basedir}/assets</dir.assets>
 
+    <templates.dir.build>${project.build.directory}/templates</templates.dir.build>
+    <conf.dir>${basedir}/conf</conf.dir>
+
     <version.sesame>2.7.3</version.sesame>
 
     <version.fuseki>0.2.7</version.fuseki>
@@ -20,12 +23,12 @@
     <fuseki.dir.data>${project.build.directory}/fuseki-data</fuseki.dir.data>
 
     <version.tomcat>7.0.42</version.tomcat>
-    <tomcat.dir.conf>${basedir}/conf/tomcat7</tomcat.dir.conf>
+    <tomcat.dir.conf>${conf.dir}/tomcat7</tomcat.dir.conf>
     <tomcat.archive.file>${project.build.directory}/apache-tomcat-${version.tomcat}.zip</tomcat.archive.file>
     <tomcat.dir.build>${project.build.directory}/tomcat</tomcat.dir.build>
 
     <version.josso>1.8.7</version.josso>
-    <josso.dir.conf>${basedir}/conf/josso</josso.dir.conf>
+    <josso.dir.conf>${conf.dir}/josso</josso.dir.conf>
     <josso.archive.file>${project.build.directory}/josso-${version.josso}.zip</josso.archive.file>
     <josso.dir.build>${project.build.directory}/josso-${version.josso}</josso.dir.build>
 
@@ -123,6 +126,13 @@
                 <delete dir="${tomcat.dir.build}/webapps/examples" />
                 <delete dir="${tomcat.dir.build}/webapps/ROOT" />
 
+                <echo message="Copy dm2e webapp to $CATALINA_HOME/webapps and rename to ROOT" />
+                <copy todir="${tomcat.dir.build}/webapps/ROOT">
+                  <fileset dir="${project.build.directory}/${project.artifactId}">
+                    <include name="**" />
+                  </fileset>
+                </copy>
+
                 <!-- Install josso deps -->
                 <echo message="Copying required JOSSO libs from ${josso.dir.build} to ${tomcat.dir.build}/lib" />
                 <copy todir="${tomcat.dir.build}/lib">
@@ -195,21 +205,26 @@
                 <!-- <echo message="Copying setenv.sh from JOSSO" /> -->
                 <!-- <copy file="${josso.dir.build}/dist/agents/config/tc70/setenv.sh" todir="${tomcat.dir.build}/bin" /> -->
 
-                <echo message="Copying custom josso-agent-config.xml" />
-                <copy file="${josso.dir.conf}/josso-agent-config.xml" todir="${tomcat.dir.build}/lib" />
+                <echo message="Create template dir" />
+                <mkdir dir="${templates.dir.build}" />
 
-                <echo message="Copying custom server.xml" />
-                <copy file="${tomcat.dir.conf}/server.xml" todir="${tomcat.dir.build}/conf" />
+                <echo message="Copying custom josso-agent-config.xml.template" />
+                <delete file="${tomcat.dir.build}/lib/josso-agent-config.xml" />
+                <copy file="${josso.dir.conf}/josso-agent-config.xml.template" todir="${templates.dir.build}" />
 
-                <echo message="Copying custom setenv.sh" />
-                <copy file="${tomcat.dir.conf}/setenv.sh" todir="${tomcat.dir.build}/bin" overwrite="true"/>
+                <echo message="Copying custom server.xml.template" />
+                <delete file="${tomcat.dir.build}/conf/server.xml" />
+                <copy file="${tomcat.dir.conf}/server.xml.template" todir="${templates.dir.build}" />
 
-                <echo message="Copy dm2e webapp to $CATALINA_HOME/webapps and rename to ROOT" />
-                <copy todir="${tomcat.dir.build}/webapps/ROOT">
-                  <fileset dir="${project.build.directory}/${project.artifactId}">
-                    <include name="**" />
-                  </fileset>
-                </copy>
+                <echo message="Copying custom setenv.sh.template" />
+                <delete file="${tomcat.dir.build}/bin/setenv.sh" />
+                <copy file="${tomcat.dir.conf}/setenv.sh.template" todir="${templates.dir.build}" />
+
+                <echo message="Copying dm2e-ws.local.properties.template" />
+                <delete file="${tomcat.dir.build}/webapps/ROOT/WEB-INF/classes/dm2e.gui.properties" />
+                <delete file="${tomcat.dir.build}/webapps/ROOT/WEB-INF/classes/dm2e-ws.test.properties" />
+                <copy file="${conf.dir}/dm2e-ws.local.properties.template" todir="${templates.dir.build}" />
+
 
                 <!-- <echo message="Copy OpenRDF WAR to $CATALINA_HOME" /> -->
                 <!-- <copy file="${dir.assets}/sesame-http-server-${version.sesame}.war" tofile="${tomcat.dir.build}/webapps/sesame.war" /> -->
