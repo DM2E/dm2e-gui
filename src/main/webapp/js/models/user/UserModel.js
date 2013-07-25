@@ -27,11 +27,15 @@ define([
             {
                 type : Backbone.HasMany,
                 key : NS.getQN("omnom:webservice"),
+                //includeInJSON: "id",
+                createModels: true,
                 relatedModel : WebserviceModel,
             },
             {
                 type : Backbone.HasMany,
                 key : NS.getQN("omnom:fileservice"),
+                //includeInJSON: "id",
+                createModels: true,
                 relatedModel : WebserviceModel,
             },
 

@@ -4,18 +4,20 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-    'RelationalModel',
+  'RelationalModel',
+  'models/workflow/WebserviceModel',
 	'logging',
 	'constants/RDFNS',
-    'constants/SERVICE_URLS',
+  'constants/SERVICE_URLS',
 	'util/dialogs',
-    'util/themeSwitcher',
-    'util/UriUtils',
+  'util/themeSwitcher',
+  'util/UriUtils',
 	'models/user/UserModel'
 ], function($,
 	_,
 	Backbone,
-    RelationalModel,
+  RelationalModel,
+  WebserviceModel,
 	logging,
 	NS,
     SERVICE_URLS,
@@ -66,43 +68,58 @@ define([
     userModel.url = userID;
     userModel.fetch({
         async: false,
-        success : function() {
-            log.debug("Successfully fetched user " + userID + " from server.");
-            console.error(userModel.toJSON());
-            log.debug("Fetching webservices");
-        },
-        error : function() {
-            log.warn("Creating user");
+        complete : function(jqXHR) {
+            if (jqXHR.status === 200) {
+                log.debug("Successfully fetched user " + userID + " from server.");
+                console.error(userModel.toJSON());
+            } else {
+              log.warn("Creating user");
 
-            userModel.set("id", userID);
+              userModel.set("id", userID);
 
-            userModel.setQN("foaf:name", UriUtils.last_url_segment(userID));
-            userModel.setQN("omnom:preferredTheme", "dark");
-            _.each(["omnom:fileservice", "omnom:webservice"], function(rel) {
-                _.each(defaultServices[rel], function(serviceUrlFragment) {
-                    userModel.getQN(rel).add(serviceUrlFragment);
-                })
-            });
-            if (userModel.getQN("foaf:name") !== 'the-test-user'){
-                userModel.save();
-            }
-        }
+              userModel.setQN("foaf:name", UriUtils.last_url_segment(userID));
+              userModel.setQN("omnom:preferredTheme", "dark");
+              _.each(["omnom:fileservice", "omnom:webservice"], function(rel) {
+              log.debug("Adding " + rel + " to new user.");
+                  _.each(defaultServices[rel], function(serviceUrlFragment) {
+                    console.log(userModel.getQN(rel));
+                    userModel.getQN(rel).add( new WebserviceModel(serviceUrlFragment) );
+                    console.log(userModel.getQN(rel));
+                  })
+              });
+              if (userModel.getQN("foaf:name") !== 'the-test-user'){
+                  userModel.save();
+              }
+              // window.location.reload();
+              console.warn("Newly built user model before expansion: ", userModel);
+          }
+//          log.debug("Fetching webservices");
+          // Expand all the services (FIXME quite a performance hit ofc)
+//          _.each(["omnom:fileservice", "omnom:webservice"], function(rel) {
+//              _.each(userModel.getQN(rel).models, function(modelToExpand) {
+//                  log.debug("Fetching webservice " + modelToExpand.id);
+//                  $.ajax({
+//                    async: false,
+//                    url: modelToExpand.id + "/describe",
+//                    dataType: "json",
+//                    success: function(data) {
+//                      modelToExpand.set(data);
+//                    },
+//                  });
+//                  console.warn("Webservice fetched: ", modelToExpand);
+//              });
+//          });
+      }
     });
 
-    // Expand all the services (FIXME quite a performance hit ofc)
-    _.each(["omnom:fileservice", "omnom:webservice"], function(rel) {
-        _.each(userModel.getQN(rel).models, function(modelToExpand) {
-            modelToExpand.url = modelToExpand.id + "/describe";
-            modelToExpand.fetch({async:false});
-        });
-    });
+    console.warn("Expanded user model: ", userModel);
 
-	var UserSession = RelationalModel.extend({
+    var UserSession = RelationalModel.extend({
         toJSON : function() { return { user : this.get("user").toJSON() } }
     });
-	var session = new UserSession({
-		user :  userModel
-	});
+    var session = new UserSession({
+	user :  userModel
+    });
     themeSwitcher.setTheme(session.get("user").getQN("omnom:preferredTheme"));
-	return session;
+    return session;
 });
