@@ -27,19 +27,29 @@ define([
             {
                 type : Backbone.HasMany,
                 key : NS.getQN("omnom:webservice"),
-                //includeInJSON: "id",
-                createModels: true,
+                // includeInJSON: "id",
+                // createModels: true,
+                // autoFetch: true,
                 relatedModel : WebserviceModel,
+                collectionType: WebserviceCollection,
             },
             {
                 type : Backbone.HasMany,
                 key : NS.getQN("omnom:fileservice"),
-                //includeInJSON: "id",
-                createModels: true,
+                // includeInJSON: "id",
+                // createModels: true,
+                // autoFetch: true,
                 relatedModel : WebserviceModel,
+                collectionType: WebserviceCollection,
             },
 
         ],
+
+        // parse : function(data) {
+            // console.error(data);
+            // throw "BAR";
+
+        // },
 //		initialize : function() {
 //			_.each(this.get("serviceList"), function(serviceURL) {
 //				var service = new WebserviceModel({id : serviceURL});
