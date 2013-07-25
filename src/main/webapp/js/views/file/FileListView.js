@@ -33,7 +33,7 @@ define([
 
         render: function () {
             this.renderModel({ fileService: this.collection.url() });
-            console.warn(this.el);
+//            console.warn(this.el);
             this.renderCollection({}, '.file-list');
             return this;
         },

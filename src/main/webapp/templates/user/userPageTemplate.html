@@ -19,7 +19,7 @@
 <ul>
 	<% _.each(rdf_attr("omnom:webservice"), function(service) { %>
 		<li>
-			<a href="<%= service.id %>"><%= service.id %></a>
+            <%= rdf_attr("rdfs:label", service) %> (<a href="<%= service.id %>"><%= service.id %></a>)
 		</li>
 	<% }) %>
 </ul>

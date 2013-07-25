@@ -29,15 +29,20 @@ define([
                 key : NS.getQN("omnom:webservice"),
                 relatedModel : WebserviceModel,
             },
+            {
+                type : Backbone.HasMany,
+                key : NS.getQN("omnom:fileservice"),
+                relatedModel : WebserviceModel,
+            },
 
         ],
-		initialize : function() {
-			_.each(this.get("serviceList"), function(serviceURL) {
-				var service = new WebserviceModel({id : serviceURL});
-				service.url = serviceURL;
-				service.fetch();
-				this.getQN("omnom:webservice").add(service);
-			}, this);
-		}
+//		initialize : function() {
+//			_.each(this.get("serviceList"), function(serviceURL) {
+//				var service = new WebserviceModel({id : serviceURL});
+//				service.url = serviceURL;
+//				service.fetch();
+//				this.getQN("omnom:webservice").add(service);
+//			}, this);
+//		}
 	});
 });

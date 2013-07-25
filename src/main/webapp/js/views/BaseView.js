@@ -1,7 +1,27 @@
-define([ 'jquery', 'underscore', 'logging', 'backbone', 'singletons/UserSession', 'vm', 'uuid', 'constants/RDFNS'
-], function ($, _, logging, Backbone, session, Vm, UUID, RDFNS) {
+define([
+    'jquery',
+    'underscore',
+    'logging',
+    'backbone',
+    'singletons/UserSession',
+    'vm',
+    'uuid',
+    'util/UriUtils',
+    'util/SizeUtils',
+    'constants/RDFNS'
+], function ($,
+    _,
+    logging,
+    Backbone,
+    session,
+    Vm,
+    UUID,
+    UriUtils,
+    SizeUtils,
+    RDFNS) {
 
     var log = logging.getLogger("views.BaseView");
+
 
     var BaseView = Backbone.View.extend({
 
@@ -45,53 +65,52 @@ define([ 'jquery', 'underscore', 'logging', 'backbone', 'singletons/UserSession'
          */
         createHTML: function (tpl, options) {
 
-            if (!options) options = {};
-
+            if (!options) {
+                options = {};
+            }
             var that = this;
             return _.template(tpl, _.extend({
-                /**
-                 * A reference to the RDFNS.js module
-                 * @see RDFS.js
-                 */
-                NS: RDFNS,
-                session : session.toJSON(),
-                /**
-                 * Returns the element of an object denoted by a qname, resolved by RDFNS.getQName
-                 */
-                rdf_attr: function (qname, arg_model) {
-                    var model = arg_model
-                        ? arg_model
-                        : options.model
+
+                    /**
+                     * The serialized session
+                     */
+                    session: session.toJSON(),
+
+                    /**
+                     * A reference to the RDFNS.js module
+                     * @see RDFNS.js
+                     */
+                    NS: RDFNS,
+
+                    /**
+                     * Returns the element of a JS object or Backbone Model
+                     * denoted by a qname, resolved by RDFNS.rdf_attr
+                     */
+                    rdf_attr: function (qname, arg_model) {
+                        var model = arg_model
+                            ? arg_model
+                            : options.model
                             ? options.model
                             : that.model
-                                ? that.model
-                                : {};
-                    if (model.attributes)
-                        model = model.attributes;
-                    return RDFNS.rdf_attr(model, qname);
+                            ? that.model
+                            : {};
+                        if (model.attributes) {
+                            model = model.attributes;
+                        }
+                        return RDFNS.rdf_attr(model, qname);
+                    },
+
+                    /**
+                     * Creates a unique ID by using UUID.js (to be used for generation of HTML identifiers and such)
+                     */
+                    unique_id: function () {
+                        return UUID.v4();
+                    }
                 },
-                /**
-                 * Returns the last segment of the argument interepreted as URL
-                 * last_url_segment("http://foo/bar/quux") = "quux"
-                 */
-                last_url_segment: function (arg_url) {
-                    if (!arg_url) return "BLANK";
-                    return arg_url.replace(/.*\//, "");
-                },
-                /**
-                 * Returns the path part of the argument interpreted as URL
-                 * url_path("http://foo/bar/quux") = "/foo/bar/quux"
-                 */
-                url_path: function (arg_url) {
-                    if (!arg_url) return "BLANK";
-                    return arg_url.replace(/http:\/\/[^\/]*/, "");
-                },
-                /**
-                 * Creates a unique ID by using UUID.js (to be used for generation of HTML identifiers and such)
-                 */
-                unique_id: function() { //noinspection JSUnresolvedFunction
-                    return UUID.v4() },
-            }, options ));
+                UriUtils,
+                SizeUtils,
+                options
+            ));
         },
 
         /**
@@ -118,9 +137,9 @@ define([ 'jquery', 'underscore', 'logging', 'backbone', 'singletons/UserSession'
             }
             this.$el.html(
                 this.createHTML(this.template, _.extend({
-                        model: this.model ? this.model.toJSON() : {},
-                        rawModel: this.model ? this.model : {},
-                    }, options)));
+                    model: this.model ? this.model.toJSON() : {},
+                    rawModel: this.model ? this.model : {},
+                }, options)));
         },
 
         /**
@@ -140,7 +159,7 @@ define([ 'jquery', 'underscore', 'logging', 'backbone', 'singletons/UserSession'
                 }
             }
             if (typeof listSelector === 'undefined') {
-                listSelector = this.listSelector
+                listSelector = this.listSelector;
                 if (typeof listSelector === 'undefined') {
                     console.error("Must pass arg or set this.listSelector to call renderCollection");
                     console.error(this);
@@ -150,20 +169,20 @@ define([ 'jquery', 'underscore', 'logging', 'backbone', 'singletons/UserSession'
             }
             log.debug("renderCollection() in BaseView called (Selector: '" + listSelector + "')");
             Vm.cleanupSubViews(this);
+            // FIXME FIXME
             _.each(this.collection.models, function (model) {
                 var subview = Vm.createSubView(this, ItemView,
                     _.extend({
-                        FOO : "FEFNEWKJNFWJKNK",
                         model: model,
                     }, itemViewOptions));
                 this.appendHTML(subview, listSelector);
             }, this);
         },
 
-        setButtonLoading : function(selector) {
+        setButtonLoading: function (selector) {
             this.$("span", selector).first().addClass("loading-indicator");
         },
-        unsetButtonLoading : function(selector) {
+        unsetButtonLoading: function (selector) {
             this.$("span", selector).first().removeClass("loading-indicator");
         },
 

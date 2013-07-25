@@ -1,10 +1,10 @@
 //Filename: FileManagerListItemView
 
 define([
-	'jquery', 
-	'underscore', 
-	'BaseView', 
-	'logging', 
+	'jquery',
+	'underscore',
+	'BaseView',
+	'logging',
 	'util/dialogs',
 	'text!templates/file/fileManagerListItemTemplate.html',
 ], function($, _, BaseView, logging, dialogs, itemTemplate) {
@@ -13,33 +13,34 @@ define([
 
 	return BaseView.extend({
 
-        template : itemTemplate,
-		
-		events : {
-			"click .btn-file-delete" : function(e) {
+		tagName: 'tr',
+
+		template: itemTemplate,
+
+		events: {
+			"click .btn-file-delete": function(e) {
 				console.log("Destroying model " + this.model.url());
 				this.model.destroy({
-					wait : true,
-					error : function(model, xhr) {
+					wait: true,
+					error: function(model, xhr) {
 						log.error("Could not destroy this file model.");
 						dialogs.errorXHR(xhr);
 					},
-					success : function(model, xhr) {
+					success: function(model, xhr) {
 						log.info("Successfully destroyed this file model.");
 					}
 				});
 			},
 		},
 
-		render : function() {
-            this.renderModel();
+		render: function() {
+			this.renderModel();
 			if (this.model.get("fileEditURI")) {
 				this.$(".btn-file-edit").removeClass("disabled");
 			}
-//			if (this.model.get("fileRetrievalURI")) {
-//				this.$(".btn-file-delete").removeClass("disabled");
-//			}
-			
+			//			if (this.model.get("fileRetrievalURI")) {
+			//				this.$(".btn-file-delete").removeClass("disabled");
+			//			}
 			return this;
 		}
 

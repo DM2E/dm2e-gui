@@ -6,6 +6,7 @@ define([
 	'BaseView',
 	'logging',
 	'vm',
+	'singletons/UserSession',
     'util/dialogs',
 	'constants/RDFNS',
 	'text!templates/file/fileUploadTemplate.html',
@@ -14,8 +15,9 @@ define([
 	BaseView,
 	logging,
 	Vm,
+	session,
     dialogs,
-	RDFNS,
+	NS,
 	fileUploadTemplate) {
 
 	var log = logging.getLogger("FileUploadPage.js");
@@ -29,11 +31,21 @@ define([
 			"click #submit-upload" : function(e) {
 				e.preventDefault();
 
+				var now = new Date();
+
+                var blank = "_:foo ";
+                var metaStr = '';
+				metaStr += blank + ' a <' + NS.getQN('omnom:File') + '> .\n';
+                metaStr += blank + ' <' + NS.getQN('omnom:fileOwner') + '> <' + session.get("user").id + '>.\n';
+				metaStr += blank + ' <' + NS.getQN('dcterms:modified') + '> "' + now.toISOString() + '".\n';
+                console.log(metaStr);
+
 				var fileInput = this.$("input:file");
 				var fileInputFile = fileInput.get(0).files[0];
                 console.log(fileInputFile);
 				var fd = new FormData();
 				fd.append("file", fileInput.get(0).files[0]);
+				fd.append("meta", metaStr);
 				console.log(fd);
 				$.ajax({
 					url : 'api/file',
@@ -48,13 +60,6 @@ define([
 					// regardless of whether content is actually sent.
 					// Defaults to 'application/x-www-form-urlencoded'
 					contentType : false,
-
-//					// Before 1.5.1 you had to do this:
-//					beforeSend : function(x) {
-//						if (x && x.overrideMimeType) {
-//							x.overrideMimeType("multipart/form-data");
-//						}
-//					},
 
 					// Now you should be able to do this:
 					mimeType : 'multipart/form-data', // Property added in 1.5.1
@@ -109,7 +114,7 @@ define([
 		renderFileTypeSelection : function() {
 
 			//noinspection JSUnresolvedFunction
-            _.each(RDFNS.OMNOM_TYPES(), function(url_func, label) {
+            _.each(NS.OMNOM_TYPES(), function(url_func, label) {
                 // skip the filetype if it contians lowercase characters or is BASE
                 if (label === 'BASE' || ! /^[^a-z]+$/.test(label))
                     return;

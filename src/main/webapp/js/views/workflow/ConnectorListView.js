@@ -19,6 +19,7 @@ define([ 'jquery', 'underscore', 'logging', 'BaseView', 'vm',
             this.listenTo(this.collection, "remove", this.render);
             console.log(this.collection);
         },
+        x
 
         render: function () {
             this.$el.html(this.createHTML(this.template));

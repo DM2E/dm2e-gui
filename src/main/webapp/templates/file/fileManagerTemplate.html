@@ -1,13 +1,17 @@
-
-<div class="span3 offset1">
-	<h2>File Manager</h2>
-	Select one of your registered file services:
-	<ul>
-		<% _.each(rdf_attr("omnom:fileservice", session.user), function(fileService) { %>
-		<li>
-			<a href="#file-list/<%= fileService.id %>"><%= fileService.id %></a>
-		</li>
-		<% }) %>
-	</ul>
+<div class="row">
+    <div class="span12">
+        <h2>File Manager</h2>
+        Select one of your registered file services:
+        <ul>
+            <%console.log(obj.session.user)%>
+            <% _.each(rdf_attr("omnom:fileservice", session.user), function(service) { %>
+            <li>
+                <a href="#file-list/<%= service.id %>"><%= service.id %></a>
+            </li>
+            <% }) %>
+        </ul>
+    </div>
 </div>
-<div class="file-list span8"></div>
+<div class="row">
+    <div class="file-list span15"></div>
+</div>

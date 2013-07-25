@@ -1,7 +1,7 @@
 define([
 	'jquery',
 	'underscore',
-	'backbone',
+	'BaseView',
 	'logging',
 	'vm',
 	'collections/file/FilesCollection',
@@ -9,18 +9,22 @@ define([
 	'text!templates/file/fileManagerListTemplate.html'
 ], function($,
 	_,
-	Backbone,
+	BaseView,
 	logging,
 	Vm,
 	FilesCollection,
 	FileManagerListItemView,
 	fileManagerListTemplate) {
 
-	var log = logging.getLogger("FileManageListView");
+	var log = logging.getLogger("views.file.FileManageListView");
 
-	return Backbone.View.extend({
-		
-		className: "list-container",
+	return BaseView.extend({
+
+        template : fileManagerListTemplate,
+
+        itemView: FileManagerListItemView,
+
+        listSelector: '.file-list',
 
 		hideLoadingIndicator : function() {
 			if (this.collection.listAvailable().length === 0) {
@@ -36,31 +40,10 @@ define([
 		},
 
 		render : function() {
-			
-			var that = this;
-
-			this.$el.html(_.template(fileManagerListTemplate, {
-				fileService : this.collection.url()
-			}));
-
-			_.each(this.collection.listAvailable(), function(fileModel) {
-				that.renderFileModel(fileModel);
-			});
-//			
+            this.renderModel({serviceURL: this.collection.url()});
+            this.renderCollection();
 			return this;
 		},
-
-		renderFileModel : function(fileModel) {
-
-			var viewName = 'view-' + fileModel.get("id");
-			var itemView = Vm.createView(this, viewName, FileManagerListItemView, {
-				model : fileModel
-			});
-			this.$el.append(itemView.render().$el);
-		},
-
-		clean : function() {
-		}
 
 	});
 
