@@ -44,6 +44,13 @@ define([
 			relatedModel : ParameterModel,
 		} ],
 
+        // parse: function(data) {
+            // if (_.isString(data)) {
+                // return { id : data };
+            // }
+            // return data;
+        // }
+
 	// initialize: function() {
 	// console.log(RDFNS.OMNOM);
 	// }
