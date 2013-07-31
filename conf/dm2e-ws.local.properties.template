@@ -5,4 +5,4 @@ dm2e.ws.server.port = $$$DM2E_PORT$$$
 dm2e.ws.base_uri = $$$DM2E_BASE_URI$$$
 dm2e.service.mint-file.username = $$$MINT_USERNAME$$$
 dm2e.service.mint-file.password = $$$MINT_PASSWORD$$$
-dm2e.service.job.base_uri = $$DM2E_BASE_URI$$$/job
+dm2e.service.job.base_uri = $$$DM2E_BASE_URI$$$/job
