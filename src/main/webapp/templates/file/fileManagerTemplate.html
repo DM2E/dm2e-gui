@@ -6,7 +6,7 @@
             <%console.log(obj.session.user)%>
             <% _.each(rdf_attr("omnom:fileservice", session.user), function(service) { %>
             <li>
-                <a href="#file-list/<%= service.id %>"><%= service.id %></a>
+                <a href="#file-list/<%= service %>"><%= service %></a>
             </li>
             <% }) %>
         </ul>

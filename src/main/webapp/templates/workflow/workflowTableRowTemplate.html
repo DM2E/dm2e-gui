@@ -5,7 +5,7 @@
     <a href="<%= model.id %>"><%= last_url_segment(model.id) %></a>
 </td>
 <td>
-    <%= rdf_attr("rdfs:label") %>
+    <%= rdf_attr("rdfs:comment") %>
 </td>
 <td>
     <%= rdf_attr("omnom:workflowPosition").length %>
@@ -14,8 +14,8 @@
     <%= rdf_attr("omnom:parameterConnector").length %>
 </td>
 <td>
-    <%= rdf_attr("dcterms:creator") || 'UNKNOWN' %>
+    <%= rdf_attr("dcterms:creator") ? last_url_segment(rdf_attr("dcterms:creator").id) :  'UNKNOWN' %>
 </td>
 <td>
-    <%= rdf_attr("dcterms:modified") || 'UNKNOWN' %>
+    <%= rdf_attr("dcterms:modified") ? human_readable_date(rdf_attr("dcterms:modified")) : 'UNKNOWN' %>
 </td>

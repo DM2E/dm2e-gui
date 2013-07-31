@@ -157,6 +157,9 @@ define([
             log.debug(this.model.toJSON());
             this.setButtonLoading("button#save-workflow");
             var that = this;
+
+            this.model.setQN("dcterms:creator", { "id" : session.user.id });
+            this.model.setQN("dcterms:modified", new Date().toISOString());
             // Un-Skolemize positions (i.e. make them blank nodes and let the
             // server rename them again
             // FIXME this does not work because connectors do not pick up the change and become invalid.

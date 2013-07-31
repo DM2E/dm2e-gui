@@ -14,6 +14,7 @@ define([
 
         module("RDFNSTest");
 
+        var compareBasePrefix = "omnom";
         var compareBase = "http://onto.dm2e.eu/omnom/";
         var compareEntity = "Workflow";
         var compare = compareBase + compareEntity;
@@ -23,6 +24,9 @@ define([
             equal(NS.OMNOM().BASE() + compareEntity, compare);
             equal(NS.OMNOM().CLASS_WORKFLOW(), compare);
             equal(NS.expand("omnom:Workflow"), compare);
+        });
+        test("shorten", 1, function() {
+            equal(NS.shorten(NS.expand("omnom:Workflow")), "omnom:Workflow");
         });
         test("rdf_attr", 4, function() {
             theObj = {};

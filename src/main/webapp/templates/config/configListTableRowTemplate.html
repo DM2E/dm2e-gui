@@ -1,0 +1,22 @@
+<% var shortType = last_url_segment(rdf_attr("rdf:type")) %>
+<td><%= shortType %></td>
+<td>
+  <% if (shortType === 'WorkflowConfig') { %>
+  <div class="btn-group btn-group-vertical">
+    <a class="btn btn-success edit-config" href="#/config-edit/<%= model.id %>">Edit Config</a>
+    <a class="btn btn-success edit-workflow" href='#/workflow-edit/<%= rdf_attr("omnom:workflow").id %>'>Edit Workflow</a>
+  </div>
+  <% } %>
+</td>
+<td><%= model.id %></td>
+<td>
+  <% if (shortType === 'WorkflowConfig') { %>
+    <%= rdf_attr("omnom:workflow").id %>
+  <% } %>
+</td>
+<td>
+  <%= rdf_attr("dcterms:creator") ? last_url_segment(rdf_attr("dcterms:creator").id) : "UNKNOWN" %>
+</td>
+<td>
+  <%= human_readable_date(rdf_attr("dcterms:modified")) %>
+</td>

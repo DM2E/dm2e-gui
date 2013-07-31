@@ -11,6 +11,7 @@ define([
     'uuid',
     'util/UriUtils',
     'util/SizeUtils',
+    "humaneDate",
     'constants/RDFNS'
 ], function ($,
     _,
@@ -21,6 +22,7 @@ define([
     UUID,
     UriUtils,
     SizeUtils,
+    humaneDate,
     RDFNS) {
 
     var log = logging.getLogger("views.BaseView");
@@ -106,13 +108,23 @@ define([
                         return UUID.v4();
                     },
 
+                    /**
+                     * Escapes angle brackets and ampersands
+                     */
                     html_escape : function(raw) {
                       var ret = raw || "";
                       ret = ret.replace(/&/g, "&amp;");
                       ret = ret.replace(/</g, "&lt;");
                       ret = ret.replace(/>/g, "&gt;");
                       return ret;
-                    }
+                    },
+
+                    /**
+                     * Displays dates nicely
+                     */
+                    human_readable_date : function(val) {
+                      return humaneDate(new Date(val));
+                    },
                 },
                 UriUtils,
                 SizeUtils,

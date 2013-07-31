@@ -1,26 +1,25 @@
 //Filename: filename
 
 define([
-	'jquery',
-	'underscore',
-	'logging',
-	'BaseCollection',
-	'models/workflow/WorkflowModel',
+    'jquery',
+    'underscore',
+    'logging',
+    'BaseCollection',
+    'models/workflow/WorkflowModel',
 ], function($,
-	_,
-	logging,
-	BaseCollection,
-	WorkflowModel
+    _,
+    logging,
+    BaseCollection,
+    WorkflowModel
    ) {
 
-	 var log = logging.getLogger("WorkflowCollection.js");
+     var log = logging.getLogger("WorkflowCollection.js");
 
-	return BaseCollection.extend({
+    return BaseCollection.extend({
 
-	    model : WorkflowModel,
-	    
-	    url : 'api/workflow/list',
+        model : WorkflowModel,
+
+        url : 'api/workflow/list',
 
     });
-    var foo;
-})
+});

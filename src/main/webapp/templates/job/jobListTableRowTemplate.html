@@ -1,0 +1,16 @@
+<% var shortType = NS.shorten(rdf_attr("rdf:type")) %>
+<td>
+  <%= shortType %>
+</td>
+<td>
+  <% if (shortType === 'omnom:WorkflowJob') { %>
+  <div class="btn-group">
+    <a class="btn btn-success show-job" href="#job/<%= model.id %>">
+      Show Job
+    </a>
+  </div>
+  <% } %>
+</td>
+<td>
+  <%= model.id %>
+</td>

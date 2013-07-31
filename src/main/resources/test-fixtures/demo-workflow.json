@@ -1,5 +1,6 @@
 {
     "uuid": "aa77dddb-0fc2-497f-bf09-ea5c25e9b9e8",
+  "rdfs:comment": "A simple demo workflow",
   "http://onto.dm2e.eu/omnom/inputParam": [
     {
       "uuid": "_:pollInterval",

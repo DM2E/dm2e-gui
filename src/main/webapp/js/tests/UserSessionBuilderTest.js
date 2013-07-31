@@ -12,6 +12,11 @@ define([
     UserSessionBuilder,
     SERVICE_URLS
 ) {
+
+  var NR_FILESERVICES = 1,
+      NR_WEBSERVICES = 4;
+  var NR_TOTAL = NR_FILESERVICES + NR_WEBSERVICES;
+
     return function() {
         module("UserSessionBuilderTest");
 
@@ -29,9 +34,9 @@ define([
         test("initialize session", function() {
             var sess = UserSessionBuilder.prototype.initSession();
             ok(sess, "Initialized");
-            equal(_.keys(sess.services).length, 6, "# of services total");
-            equal(NS.rdf_attr("omnom:fileservice", sess).length, 2, "# of fileservices");
-            equal(NS.rdf_attr("omnom:webservice", sess).length, 4, "# of webservices");
+            equal(_.keys(sess.services).length, NR_TOTAL, "# of services total");
+            equal(NS.rdf_attr("omnom:fileservice", sess).length, NR_FILESERVICES, "# of fileservices");
+            equal(NS.rdf_attr("omnom:webservice", sess).length, NR_WEBSERVICES, "# of webservices");
             ok(sess.cacheService(SERVICE_URLS.BASE + "file"));
         });
 

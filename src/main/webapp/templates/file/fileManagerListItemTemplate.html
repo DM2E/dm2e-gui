@@ -1,47 +1,59 @@
-<% console.log( obj ) %> Name:
 <td>
-<a class="btn btn-file-edit"
-   href='<%= rdf_attr("omnom:fileEditURI") %>'>
-    <!--         href="<% if (obj.edit_url) { %><%= obj.edit_url %><% } else { %>editor?id=<%= obj.id %><% } %>"> -->
-    <i class="icon-edit">&nbsp;</i>
-    edit
-</a>
-<button class="btn btn-danger btn-file-delete disabled">
-    <i class="icon-trash">&nbsp;</i>
-    delete
-</button>
-<a class="btn btn-download" href='<%= rdf_attr("omnom:fileRetrievalURI") %>'>
-    <i class="icon-download">&nbsp;</i>
-    Download
-</a>
+  <div class="btn-group btn-group-vertical">
+    <a class="btn btn-file-edit"
+      href='<%= rdf_attr("omnom:fileEditURI") %>'>
+      <!--         href="<% if (obj.edit_url) { %><%= obj.edit_url %><% } else { %>editor?id=<%= obj.id %><% } %>">
+ -->
+      <i class="icon-edit">
+        &nbsp;
+      </i>
+      edit
+    </a>
+    <button class="btn btn-danger btn-file-delete disabled">
+      <i class="icon-trash">
+        &nbsp;
+      </i>
+      delete
+    </button>
+    <a class="btn btn-download" href='<%= rdf_attr("omnom:fileRetrievalURI") %>'>
+      <i class="icon-download">
+        &nbsp;
+      </i>
+      Download
+    </a>
+  </div>
 </td>
 <td>
-    <%= rdf_attr("omnom:originalName") %>
+  <%= rdf_attr("omnom:originalName") %>
 </td>
-<!-- 	<br /> -->
+<!-- 	
+<br />
+ -->
 <!-- 	Owner: <%= obj.owner %> -->
-<!-- 	<br /> -->
+<!-- 	
+<br />
+ -->
 <!-- 	Upload Date: rdf_attr("omnom:uploadDate") %> -->
 <td>
-    <%= human_readable_size(rdf_attr("dcterms:extent")) %>
+  <%= human_readable_size(rdf_attr("dcterms:extent")) %>
 </td>
 <td>
-    <%= rdf_attr("dcterms:modified") %> ??
+  <%= human_readable_date(rdf_attr("dcterms:modified")) %>
 </td>
 <td>
-    <%= rdf_attr("omnom:fileType") %> ??
+  <%= NS.shorten(rdf_attr("omnom:fileType")) %>
 </td>
 <td>
-    <%= rdf_attr("omnom:fileStatus") %>
+  <%= rdf_attr("omnom:fileStatus") %>
 </td>
 <td>
-    <%= rdf_attr("dcterms:format") %>
+  <%= rdf_attr("dcterms:format") %>
 </td>
 <td>
-    <%= rdf_attr("omnom:fileOwner") %>
+  <%= rdf_attr("omnom:fileOwner") ? last_url_segment(rdf_attr("omnom:fileOwner").id) : "UNKNOWN" %>
 </td>
 <td>
-    <%= model.id %>
+  <%= model.id %>
 </td>
 <td>
 </td>

@@ -3,14 +3,14 @@
 
 require.config({
     // Set up modules
-	paths : {
-		jquery : '../vendor/jquery/jquery',
+    paths : {
+        jquery : '../vendor/jquery/jquery',
         underscore : '../vendor/lodash/lodash',
-		backbone : '../vendor/backbone/backbone',
-		text : '../vendor/requirejs-text/text',
+        backbone : '../vendor/backbone/backbone',
+        text : '../vendor/requirejs-text/text',
         log4javascript : '../vendor/log4javascript/log4javascript',
 
-		bootstrap : '../vendor/bootstrap-css/js/bootstrap',
+        bootstrap : '../vendor/bootstrap-css/js/bootstrap',
 
         backbone_relational : '../vendor/backbone-relational/backbone-relational',
         backbone_bootstrap_modal : '../vendor/backbone.bootstrap-modal/src/backbone.bootstrap-modal',
@@ -29,43 +29,47 @@ require.config({
 
         // utility
         uuid : '../vendor/node-uuid/uuid',
+        humaneDate : "../vendor/humane-dates/humane",
 
         // shortcut to HTML templates
-		templates : '../templates',
+        templates : '../templates',
 
-		BaseView : "views/BaseView",
-		BaseModel : "models/BaseModel",
-		RelationalModel : "models/RelationalModel",
-		BaseCollection : "collections/BaseCollection",
+        BaseView : "views/BaseView",
+        BaseModel : "models/BaseModel",
+        RelationalModel : "models/RelationalModel",
+        BaseCollection : "collections/BaseCollection",
 
-	},
-	
-	// http://requirejs.org/docs/api.html#config-shim
-	shim : {
-		'backbone' : {
-			deps : [ 'underscore', 'jquery' ],
-			exports : 'Backbone'
-		},
-		'jquery_ui' : {
-			deps : [ "jquery" ]
-		},
-		'underscore' : {
-			exports : '_',
-		},
-		'log4javascript' : {
-			exports : 'log4javascript'
-		},
-		'bootstrap' : {
-			deps : [ "jquery" ]
-		},
-		'backbone_relational' : {
-			deps :  [ 'backbone' ],
-			exports : 'Backbone.RelationalModel',
-		},
-		'backbone_bootstrap_modal' : {
-			deps : ['backbone'],
-			exports : 'Backbone.Modal',
-		},
+    },
+    
+    // http://requirejs.org/docs/api.html#config-shim
+    shim : {
+        'humaneDate' : {
+          exports : 'humaneDate',
+        },
+        'backbone' : {
+            deps : [ 'underscore', 'jquery' ],
+            exports : 'Backbone'
+        },
+        'jquery_ui' : {
+            deps : [ "jquery" ]
+        },
+        'underscore' : {
+            exports : '_',
+        },
+        'log4javascript' : {
+            exports : 'log4javascript'
+        },
+        'bootstrap' : {
+            deps : [ "jquery" ]
+        },
+        'backbone_relational' : {
+            deps :  [ 'backbone' ],
+            exports : 'Backbone.RelationalModel',
+        },
+        'backbone_bootstrap_modal' : {
+            deps : ['backbone'],
+            exports : 'Backbone.Modal',
+        },
         'bootstrap_jasny_fileupload' : {
             deps : [ 'jquery' ],
         },
@@ -84,24 +88,24 @@ require.config({
             ],
         }
 
-	}
+    }
 
 });
 
 // Wrap Backbone sync for debugging
 // Actually start the whole thing
 require([
-	'router',
-	'views/app',
-	'vm',
+    'router',
+    'views/app',
+    'vm',
     'util/backbone.sync',
 ], function(Router, AppView, Vm) {
 
-	var appView = Vm.createView({}, 'AppView', AppView);
-	appView.render();
+    var appView = Vm.createView({}, 'AppView', AppView);
+    appView.render();
 
-	var router = Router.initialize({
-		appView : appView
-	}); // The router now has a copy of all main appview
-	Vm.setRouter(router);
+    var router = Router.initialize({
+        appView : appView
+    }); // The router now has a copy of all main appview
+    Vm.setRouter(router);
 });

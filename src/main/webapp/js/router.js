@@ -287,7 +287,33 @@ define([
          */
         appRouter.route(/^job-list/, 'showJobList');
         appRouter.on('route:showJobList', function() {
-            dialogs.errorNotImplemented('View JobList');
+            require([
+                    'models/job/JobModel',
+                    'collections/job/JobCollection',
+                    'views/job/JobListPage'
+            ], function(JobModel, JobCollection, JobListPage) {
+                var collection = new JobCollection();
+                appView.showPage(Vm.createView({}, 'JobListPage', JobListPage, {
+                    collection: collection
+                }));
+            });
+        });
+
+        /**
+         * TODO
+         */
+        appRouter.route(/^config-list/, 'showConfigList');
+        appRouter.on('route:showConfigList', function() {
+            require([
+                    'models/config/WorkflowConfigModel',
+                    'collections/config/WorkflowConfigCollection',
+                    'views/config/ConfigListPage'
+            ], function(ConfigModel, ConfigCollection, ConfigListPage) {
+                var configColl = new ConfigCollection();
+                appView.showPage(Vm.createView({}, 'ConfigListPage', ConfigListPage, {
+                    collection: configColl
+                }));
+            });
         });
 
         Backbone.history.start();
