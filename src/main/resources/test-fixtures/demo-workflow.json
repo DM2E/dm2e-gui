@@ -1,0 +1,65 @@
+{
+    "uuid": "aa77dddb-0fc2-497f-bf09-ea5c25e9b9e8",
+  "http://onto.dm2e.eu/omnom/inputParam": [
+    {
+      "uuid": "_:pollInterval",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Time to wait between polls for job status, in milliseconds. [Default: 2000ms]",
+      "http://onto.dm2e.eu/omnom/defaultValue": "2000",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+      "http://www.w3.org/2000/01/rdf-schema#label": "pollInterval"
+    },
+    {
+      "uuid": "_:countdownPhrase",
+      "http://onto.dm2e.eu/omnom/webservice": {
+        "id": "http://localhost:9998/api/service/demo"
+      },
+      "http://onto.dm2e.eu/omnom/defaultValue": "bottles of beer on the wall",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+      "http://www.w3.org/2000/01/rdf-schema#label": "countdownPhrase"
+    },
+    {
+      "uuid": "_:jobTimeout",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Maximum time to wait for a job to finish, in seconds. [Default: 120s]",
+      "http://onto.dm2e.eu/omnom/defaultValue": "120",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+      "http://www.w3.org/2000/01/rdf-schema#label": "jobTimeout"
+    }
+  ],
+  "http://onto.dm2e.eu/omnom/outputParam": [
+    {
+      "uuid": "_:completeLog",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The complete log file of the workflow job and its webservice jobs.",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+      "http://www.w3.org/2000/01/rdf-schema#label": "completeLog"
+    }
+  ],
+  "http://onto.dm2e.eu/omnom/parameterConnector": [
+    {
+      "http://onto.dm2e.eu/omnom/fromWorkflow": {
+        "uuid": "aa77dddb-0fc2-497f-bf09-ea5c25e9b9e8"
+      },
+      "http://onto.dm2e.eu/omnom/toPosition": {
+        "uuid": "5ff08910-6bc0-4f39-85be-7f78f4b8a7c5"
+      },
+      "http://onto.dm2e.eu/omnom/fromParam": {
+        "uuid": "_:countdownPhrase"
+      },
+      "http://onto.dm2e.eu/omnom/toParam": {
+        "id": "http://localhost:9998/api/service/demo/param/countdownPhrase"
+      }
+    }
+  ],
+  "http://onto.dm2e.eu/omnom/workflowPosition": [
+    {
+      "uuid": "5ff08910-6bc0-4f39-85be-7f78f4b8a7c5",
+      "http://onto.dm2e.eu/omnom/inWorkflow": {
+        "uuid": "aa77dddb-0fc2-497f-bf09-ea5c25e9b9e8"
+      },
+      "http://onto.dm2e.eu/omnom/webservice": {
+        "id": "http://localhost:9998/api/service/demo",
+        "uuid": "6a41e8c4-dd5b-4425-a98f-08a248d1f05f"
+      }
+    }
+  ],
+  "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": "http://onto.dm2e.eu/omnom/Workflow"
+}
