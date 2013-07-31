@@ -69,8 +69,8 @@ define([
                 is_to_workflow : is_to_workflow,
                 is_from_workflow : is_from_workflow,
             };
-            console.error(render_opts);
-            console.error(this.model);
+            // console.log(render_opts);
+            // console.log(this.model);
 
             this.renderModel(render_opts);
 
