@@ -50,4 +50,6 @@ alias HEAD="curl -v -X HEAD"
 # SRV="http://localhost:9998"
 # SRV="http://localhost:8080/dm2e-ws/api"
 # SRV="http://localhost:9998/api"
-SRV="http://localhost:8080/api"
+if [ -z "$SRV" ];then
+    SRV="http://localhost:8080/api"
+fi

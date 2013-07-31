@@ -1,12 +1,20 @@
 #!env zsh
 
 tempfile=$(mktemp)
+workflow_file=$(mktemp)
 
 source bin/curl_rest.sh
-SRV="http://localhost:9998/api"
+
+cat src/main/resources/test-fixtures/demo-workflow.json > $workflow_file
+
+if [  "$SRV" != "http://localhost:9998/api" ];then
+    echo "Replacing..."
+    sed -i "s!http://localhost:9998/api!$SRV!" $workflow_file
+fi
+
 
 # post workflow
-WORKFLOW=$(POST -H $CT_JSON $SRV/workflow -d @src/main/resources/test-fixtures/demo-workflow.json \
+WORKFLOW=$(POST -H $CT_JSON $SRV/workflow -d @$workflow_file \
     2>&1 | grep 'Location: ' | sed 's///' | grep 'Location' | grep -o 'http.*')
 
 # get empty config
