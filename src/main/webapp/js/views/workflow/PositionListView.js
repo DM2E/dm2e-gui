@@ -64,7 +64,7 @@ define([
 //					that.collection.add(newPositionModel);
 					var newPos = {};
 					log.debug("foo");
-					newPos[NS.getQN("omnom:webservice")] = ui.draggable.data("model");
+					newPos[NS.expand("omnom:webservice")] = ui.draggable.data("model");
 					that.collection.add(newPos);
 					log.debug("bar");
 				}

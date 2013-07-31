@@ -6,37 +6,37 @@ define([ 'jquery',
 'logging',
 'text!templates/workflow/webserviceTemplate.html'
 ], function($,
-	_,
-	BaseView,
-	logging,
-	webserviceTemplate
-	) {
+    _,
+    BaseView,
+    logging,
+    webserviceTemplate
+    ) {
 
-	//noinspection JSUnusedLocalSymbols
+    //noinspection JSUnusedLocalSymbols
     var log = logging.getLogger("WebserviceView.js");
 
-	return BaseView.extend({
+    return BaseView.extend({
 
         template: webserviceTemplate,
-		
-		tagName: "div",
 
-		className: "webservice boxed-item fat-border",
-		
-		initialize : function() {
+        tagName: "div",
 
-			this.$el.data("model", this.model);
-			
-			this.$el.draggable({
-				revert: "invalid",
-				helper: "clone",
-				delay: 0,
-			});
-		},
+        className: "webservice boxed-item fat-border",
+
+        initialize : function() {
+
+            this.$el.data("model", this.model);
+
+            this.$el.draggable({
+                revert: "invalid",
+                helper: "clone",
+                delay: 0,
+            });
+        },
 
 //        render : function() {
 //            this.renderModel();
 //        }
-	
-	});
+
+    });
 });

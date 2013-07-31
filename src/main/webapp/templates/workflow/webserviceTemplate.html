@@ -3,7 +3,7 @@
 <div class="foo collapse" id="<%= uid %>">
     Input Params:
     <ul>
-        <% _.each(rdf_attr("omnom:inputParam").models, function(param) { %>
+        <% _.each(rdf_attr("omnom:inputParam"), function(param) { %>
         <li>
             <%= rdf_attr("rdfs:label", param) %>
         </li>
@@ -11,7 +11,7 @@
     </ul>
     Output Params:
     <ul>
-        <% _.each(rdf_attr("omnom:outputParam").models, function(param){ %>
+        <% _.each(rdf_attr("omnom:outputParam"), function(param){ %>
         <li>
             <%= rdf_attr("rdfs:label", param) %>
         </li>

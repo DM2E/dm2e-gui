@@ -7,7 +7,13 @@ define([
     'constants/RDFNS',
     'BaseModel',
 //    'RelationalModel',
-], function($,
+],
+/**
+ * A model representing a Job.
+ * @module models/job/JobModel
+ */
+
+function($,
     _,
     logging,
     NS,
@@ -18,7 +24,16 @@ define([
 
     var theDefaults = {};
 
+    /** 
+      @constructor
+      @requires Underscore
+      @requires Backbone
+      @augments module:Backbone.Model
+      */
     return BaseModel.extend({
+      /** 
+        @#lends module:models/job/JobModel~JobModel.prototype
+        */
 
         defaults : theDefaults,
 
@@ -27,4 +42,4 @@ define([
         }
 
     });
-})
+});

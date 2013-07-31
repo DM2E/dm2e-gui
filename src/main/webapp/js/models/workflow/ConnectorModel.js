@@ -19,7 +19,7 @@ function (
     var log = logging.getLogger("models.workflow.ConnectorModel");
 
     var theDefaults = {};
-    theDefaults[NS.getQN("rdf:type")] = NS.getQN("omnom:ParameterConnector");
+    theDefaults[NS.expand("rdf:type")] = NS.expand("omnom:ParameterConnector");
 
     var rdfRange = {
         "omnom:fromPosition" : "omnom:WorkflowPosition",
@@ -52,53 +52,53 @@ function (
                 if (!this.getQN(qname))
                     return;
 //                console.error(this.getQN(qname));
-                retJSON[NS.getQN(qname)] = {};
-                retJSON[NS.getQN(qname)][NS.getQN("rdf:type")] = NS.getQN(rdfRange[qname]);
-                retJSON[NS.getQN(qname)].id =  this.getQN(qname).id;
+                retJSON[NS.expand(qname)] = {};
+                retJSON[NS.expand(qname)][NS.expand("rdf:type")] = NS.expand(rdfRange[qname]);
+                retJSON[NS.expand(qname)].id =  this.getQN(qname).id;
 
                 // THIS IS THE HACK THAT MAKES IT AAAALL WORK
                 if (this.getQN(qname).attributes)
-                    retJSON[NS.getQN(qname)].uuid =  this.getQN(qname).attributes.cid;
-            }, this)
+                    retJSON[NS.expand(qname)].uuid =  this.getQN(qname).attributes.cid;
+            }, this);
             return retJSON;
         },
 
         relations: [
             {
                 type: Backbone.HasOne,
-                key: NS.getQN("omnom:fromWorkflow"),
+                key: NS.expand("omnom:fromWorkflow"),
                 relatedModel: WorkflowModel,
                 isAutoRelation: true,
                 includeInJSON: [ "id", "uuid" ],
             },
             {
                 type: Backbone.HasOne,
-                key: NS.getQN("omnom:toWorkflow"),
+                key: NS.expand("omnom:toWorkflow"),
                 relatedModel: WorkflowModel,
                 isAutoRelation: true,
                 includeInJSON: [ "id", "uuid" ],
             },
             {
                 type: Backbone.HasOne,
-                key: NS.getQN("omnom:fromPosition"),
+                key: NS.expand("omnom:fromPosition"),
                 relatedModel: PositionModel,
                 includeInJSON: [ "id", "uuid" ],
             },
             {
                 type: Backbone.HasOne,
-                key: NS.getQN("omnom:toPosition"),
+                key: NS.expand("omnom:toPosition"),
                 relatedModel: PositionModel,
                 includeInJSON: [ "id", "uuid" ],
             },
             {
                 type: Backbone.HasOne,
-                key: NS.getQN("omnom:fromParam"),
+                key: NS.expand("omnom:fromParam"),
                 relatedModel: ParameterModel,
                 includeInJSON: [ "id", "uuid" ],
             },
             {
                 type: Backbone.HasOne,
-                key: NS.getQN("omnom:toParam"),
+                key: NS.expand("omnom:toParam"),
                 relatedModel: ParameterModel,
                 includeInJSON: [ "id", "uuid" ],
             }

@@ -49,8 +49,8 @@ define([
 
         renderProgressBar : function() {
             var progress = 100 *
-                ( this.model.getQN("omnom:finishedPosition").length
-                    / this.workflow.getQN("omnom:workflowPosition").length );
+                ( this.model.getQN("omnom:finishedPosition").length /
+                 this.workflow.getQN("omnom:workflowPosition").length );
             this.$("div.progress div.bar").css("width", progress + "%");
         },
 

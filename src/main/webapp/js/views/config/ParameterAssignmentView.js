@@ -20,8 +20,17 @@ define([
     return BaseView.extend({
 
         template : theTemplate,
+
+        events : {
+            // FIXME
+            "focusout input#paramValue": function() { this.populateModelFromForm(); },
+        },
+
         populateModelFromForm : function() {
-            this.model.setQN("omnom:parameterValue", this.$("input#paramValue").val());
+            if (this.$("input#paramValue").val() !== "") {
+                this.model.setQN("omnom:parameterValue", this.$("input#paramValue").val());
+            }
+            log.debug("Model updated");
         },
         drop : function(event, ui) {
             var droppedModel = ui.draggable.data("model");
@@ -38,8 +47,8 @@ define([
 
             var that = this;
             this.$el.droppable({
-                drop : function(event, ui) { return that.drop(event, ui) },
-                accept : function(draggable) { return that.accept(draggable) },
+                drop : function(event, ui) { return that.drop(event, ui); },
+                accept : function(draggable) { return that.accept(draggable); },
                 activeClass: "drop-active",
                 hoverClass: "drop-hover",
             });

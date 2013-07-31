@@ -1,45 +1,12 @@
 define([
     'jquery',
+    'underscore',
     'logging',
     'util/constantLoader'
-], function ($, logging, loadConstants) {
+], function ($, _, logging, loadConstants) {
 
     var rdfns = {};
 
-//	var rdfnsRaw = loadConstants.from('api/constants/rdfns');
-//	_.each(rdfnsRaw, function(urls,namespace) {
-//		var base = urls.BASE;
-//		var urlsNameReverse = {};
-//		_.each(urls, function(url, name){
-//			var pathSegment = url.replace(base, "");
-//			urls[name] = function() { return pathSegment; };
-//			urlsNameReverse[pathSegment] = name;
-//		});
-//		urls.inverted = urlsNameReverse;
-//		urls.qname = function(path) {
-//			var constantName = this.inverted[path];
-//			if (! constantName) {
-//				console.log(this.inverted);
-//				throw "Unknown path " + path;
-//			}
-//			return this[constantName].call();
-//		}
-//		rdfnsElem = function() {
-//			return urls;
-//		};
-//		rdfns[namespace] = rdfnsElem;
-//
-////		var rdfnsNselem = {}
-////		rdfnsNselem.urls = urls;
-////		console.log(rdfnsNselem);
-////		rdfnsNselem.get = function(name) {
-////			if (this.urls[name]) {
-////				return this.urls[name];
-////			}
-////			throw "Unknown path " + name + " in " + namespace;
-////		};
-////		rdfns[namespace.toLowerCase()] = rdfnsNselem;
-//	});
     var rdfnsRaw = loadConstants.from('api/constants/rdfns');
     _.each(rdfnsRaw, function (urls, namespace) {
         var urlsNameReverse = {};
@@ -51,15 +18,15 @@ define([
             var pathSegment = url.replace(urls.BASE(), "");
             urlsNameReverse[pathSegment] = name;
         });
-        urls.inverted = urlsNameReverse;
-        urls.getQN = function (path) {
-            var constantName = this.inverted[path];
+        urls._inverted = urlsNameReverse;
+        urls._expand = function (path) {
+            var constantName = this._inverted[path];
             if (!constantName) {
-                console.log(this.inverted);
+                console.log(this._inverted);
                 throw "Unknown path " + path;
             }
             return this[constantName].call();
-        }
+        };
         var rdfnsElem = function () {
             return urls;
         };
@@ -67,19 +34,25 @@ define([
 
     });
 
-    rdfns.getQN = function (qname) {
+    rdfns.expand = function (qname) {
         var tokens = qname.split(":");
         var namespace = tokens[0].toUpperCase();
         var path = tokens[1];
         if (!this[namespace]) {
             throw "Unknown namespace prefix " + namespace;
         }
-        return this[namespace].call().getQN(path);
+        return this[namespace].call()._expand(path);
     };
 
-    rdfns.rdf_attr = function (arg_obj, qname) {
-        var obj = arg_obj || {};
-        return obj[rdfns.getQN(qname)];
+    /**
+     * Get/Set the key of an object by a qname
+     */
+    rdfns.rdf_attr = function (qname, arg_obj, arg_val) {
+        if (typeof arg_obj === 'undefined')
+            throw "Must give object to rdf_attr";
+        if (typeof arg_val !== 'undefined')
+            arg_obj[rdfns.expand(qname)] = arg_val;
+        return arg_obj[rdfns.expand(qname)];
     };
 //	console.log(rdfns.OMNOM().PROP_FILE_RETRIEVAL_URI());
 //	console.log(rdfns.OMNOM().qname("fileRetrievalURI"));

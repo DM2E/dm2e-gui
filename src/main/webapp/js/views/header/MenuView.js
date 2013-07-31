@@ -11,7 +11,7 @@ define([
 	BaseView,
 	logging,
     themeSwitcher,
-	userSession,
+	session,
 	menuTemplate) {
 
 	var log = logging.getLogger("MenuView");
@@ -23,21 +23,21 @@ define([
         events: {
             "click #switch-theme" : function() {
                 themeSwitcher.toggle();
-                userSession.get("user").setQN("omnom:preferredTheme", themeSwitcher.getTheme());
-                userSession.get("user").save();
+                session.user.setQN("omnom:preferredTheme", themeSwitcher.getTheme());
+                session.user.save();
                 this.render();
             }
         },
 		initialize : function() {
 			log.trace("MenuView initialized.");
-			this.model = userSession.get("user");
+			this.model = session.user;
 		},
 		render : function() {
             this.renderModel();
-            this.$("#switch-theme").html(userSession.get("user").getQN("omnom:preferredTheme"));
+            this.$("#switch-theme").html(session.user.getQN("omnom:preferredTheme"));
         },
 //			this.$el.html(_.template(menuTemplate, {
-//				user : userSession.get("user")
+//				user : session.get("user")
 //			}));
 //			$('a[href="' + window.location.hash + '"]').parent().addClass('active');
 //			return this;

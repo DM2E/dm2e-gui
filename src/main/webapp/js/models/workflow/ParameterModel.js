@@ -5,28 +5,27 @@ define([ 'jquery', // lib/jquery/jquery
 'RelationalModel', // lib/backbone/backbone
 'logging', // logging
 ], function($,
-	_,
-	RelationalModel,
-	logging) {
+    _,
+    RelationalModel,
+    logging) {
 
-	var log = logging.getLogger("models.workflow.ParameterModel");
+    var log = logging.getLogger("models.workflow.ParameterModel");
 
-	return RelationalModel.extend({
-		
-		initialize: function() {
-	    	var isWorkflowParam = /.*\/workflow\/.*param\/.*$/.test(this.id);
+    return RelationalModel.extend({
+
+        initialize: function() {
+            var isWorkflowParam = /.*\/workflow\/.*param\/.*$/.test(this.id);
             // TODO FIXME this should be position not webservice
-	    	this.paramType = isWorkflowParam ? "workflow" : "webservice";
-	    	log.trace("%o is a workflowparam? : %o", this.id, this.isWorkflowParam);
+            this.paramType = isWorkflowParam ? "workflow" : "webservice";
+            log.trace("%o is a workflowparam? : %o", this.id, this.isWorkflowParam);
 //            console.error(this);
-		},
-		
-		toJSON : function() {
-			
-			var asJSON = _.extend({},this.attributes);
-			asJSON.uuid = this.cid;
-			return asJSON;
-		}
-	
-	});
+        },
+
+        // toJSON : function() {
+        //     var asJSON = _.extend({},this.attributes);
+        //     asJSON.uuid = this.cid;
+        //     return asJSON;
+        // }
+
+    });
 });

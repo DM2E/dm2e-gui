@@ -1,3 +1,4 @@
+/** @module util/dialogs */
 define([ 'jquery', 'underscore', 'backbone',
 
 //'backboneBootstrapModal', // exports to Backbone.BootstrapModal!
@@ -17,7 +18,7 @@ define([ 'jquery', 'underscore', 'backbone',
             type = type || 'success';
             $(".notifications").notify({
                 message: { text : type.toUpperCase() + ": " + what },
-                fadeOut : { enabled: false },
+                fadeOut : { enabled: true },
                 type : type,
             }).show();
         },
@@ -29,7 +30,7 @@ define([ 'jquery', 'underscore', 'backbone',
         },
 
 		errorNotImplemented : function(what) {
-            var what = what || "functionality";
+            what = what || "functionality";
 			new Backbone.BootstrapModal({
 				content : what + " is not yet implemented.",
 			}).open();

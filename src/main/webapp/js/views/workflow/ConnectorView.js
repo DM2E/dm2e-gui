@@ -36,18 +36,19 @@ define([
 
         render : function() {
 
+            // ????
             var from_cid, from_id, to_cid, to_id;
             var is_from_workflow = false;
             var is_to_workflow = false;
 
             if (this.model.getQN("omnom:fromWorkflow")) {
+                is_from_workflow = true;
                 from_cid = this.model.getQN('omnom:fromWorkflow').id;
                 from_id = this.model.getQN('omnom:fromWorkflow').id;
-                is_from_workflow = true;
             } else {
-                from_cid = this.model.getQN('omnom:fromPosition').id
-                    ? this.model.getQN('omnom:fromPosition').id
-                    : this.model.getQN('omnom:fromPosition').attributes.cid;
+                from_cid = this.model.getQN('omnom:fromPosition').id ?
+                  this.model.getQN('omnom:fromPosition').id :
+                  this.model.getQN('omnom:fromPosition').attributes.cid;
                 from_id = this.model.getQN('omnom:fromPosition').id;
             }
             if (this.model.getQN("omnom:toWorkflow")) {
@@ -55,9 +56,9 @@ define([
                 to_cid = this.model.getQN('omnom:toWorkflow').id;
                 to_id = this.model.getQN('omnom:toWorkflow').id;
             } else {
-                to_cid = this.model.getQN('omnom:toPosition').id
-                    ? this.model.getQN('omnom:toPosition').id
-                    : this.model.getQN('omnom:toPosition').attributes.cid;
+                to_cid = this.model.getQN('omnom:toPosition').id ?
+                  this.model.getQN('omnom:toPosition').id :
+                  this.model.getQN('omnom:toPosition').attributes.cid;
                 to_id = this.model.getQN('omnom:toPosition').id;
             }
             var render_opts = {
@@ -77,9 +78,9 @@ define([
 //                console.error(this);
 //                console.error($(this).attr("data-omnom-uuid-ref"));
 //                console.error($(this).attr("data-backbone-modelid-ref"));
-                $("*[data-backbone-modelid='"
-                    + $(this).attr("data-backbone-modelid-ref")
-                    + "']").toggleClass("highlight");
+                $("*[data-backbone-modelid='" +
+                    $(this).attr("data-backbone-modelid-ref") +
+                  "']").toggleClass("highlight");
                 // FIND VIEW
                 // highlight it
 //                alert("FNOIP");

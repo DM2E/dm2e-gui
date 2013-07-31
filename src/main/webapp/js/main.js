@@ -64,7 +64,7 @@ require.config({
 		},
 		'backbone_bootstrap_modal' : {
 			deps : ['backbone'],
-			exports : 'Backbone.BootstrapModal',
+			exports : 'Backbone.Modal',
 		},
         'bootstrap_jasny_fileupload' : {
             deps : [ 'jquery' ],
@@ -89,27 +89,12 @@ require.config({
 });
 
 // Wrap Backbone sync for debugging
-require(['backbone'], function(Backbone) {
-	var originalBackboneSync = Backbone.sync;
-
-	Backbone.sync = function(method, model, options) {
-		var request = originalBackboneSync.call(Backbone, method, model, options);
-
-		request.done(function(msg) {
-//			console.log(msg);
-		});
-		request.fail(function(jqXHR, textStatus) {
-			console.log(jqXHR, textStatus);
-		});
-		return request;
-	};
-});
-
 // Actually start the whole thing
 require([
 	'router',
 	'views/app',
 	'vm',
+    'util/backbone.sync',
 ], function(Router, AppView, Vm) {
 
 	var appView = Vm.createView({}, 'AppView', AppView);

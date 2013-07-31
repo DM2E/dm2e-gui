@@ -12,88 +12,88 @@ define([ 'jquery', // lib/jquery/jquery
 'collections/workflow/ParameterCollection',
 'collections/workflow/ConnectorCollection',
 ], function($,
-	_,
-	RelationalModel,
-	logging,
-	NS,
-	PositionModel,
-	ParameterModel,
-	ConnectorModel,
-	PositionCollection,
-	ParameterCollection,
-	ConnectorCollection
-	) {
+    _,
+    RelationalModel,
+    logging,
+    NS,
+    PositionModel,
+    ParameterModel,
+    ConnectorModel,
+    PositionCollection,
+    ParameterCollection,
+    ConnectorCollection
+    ) {
 
-	var log = logging.getLogger("WorkflowModel.js");
+    var log = logging.getLogger("WorkflowModel.js");
 
-	var theDefaults = {};
+    var theDefaults = {};
 
-	console.log(NS.OMNOM());
+    console.log(NS.OMNOM());
 
-	var model =  RelationalModel.extend({
+    var model =  RelationalModel.extend({
 
-//		urlRoot : 'api/workflow',
+//      urlRoot : 'api/workflow',
 
-		relations: [
+        relations: [
             {
-				type : Backbone.HasMany,
-				key : NS.OMNOM().PROP_WORKFLOW_POSITION(),
-				relatedModel : PositionModel,
+                type : Backbone.HasMany,
+                key : NS.OMNOM().PROP_WORKFLOW_POSITION(),
+                relatedModel : PositionModel,
                 collectionType: PositionCollection,
-//				reverseRelation : {
-//					key : NS.getQN("omnom:inWorkflow"),
-//					includeInJSON : true
-//				}
-			},
-		    {
-				type : Backbone.HasMany,
-				key : NS.getQN("omnom:outputParam"),
-				relatedModel : ParameterModel,
-				collectionType: ParameterCollection,
-//				reverseRelation : {
-//					key : NS.getQN("omnom:inWorkflow"),
-////					keySource : NS.getQN("omnom:inWorkflow"),
-////					keyDestination : NS.getQN("omnom:outputParam"),
-//					includeInJSON : true
-//				}
+//              reverseRelation : {
+//                  key : NS.expand("omnom:inWorkflow"),
+//                  includeInJSON : true
+//              }
             },
-		    {
-				type : Backbone.HasMany,
-				key : NS.getQN("omnom:inputParam"),
-				relatedModel : ParameterModel,
-				collectionType: ParameterCollection,
+            {
+                type : Backbone.HasMany,
+                key : NS.expand("omnom:outputParam"),
+                relatedModel : ParameterModel,
+                collectionType: ParameterCollection,
+//              reverseRelation : {
+//                  key : NS.expand("omnom:inWorkflow"),
+////                    keySource : NS.expand("omnom:inWorkflow"),
+////                    keyDestination : NS.expand("omnom:outputParam"),
+//                  includeInJSON : true
+//              }
+            },
+            {
+                type : Backbone.HasMany,
+                key : NS.expand("omnom:inputParam"),
+                relatedModel : ParameterModel,
+                collectionType: ParameterCollection,
 //                reverseRelation : {
-//                    key : NS.getQN("omnom:inWorkflow"),
+//                    key : NS.expand("omnom:inWorkflow"),
 //                    includeInJSON : true
 //                }
             },
-	        {
-				type : Backbone.HasMany,
-				key : NS.getQN("omnom:parameterConnector"),
-				relatedModel : ConnectorModel,
+            {
+                type : Backbone.HasMany,
+                key : NS.expand("omnom:parameterConnector"),
+                relatedModel : ConnectorModel,
                 collectionType: ConnectorCollection,
 //                includeInJSON: ["id"],
-//				reverseRelation : {
-//					key : NS.getQN("omnom:inWorkflow"),
-//					includeInJSON : true
-//				}
-			},
-		],
+//              reverseRelation : {
+//                  key : NS.expand("omnom:inWorkflow"),
+//                  includeInJSON : true
+//              }
+            },
+        ],
 
-		dumpToJSON : function(){
+        dumpToJSON : function(){
 
-			var asJSON = this.toJSON();
-//			
-			var replacer = function(k,v) {
-				return v;
-			}
-			console.log(asJSON);
-			return JSON.stringify(asJSON, replacer, 2);
-		}
+            var asJSON = this.toJSON();
+//
+            var replacer = function(k,v) {
+                return v;
+            };
+            console.log(asJSON);
+            return JSON.stringify(asJSON, replacer, 2);
+        }
 
-		// TODO
+        // TODO
 
-	});
-	model.setup();
-	return model;
+    });
+    model.setup();
+    return model;
 });

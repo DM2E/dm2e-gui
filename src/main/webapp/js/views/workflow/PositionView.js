@@ -1,30 +1,30 @@
 //Filename: js/views/workflow/PositionView.js
 
 define([
-	'jquery',
-	'underscore',
-	'logging',
-	'BaseView',
-	'vm',
-	'constants/RDFNS',
-	'views/workflow/ParameterInPositionView',
+    'jquery',
+    'underscore',
+    'logging',
+    'BaseView',
+    'vm',
+    'constants/RDFNS',
+    'views/workflow/ParameterInPositionView',
     'text!templates/workflow/positionTemplate.html'
 ], function($,
-	_,
-	logging,
-	BaseView,
-	Vm,
-	NS,
-	ParameterInPositionView,
+    _,
+    logging,
+    BaseView,
+    Vm,
+    NS,
+    ParameterInPositionView,
     theTemplate
    ) {
 
-	// var log = logging.getLogger("filename");
+    // var log = logging.getLogger("filename");
 
-	return BaseView.extend({
+    return BaseView.extend({
 
-		
-		events: {
+
+        events: {
             "click button.set-first" : function() {
                 var thisModel = this.model;
                 var coll = thisModel.collection;
@@ -32,16 +32,16 @@ define([
                 coll.models.splice(0, 0, coll.models.splice(thisModelIndex, 1)[0]);
                 coll.trigger("add");
             },
-			"click button.remove-position" : function() {
-				this.model.collection.remove(this.model);
-			}
-		},
-		
-		className: "boxed-item",
+            "click button.remove-position" : function() {
+                this.model.collection.remove(this.model);
+            }
+        },
 
-	    template : theTemplate,
+        className: "boxed-item",
 
-	    render : function() {
+        template : theTemplate,
+
+        render : function() {
             this.$el.html(this.createHTML(this.template, { model: this.model.toJSON() }));
 
             if (this.model.id)
@@ -49,32 +49,32 @@ define([
             else
                 this.$el.attr("data-backbone-modelid", this.model.cid);
 
-			Vm.cleanupSubViews(this);
+            Vm.cleanupSubViews(this);
 
-			console.log(this.model.getQN("omnom:webservice").getQN("omnom:inputParam"));
-			_.each(this.model.getQN("omnom:webservice").getQN("omnom:inputParam").models, function(model) {
-				var subview = Vm.createSubView(this, ParameterInPositionView, {
-					parentType : NS.getQN("omnom:WorkflowPosition"),
+            console.log(this.model.getQN("omnom:webservice").getQN("omnom:inputParam"));
+            _.each(this.model.getQN("omnom:webservice").getQN("omnom:inputParam").models, function(model) {
+                var subview = Vm.createSubView(this, ParameterInPositionView, {
+                    parentType : NS.expand("omnom:WorkflowPosition"),
                     inputOrOutput : 'input',
-					parentModel : this.model,
-					model : model
-				});
-				this.appendHTML(subview, ".input-params")
-			}, this);
+                    parentModel : this.model,
+                    model : model
+                });
+                this.appendHTML(subview, ".input-params");
+            }, this);
 
-			_.each(this.model.getQN("omnom:webservice").getQN("omnom:outputParam").models, function(model) {
-				var subview = Vm.createSubView(this, ParameterInPositionView, {
-					parentType : NS.getQN("omnom:WorkflowPosition"),
-					parentModel : this.model,
+            _.each(this.model.getQN("omnom:webservice").getQN("omnom:outputParam").models, function(model) {
+                var subview = Vm.createSubView(this, ParameterInPositionView, {
+                    parentType : NS.expand("omnom:WorkflowPosition"),
+                    parentModel : this.model,
                     inputOrOutput : 'output',
-					itemClass : "output-param",
-					model : model
-				});
-				console.log(model);
-				this.appendHTML(subview, ".output-params")
-			}, this);
-	    	return this;
-	    }
+                    itemClass : "output-param",
+                    model : model
+                });
+                console.log(model);
+                this.appendHTML(subview, ".output-params");
+            }, this);
+            return this;
+        }
 
     });
 });

@@ -22,6 +22,10 @@ define([
 	HeaderMenuView,
 	layoutTemplate) {
 
+  /**
+   * @module views.app
+   */
+
 	var log = logging.getLogger("app.js");
 
 	return BaseView.extend({
@@ -48,6 +52,10 @@ define([
 
 		},
 
+		/**
+		 * Display a view full-page by setting this.pageView to it and rendering.
+		 * @instance
+		 */
 		showPage : function(view) {
 			log.debug("Rendering page");
 			this.pageView = view;

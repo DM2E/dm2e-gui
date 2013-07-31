@@ -2,14 +2,14 @@
 
     <a class="btn btn-danger" href="http://dm2e-security.rz-berlin.mpg.de/userManager/josso_logout/">Log out</a>
 
-<h2>Profile for <%= rdf_attr("foaf:name") %></h2>
+<h2>Profile for <%= rdf_attr("foaf:name", session.user) %></h2>
 
 <h3>File Services</h3>
 <ul>
-	<% _.each(rdf_attr("omnom:fileservice"), function(fileService) { %>
-        <% console.log(fileService); %>
+	<% _.each(rdf_attr("omnom:fileservice", session.user), function(fs) { %>
+        <% var service = session.services[fs]; %>
 	<li>
-		<%= rdf_attr("rdfs:label", fileService) %> (<a href="<%= fileService.id %>"><%= fileService.id %></a>)
+		<%= rdf_attr("rdfs:label", service) %> (<a href="<%= service.id %>"><%= service.id %></a>)
 	</li>
 	<% }) %>
 </ul>
@@ -17,10 +17,11 @@
 	
 <h3>Transformation / Publishing Services</h3>
 <ul>
-	<% _.each(rdf_attr("omnom:webservice"), function(service) { %>
-		<li>
-            <%= rdf_attr("rdfs:label", service) %> (<a href="<%= service.id %>"><%= service.id %></a>)
-		</li>
+	<% _.each(rdf_attr("omnom:webservice", session.user), function(ws) { %>
+        <% var service = session.services[ws]; %>
+	<li>
+		<%= rdf_attr("rdfs:label", service) %> (<a href="<%= service.id %>"><%= service.id %></a>)
+	</li>
 	<% }) %>
 </ul>
 <button class="btn btn-success">Add Transformation Service</button>

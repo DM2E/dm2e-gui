@@ -31,7 +31,7 @@ define([ 'jquery', // lib/jquery/jquery
 		},
 		
 		render : function() {
-			this.$el.html(webserviceListTemplate);
+			this.$el.html(this.createHTML(webserviceListTemplate));
 			log.debug("Rendering the webservice list");
 //			Vm.cleanupSubViews(this);
 //			_.each(this.collection.models, function(webserviceModel) {
@@ -39,8 +39,7 @@ define([ 'jquery', // lib/jquery/jquery
 //				this.appendHTML(subview, "div.list-container")
 //			}, this);
 //            this.listSelector = this.el;
-            this.renderCollection()
-
+            this.renderCollection();
 		}
 	
 	});

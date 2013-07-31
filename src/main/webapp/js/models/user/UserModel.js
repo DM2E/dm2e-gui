@@ -7,6 +7,7 @@ define([
 	'RelationalModel',
 	'logging',
 	'constants/RDFNS',
+	'constants/SERVICE_URLS',
 	'models/workflow/WebserviceModel',
 	'collections/workflow/WebserviceCollection'
 ], function($,
@@ -15,39 +16,75 @@ define([
 	RelationalModel,
 	logging,
 	NS,
+	SERVICE_URLS,
 	WebserviceModel,
 	WebserviceCollection) {
 
 	var log = logging.getLogger("models.user.UserModel");
-//	theDefaults[NS.getQN("omnom:webservice")] = new WebserviceCollection();
+	var theDefaults = {};
+    NS.rdf_attr("rdf:type", theDefaults, NS.expand("foaf:Person"));
+    NS.rdf_attr("omnom:preferredTheme", theDefaults, "dark");
+    NS.rdf_attr("omnom:fileservice", theDefaults, _.map([
+            'file',
+            // 'mint-file', // Comment that one out for testing
+    ], function(id) {
+        return SERVICE_URLS.BASE + id;
+    }));
+    NS.rdf_attr("omnom:webservice", theDefaults, _.map([
+            'service/xslt',
+            'service/xslt-zip',
+            'publish',
+            'service/demo'
+    ], function(id) {
+        return SERVICE_URLS.BASE + id;
+    }));
 
-	return RelationalModel.extend({
+	return BaseModel.extend({
 
-		relations : [
-            {
-                type : Backbone.HasMany,
-                key : NS.getQN("omnom:webservice"),
+        defaults : theDefaults,
+
+        // toJSON : function() {
+        //     jsonObj = _.clone(this.attributes);
+        //     if (this.id) jsonObj.id = this.id;
+        //     this.uuid = this.cid;
+        //     _.each(["omnom:webservice", "omnom:fileservice"], function(rel) {
+        //         NS.rdf_attr(rel, jsonObj, _.map(this.getQN(rel).models, function(ws){
+        //             return (ws.toJSON());
+        //         }));
+        //     }, this);
+        //     // this[NS.expand("omnom:webservice")] = 
+        //     return jsonObj;
+        // },
+
+		// relations : [
+            // {
+                // type : Backbone.HasMany,
+                // key : NS.getQN("omnom:webservice"),
                 // includeInJSON: "id",
-                // createModels: true,
-                // autoFetch: true,
-                relatedModel : WebserviceModel,
-                collectionType: WebserviceCollection,
-            },
-            {
-                type : Backbone.HasMany,
-                key : NS.getQN("omnom:fileservice"),
+                // // createModels: true,
+                // // autoFetch: true,
+                // relatedModel : WebserviceModel,
+                // collectionType: WebserviceCollection,
+            // },
+            // {
+                // type : Backbone.HasMany,
+                // key : NS.getQN("omnom:fileservice"),
                 // includeInJSON: "id",
-                // createModels: true,
-                // autoFetch: true,
-                relatedModel : WebserviceModel,
-                collectionType: WebserviceCollection,
-            },
+                // // createModels: true,
+                // // autoFetch: true,
+                // relatedModel : WebserviceModel,
+                // collectionType: WebserviceCollection,
+            // },
+        // ],
 
-        ],
-
-        // parse : function(data) {
-            // console.error(data);
-            // throw "BAR";
+        parse : function(data) {
+            _.each(["omnom:webservice", "omnom:fileservice"], function(rel) {
+                NS.rdf_attr(rel, data, _.map(NS.rdf_attr(rel, data), function(ws) {
+                    return ws.id;
+                }));
+            });
+            return data;
+        }
 
         // },
 //		initialize : function() {

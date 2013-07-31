@@ -1,5 +1,5 @@
 <dt>
-    <%= last_url_segment(rdf_attr("omnom:forParam").id) || "THIS SHOULD HAVE AN ID" %>
+<%= rdf_attr("rdfs:label") %> (<%= last_url_segment(rdf_attr("omnom:forParam").id) || "THIS SHOULD HAVE AN ID" %>)
 </dt>
 <dd>
     <form class="form-horizontal parameter-assignment">
@@ -8,10 +8,13 @@
             <label class="control-label" for="paramValue">Parameter Value</label>
 
             <div class="controls">
-                <input id="paramValue" name="paramValue" type="text"
-                       placeholder='<%= rdf_attr("omnom:parameterValue") %>'
-                       class="input-xlarge">
-                <!--<p class="help-block">help</p>-->
+                <input 
+                  id="paramValue" 
+                  name="paramValue"
+                  type="text"
+                  placeholder='<%= rdf_attr("omnom:parameterValue") %>'
+                  class="input-xlarge" 
+                  />
             </div>
         </div>
     </form>

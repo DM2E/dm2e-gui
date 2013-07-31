@@ -1,42 +1,42 @@
 //Filename: WorkflowConfigModel.js
 define([
-	'jquery',
-	'underscore',
-	'logging',
+    'jquery',
+    'underscore',
+    'logging',
     'constants/RDFNS',
-	'RelationalModel',
+    'RelationalModel',
     'models/config/ParameterAssignmentModel',
 ], function($,
-	_,
-	logging,
+    _,
+    logging,
     NS,
-	RelationalModel,
+    RelationalModel,
     ParameterAssignmentModel
    ) {
 
     var moduleName="WorkflowConfigModel";
-	var log = logging.getLogger("models.config.WorkflowConfigModel");
+    var log = logging.getLogger("models.config.WorkflowConfigModel");
 
     var theDefaults = {};
-    theDefaults[NS.getQN("rdf:type")] = NS.getQN("omnom:WorkflowConfig");
+    theDefaults[NS.expand("rdf:type")] = NS.expand("omnom:WorkflowConfig");
 
-	return RelationalModel.extend({
+    return RelationalModel.extend({
 
-	    defaults : theDefaults,
+        defaults : theDefaults,
 
         relations : [
             {
                 type : Backbone.HasMany,
-                key : NS.getQN("omnom:assignment"),
+                key : NS.expand("omnom:assignment"),
                 relatedModel : ParameterAssignmentModel
 //                collectionType: PositionCollection,
 
             }
         ],
 
-	    initialize : function () {
-            log.debug("Initialized " + moduleName + ".")
+        initialize : function () {
+            log.debug("Initialized " + moduleName + ".");
         }
 
     });
-})
+});

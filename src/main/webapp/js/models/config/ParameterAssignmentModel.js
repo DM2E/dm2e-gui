@@ -11,7 +11,7 @@ define([
     var log = logging.getLogger("ParameterAssignmentModel");
 
     var theDefaults = {};
-    theDefaults[NS.getQN("rdf:type")] = NS.getQN("omnom:ParameterAssignment");
+    NS.rdf_attr("rdf:type", theDefaults, NS.expand("omnom:ParameterAssignment"));
 
     return RelationalModel.extend({
 
@@ -22,4 +22,4 @@ define([
         }
 
     });
-})
+});

@@ -29,6 +29,7 @@ define([
         initialize: function () {
             this.collection.on('sync', this.render, this);
             this.collection.on('sync', this.hideLoadingIndicator, this);
+            this.collection.on('error', this.hideLoadingIndicator, this);
         },
 
         render: function () {

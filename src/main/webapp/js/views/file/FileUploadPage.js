@@ -35,10 +35,10 @@ define([
 
                 var blank = "_:foo ";
                 var metaStr = '';
-				metaStr += blank + ' a <' + NS.getQN('omnom:File') + '> .\n';
-                metaStr += blank + ' <' + NS.getQN('omnom:fileOwner') + '> <' + session.get("user").id + '>.\n';
-                metaStr += blank + ' <' + NS.getQN('omnom:fileType') + '> <' + this.$("#inputFiletype").val() + '>.\n';
-				metaStr += blank + ' <' + NS.getQN('dcterms:modified') + '> "' + now.toISOString() + '".\n';
+				metaStr += blank + ' a <' + NS.expand('omnom:File') + '> .\n';
+                metaStr += blank + ' <' + NS.expand('omnom:fileOwner') + '> <' + session.user.id + '>.\n';
+                metaStr += blank + ' <' + NS.expand('omnom:fileType') + '> <' + this.$("#inputFiletype").val() + '>.\n';
+				metaStr += blank + ' <' + NS.expand('dcterms:modified') + '> "' + now.toISOString() + '".\n';
                 console.log(metaStr);
 
 				var fileInput = this.$("input:file");

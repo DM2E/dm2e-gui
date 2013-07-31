@@ -1,3 +1,6 @@
+/**
+ * @module views.BaseView
+ */
 define([
     'jquery',
     'underscore',
@@ -22,11 +25,12 @@ define([
 
     var log = logging.getLogger("views.BaseView");
 
-
     var BaseView = Backbone.View.extend({
 
 
-
+        /**
+         * selector of the list container, can be a string or a jQuery object
+         */
         listSelector: 'div.list-container',
 
         /**
@@ -49,13 +53,11 @@ define([
          *
          */
         appendHTML: function (subview, selector) {
-            var targetElem = selector === 'undefined'
-                ? this.$(this.listSelector)
-                : _.isString(selector)
-                    ? this.$(selector)
-                    : selector;
+            var targetElem = selector === 'undefined' ? this.$(this.listSelector) :
+                _.isString(selector) ? this.$(selector) :
+                    selector;
 
-            console.log("Adding subview to ", targetElem);
+            log.debug("Adding subview to ", targetElem);
 
             targetElem.append(subview.render().$el);
         },
@@ -87,17 +89,14 @@ define([
                      * denoted by a qname, resolved by RDFNS.rdf_attr
                      */
                     rdf_attr: function (qname, arg_model) {
-                        var model = arg_model
-                            ? arg_model
-                            : options.model
-                            ? options.model
-                            : that.model
-                            ? that.model
-                            : {};
+                        var model = arg_model ? arg_model :
+                                    options.model ? options.model :
+                                        that.model ? that.model :
+                                            {};
                         if (model.attributes) {
                             model = model.attributes;
                         }
-                        return RDFNS.rdf_attr(model, qname);
+                        return RDFNS.rdf_attr(qname, model);
                     },
 
                     /**
@@ -105,6 +104,14 @@ define([
                      */
                     unique_id: function () {
                         return UUID.v4();
+                    },
+
+                    html_escape : function(raw) {
+                      var ret = raw || "";
+                      ret = ret.replace(/&/g, "&amp;");
+                      ret = ret.replace(/</g, "&lt;");
+                      ret = ret.replace(/>/g, "&gt;");
+                      return ret;
                     }
                 },
                 UriUtils,
@@ -165,7 +172,6 @@ define([
                     console.error(this);
                     return;
                 }
-
             }
             log.debug("renderCollection() in BaseView called (Selector: '" + listSelector + "')");
             Vm.cleanupSubViews(this);

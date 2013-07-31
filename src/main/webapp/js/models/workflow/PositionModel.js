@@ -29,7 +29,7 @@ define([ 'jquery',
 		relations: [
             {
 				type : Backbone.HasOne,
-				key : NS.getQN("omnom:webservice"),
+				key : NS.expand("omnom:webservice"),
 				relatedModel : WebserviceModel,
                 includeInJSON : ["id", "uuid"],
 			},
