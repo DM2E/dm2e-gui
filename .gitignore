@@ -6,3 +6,5 @@ IGNOREME
 .idea
 src/main/webapp/test/
 *.sublime-*
+deploy.profile.sh
+log
