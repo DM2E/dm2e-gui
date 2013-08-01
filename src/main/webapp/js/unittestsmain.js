@@ -28,6 +28,7 @@ require.config({
 
         // utility
         uuid : '../vendor/node-uuid/uuid',
+        humaneDate : "../vendor/humane-dates/humane",
 
         // shortcut to HTML templates
 		templates : '../templates',
@@ -43,6 +44,9 @@ require.config({
 	
 	// http://requirejs.org/docs/api.html#config-shim
 	shim : {
+        'humaneDate' : {
+          exports : 'humaneDate',
+        },
 		'backbone' : {
 			deps : [ 'underscore', 'jquery' ],
 			exports : 'Backbone'
@@ -110,7 +114,8 @@ require([
 	'jquery',
 	'bootstrap_jasny_fileupload',
 	// 'jquery_file_upload',
-    'bootstrap_notify'
+    'bootstrap_notify',
+    'humaneDate'
 ],
 function(QUnit,
          RDFNSTest,
