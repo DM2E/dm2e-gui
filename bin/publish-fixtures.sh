@@ -7,7 +7,7 @@ source bin/curl_rest.sh
 
 cat src/main/resources/test-fixtures/demo-workflow.json > $workflow_file
 
-if [  "$SRV" != "http://localhost:9998/api" ];then
+if [  ! -z "$SRV" -a "$SRV" != "http://localhost:9998/api" ];then
     echo "Replacing..."
     sed -i "s!http://localhost:9998/api!$SRV!" $workflow_file
 fi
