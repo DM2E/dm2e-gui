@@ -7,8 +7,19 @@ source bin/curl_rest.sh
 
 cat src/main/resources/test-fixtures/demo-workflow.json > $workflow_file
 
-if [  ! -z "$SRV" -a "$SRV" != "http://localhost:9998/api" ];then
-    echo "Replacing..."
+die() {
+	echo $1 | boxes -d nuke
+	exit 128
+}
+
+if [ -z "$SRV" ];then
+	die "Must set SRV to base path of omnom api (e.g. export SRV='http://localhost:9998/api')";
+fi
+
+
+boilerplate_url="http://localhost:9998/api"
+if [ "$SRV" != "$boilerplate_url" ];then
+    echo "Replacing... $boilerplate_url with $SRV"
     sed -i "s!http://localhost:9998/api!$SRV!" $workflow_file
 fi
 
