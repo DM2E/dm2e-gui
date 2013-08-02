@@ -15,8 +15,14 @@
   <% } %>
 </td>
 <td>
-  <%= rdf_attr("dcterms:creator") ? last_url_segment(rdf_attr("dcterms:creator").id) : "UNKNOWN" %>
+  <% if (rdf_attr("dcterms:creator")) { %>
+  <a class="btn btn-info">User <%= last_url_segment(rdf_attr("dcterms:creator").id) %></a>
+  <% } else if(rdf_attr("prov:wasGeneratedBy")) { %>
+    <a class="btn btn-success" href="#job/<%= rdf_attr('prov:wasGeneratedBy').id %>">View Job</a>
+  <% } %>
 </td>
 <td>
   <%= human_readable_date(rdf_attr("dcterms:modified")) %>
+</td>
+<td>
 </td>
