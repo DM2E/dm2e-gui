@@ -34,7 +34,7 @@ define([
             }
         },
 
-        addItem: function(preset) {
+        addItem: function(preset, successCallback) {
             //          console.log("param coll: %o", this.collection);
             var NewModel = this.collection.model;
             //          console.log("new model: %o", NewModel);
@@ -48,6 +48,9 @@ define([
             var that = this;
             modalView.on("parameter-was-saved", function() {
                 that.collection.add(newInst);
+                if (successCallback) {
+                    successCallback();
+                }
             });
             modalView.showForm();
             return newInst;
@@ -97,23 +100,24 @@ define([
                     sourceModelJSON.id = workflow.id + '/param/' + UUID.v4();
 
                     // Add parameter
-                    var newParam  = parameterList.addItem(sourceModelJSON);
+                    var newParam  = parameterList.addItem(sourceModelJSON,function(){
+                        // Create a connection
+                        var conn = {};
+                        console.error(this.inputOrOutput);
+                        if (parameterList.inputOrOutput === 'input') {
+                            NS.rdf_attr("omnom:fromParam", conn, newParam);
+                            NS.rdf_attr("omnom:toParam", conn, source);
+                            NS.rdf_attr("omnom:fromWorkflow", conn, workflow);
+                            NS.rdf_attr("omnom:toPosition", conn, sourceParent);
+                        } else {
+                            NS.rdf_attr("omnom:fromParam", conn, source);
+                            NS.rdf_attr("omnom:toParam", conn, newParam);
+                            NS.rdf_attr("omnom:fromPosition", conn, sourceParent);
+                            NS.rdf_attr("omnom:toWorkflow", conn, workflow);
+                        }
+                        workflow.getQN("omnom:parameterConnector").add(conn);
+                    });
 
-                    // Create a connection
-                    var conn = {};
-                    console.error(this.inputOrOutput);
-                    if (parameterList.inputOrOutput === 'input') {
-                      NS.rdf_attr("omnom:fromParam", conn, newParam);
-                      NS.rdf_attr("omnom:toParam", conn, source);
-                      NS.rdf_attr("omnom:fromWorkflow", conn, workflow);
-                      NS.rdf_attr("omnom:toPosition", conn, sourceParent);
-                    } else {
-                      NS.rdf_attr("omnom:fromParam", conn, source);
-                      NS.rdf_attr("omnom:toParam", conn, newParam);
-                      NS.rdf_attr("omnom:fromPosition", conn, sourceParent);
-                      NS.rdf_attr("omnom:toWorkflow", conn, workflow);
-                    }
-                    workflow.getQN("omnom:parameterConnector").add(conn);
                 },
                 activeClass: "drop-active",
                 hoverClass: "drop-hover",
