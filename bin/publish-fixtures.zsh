@@ -30,6 +30,10 @@ WORKFLOW=$(POST -H $CT_JSON $SRV/workflow -d @$workflow_file \
 
 # get empty config
 GETJ $WORKFLOW/blankConfig 2>/dev/null | sed 's/bottles of beer on the wall/flailing piglets/' > $tempfile
+sed -i '/^{/a \
+"http://purl.org/dc/terms/creator":"http://omnom.hu-berlin.de/api/user/command-line",
+' $tempfile
+
 
 # persist it
 CONFIG=$(POST -H $CT_JSON $SRV/config -d @$tempfile \
@@ -44,3 +48,4 @@ JOB=$(PUT "-H$CT_TEXT" "$WORKFLOW" -d "$CONFIG" \
 echo "WORKFLOW='$WORKFLOW'"
 echo "CONFIG='$CONFIG'"
 echo "JOB='$JOB'"
+echo $tempfile
