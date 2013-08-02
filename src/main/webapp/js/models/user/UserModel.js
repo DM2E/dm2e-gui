@@ -26,7 +26,7 @@ define([
     NS.rdf_attr("omnom:preferredTheme", theDefaults, "dark");
     NS.rdf_attr("omnom:fileservice", theDefaults, _.map([
             'file',
-            // 'mint-file', // Comment that one out for testing
+            'mint-file', // Comment that one out for testing
     ], function(id) {
         return SERVICE_URLS.BASE + id;
     }));
