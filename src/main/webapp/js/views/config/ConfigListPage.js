@@ -8,10 +8,11 @@ define([
         'BaseView',
         'constants/RDFNS',
         'util/dialogs',
+        'sorttable',
         'singletons/UserSession',
         'views/config/ConfigListTableRowView',
         'text!templates/config/ConfigListTemplate.html'
-], function($, _, logging, Vm, BaseView, NS, dialogs, session, ConfigListTableRowView, theTemplate) {
+], function($, _, logging, Vm, BaseView, NS, dialogs, sorttable, session, ConfigListTableRowView, theTemplate) {
 
     var log = logging.getLogger("views.config.ConfigListPage");
 
@@ -32,6 +33,7 @@ define([
         render : function() {
             this.renderModel();
             this.renderCollection();
+            sorttable.makeSortable(this.$("table")[0]);
             return this;
         },
 

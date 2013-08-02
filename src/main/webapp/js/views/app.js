@@ -12,6 +12,7 @@ define([
 	'jquery_ui',
 	'backbone_bootstrap_modal',
 	'jquery',
+	'sorttable',
 	'bootstrap_jasny_fileupload',
 	// 'jquery_file_upload',
     'bootstrap_notify'

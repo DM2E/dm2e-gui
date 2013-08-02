@@ -6,10 +6,11 @@ define([
         'BaseView',
         'constants/RDFNS',
         'util/dialogs',
+        'sorttable',
         'singletons/UserSession',
         'views/job/JobListTableRowView',
         'text!templates/job/jobListPageTemplate.html'
-], function($, _, logging, Vm, BaseView, NS, dialogs, session, ItemView, theTemplate) {
+], function($, _, logging, Vm, BaseView, NS, dialogs, sorttable, session, ItemView, theTemplate) {
 
     var log = logging.getLogger("views.job.JobListPage");
 
@@ -29,6 +30,7 @@ define([
         render : function() {
             this.renderModel();
             this.renderCollection();
+            sorttable.makeSortable(this.$("table")[0]);
             return this;
         },
 

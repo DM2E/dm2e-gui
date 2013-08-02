@@ -8,6 +8,7 @@ define([
 	'vm',
 	'singletons/UserSession',
 	'constants/RDFNS',
+	'sorttable',
 //	'collections/workflow/WorkflowCollection',
 //	'models/workflow/WorkflowModel',
 	'text!templates/workflow/workflowListPage.html',
@@ -19,6 +20,7 @@ define([
 	Vm,
 	session,
 	NS,
+	sorttable,
 //	WorkflowCollection,
 //	WorkflowModel,
 	workflowListTemplate,
@@ -38,8 +40,9 @@ define([
 
         hideLoadingIndicator : function() {
             this.$(".loading-indicator").hide();
-            if (this.collection.models.length === 0)
+            if (this.collection.models.length === 0) {
                 this.$el.append("No workflows found");
+            }
         },
 
 		initialize : function() {
@@ -63,6 +66,7 @@ define([
             this.renderModel();
             console.log(this.collection);
             this.renderCollection({}, 'tbody');
+            sorttable.makeSortable(this.$("table")[0]);
             return this;
 		},
 		

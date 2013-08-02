@@ -30,6 +30,7 @@ require.config({
         // utility
         uuid : '../vendor/node-uuid/uuid',
         humaneDate : "../vendor/humane-dates/humane",
+        sorttable : "../vendor/sorttable",
 
         // shortcut to HTML templates
         templates : '../templates',
@@ -55,6 +56,9 @@ require.config({
         },
         'underscore' : {
             exports : '_',
+        },
+        'sorttable' : {
+            exports : 'sorttable'
         },
         'log4javascript' : {
             exports : 'log4javascript'
@@ -83,9 +87,7 @@ require.config({
             // // exports : "jquery.ui.widget",
         // },
         'bootstrap_notify' : {
-            deps : [
-                'jquery'
-            ],
+            deps : [ 'jquery' ],
         }
 
     }
