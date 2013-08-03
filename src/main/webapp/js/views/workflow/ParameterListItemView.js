@@ -42,11 +42,15 @@ define([
             this.model.on("change", function() {
                 that.render();
             });
+            // TODO kinda hacky but simple
+            this.workflow = $("#page").data("model");
             this.doInitialize(options);
         },
 
         removeParam: function() {
+            // FIXME TODO find connectors and squash em
             this.model.collection.remove(this.model);
+            this.workflow.cleanupConnectors();
         },
 
         handleFormSave: function() {

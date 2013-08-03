@@ -103,7 +103,12 @@ define([
                     var newParam  = parameterList.addItem(sourceModelJSON,function(){
                         // Create a connection
                         var conn = {};
-                        console.error(this.inputOrOutput);
+
+                        // sanity check
+                        if (typeof parameterList.inputOrOutput === 'undefined') {
+                            console.error(parameterList);
+                            throw "ParameterList is neither input NOR output!";
+                        }
                         if (parameterList.inputOrOutput === 'input') {
                             NS.rdf_attr("omnom:fromParam", conn, newParam);
                             NS.rdf_attr("omnom:toParam", conn, source);
