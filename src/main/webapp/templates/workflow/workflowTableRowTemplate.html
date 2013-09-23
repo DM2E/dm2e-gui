@@ -1,8 +1,11 @@
 <td>
+  <div class="btn-group btn-group-vertical">
     <a class="btn btn-success" href="#workflow-edit<%= url_path(model.id) %>">Edit</a>
+    <a class="btn" href="<%= model.id %>">Download</a>
+  </div>
 </td>
 <td>
-    <a href="<%= model.id %>"><%= last_url_segment(model.id) %></a>
+    <a href="#workflow-edit<%= url_path(model.id) %>"><%= last_url_segment(model.id) %></a>
 </td>
 <td>
     <%= rdf_attr("rdfs:comment") %>
