@@ -1,7 +1,7 @@
 {
-    "uuid": "aa77dddb-0fc2-497f-bf09-ea5c25e9b9e8",
-    "http://purl.org/dc/terms/creator": "http://localhost:9998/api/user/command-line",
-  "rdfs:comment": "A simple demo workflow",
+  "uuid": "aa77dddb-0fc2-497f-bf09-ea5c25e9b9e8",
+  "http://purl.org/dc/terms/creator": "http://localhost:9998/api/user/command-line",
+  "http://www.w3.org/2000/01/rdf-schema#label": "A simple demo workflow",
   "http://onto.dm2e.eu/omnom/inputParam": [
     {
       "uuid": "_:pollInterval",
