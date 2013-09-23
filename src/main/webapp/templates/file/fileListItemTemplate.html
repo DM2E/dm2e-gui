@@ -10,7 +10,7 @@
 	<!--<br />-->
 	<!--Content-Type: <%= rdf_attr("dcterms:format") %>-->
 	<!--<br />-->
-	ID: <%= model.id %> (<%= last_url_segment(rdf_attr("omnom:fileType")) %>)
+    <%= rdf_attr("rdfs:label") || model.id %> (<%= last_url_segment(rdf_attr("omnom:fileType")) %>)
 <!--	<br />
 	URL: <a href="<%= model.id %>"><%= model.url %></a>
 	<br />
