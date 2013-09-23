@@ -3,6 +3,7 @@ define([
 	'underscore',
 	'BaseView',
 	'logging',
+	'sorttable',
 	'vm',
 	'collections/file/FilesCollection',
 	'views/file/FileManagerListItemView',
@@ -11,6 +12,7 @@ define([
 	_,
 	BaseView,
 	logging,
+	sorttable,
 	Vm,
 	FilesCollection,
 	FileManagerListItemView,
@@ -42,6 +44,7 @@ define([
 		render : function() {
             this.renderModel({serviceURL: this.collection.url()});
             this.renderCollection();
+            sorttable.makeSortable(this.$("table")[0]);
 			return this;
 		},
 

@@ -60,7 +60,7 @@ define([
       }
       var qname = "";
       _.each(this._url_to_prefix, function(prefix, base) {
-        console.log(base);
+        // console.log(base);
         if (url.indexOf(base) === 0) {
           qname = prefix + ":" + url.replace(base, "");
         }
