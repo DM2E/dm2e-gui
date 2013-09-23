@@ -9,6 +9,7 @@
   <% } %>
 </td>
 <td><%= model.id %></td>
+<td><%= rdf_attr("rdfs:label") %></td>
 <td>
   <% if (shortType === 'WorkflowConfig') { %>
     <%= rdf_attr("omnom:workflow").id %>
