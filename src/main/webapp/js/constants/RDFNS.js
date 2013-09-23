@@ -54,6 +54,10 @@ define([
      * Shortens a URL to a qname
      */
     rdfns.shorten = function(url) {
+      if (typeof url === 'undefined') {
+        console.error("RDFNS.shorten called without a URL!");
+        return;
+      }
       var qname = "";
       _.each(this._url_to_prefix, function(prefix, base) {
         console.log(base);
@@ -68,10 +72,12 @@ define([
      * Get/Set the key of an object by a qname
      */
     rdfns.rdf_attr = function(qname, arg_obj, arg_val) {
-        if (typeof arg_obj === 'undefined')
+        if (typeof arg_obj === 'undefined') {
             throw "Must give object to rdf_attr";
-        if (typeof arg_val !== 'undefined')
+        }
+        if (typeof arg_val !== 'undefined') {
             arg_obj[rdfns.expand(qname)] = arg_val;
+        }
         return arg_obj[rdfns.expand(qname)];
     };
     //	console.log(rdfns.OMNOM().PROP_FILE_RETRIEVAL_URI());
