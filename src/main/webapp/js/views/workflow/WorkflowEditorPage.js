@@ -1,11 +1,11 @@
 //Filename: WorkflowView.js
 
 define([
-        'jquery', // lib/jquery/jquery
-    'underscore', // lib/underscore/underscore
-    'BaseView', // lib/backbone/backbone
-    'logging', // logging
-    'vm',
+        'jquery',
+        'underscore',
+        'BaseView',
+        'logging',
+        'vm',
         'singletons/UserSession',
         'constants/RDFNS',
         'util/dialogs',
@@ -68,6 +68,18 @@ define([
             this.listenTo(this.model.getQN("omnom:workflowPosition"), "add", this.saveWorkflow);
             this.listenTo(this.model.getQN("omnom:workflowPosition"), "remove", this.saveWorkflow);
 
+            this.listenTo(this.model.getQN("omnom:outputParam"), "remove", function() {
+              console.error("I NOTICED YOU STEALING MY PARAMZ!");
+              console.error("I NOTICED YOU STEALING MY PARAMZ!");
+              console.error("I NOTICED YOU STEALING MY PARAMZ!");
+              console.error("I NOTICED YOU STEALING MY PARAMZ!");
+              console.error("I NOTICED YOU STEALING MY PARAMZ!");
+              console.error("I NOTICED YOU STEALING MY PARAMZ!");
+              console.error("I NOTICED YOU STEALING MY PARAMZ!");
+              console.error("I NOTICED YOU STEALING MY PARAMZ!");
+              console.error("I NOTICED YOU STEALING MY PARAMZ!");
+              console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            });
             // NOTE cannot reference $el yet because app.js assigns it to the #page at render time => render
             //            this.$el.attr("data-backbone-modelid", this.model.id);
 
@@ -158,7 +170,11 @@ define([
             this.setButtonLoading("button#save-workflow");
             var that = this;
 
-            this.model.setQN("dcterms:creator", { "id" : session.user.id });
+            this.model.setQN("rdfs:label", $("#workflow-label").val());
+
+            this.model.setQN("dcterms:creator", {
+                "id": session.user.id
+            });
             this.model.setQN("dcterms:modified", new Date().toISOString());
             // Un-Skolemize positions (i.e. make them blank nodes and let the
             // server rename them again
@@ -176,8 +192,9 @@ define([
                 if (xhr.status >= 200 && xhr.status < 300) {
                     dialogs.notify("Saved Workflow " + that.model.id, 'success');
                     //                        that.odel.fetch().then(that.render);
-                } else
+                } else {
                     dialogs.notify(xhr.statusText, 'error');
+                }
             });
         },
 
