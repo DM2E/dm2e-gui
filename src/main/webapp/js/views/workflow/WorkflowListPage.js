@@ -67,6 +67,7 @@ define([
             console.log(this.collection);
             this.renderCollection({}, 'tbody');
             sorttable.makeSortable(this.$("table")[0]);
+            sorttable.innerSortFunction.apply(this.$("th", $("table")[0])[6]);
             return this;
 		},
 		

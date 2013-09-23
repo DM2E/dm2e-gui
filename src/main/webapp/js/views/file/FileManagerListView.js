@@ -45,6 +45,7 @@ define([
             this.renderModel({serviceURL: this.collection.url()});
             this.renderCollection();
             sorttable.makeSortable(this.$("table")[0]);
+            sorttable.innerSortFunction.apply(this.$("th", $("table")[0])[3]);
 			return this;
 		},
 
