@@ -9,6 +9,8 @@
         Configuration URL : <%= model.id %>
         <br/>
         For Workflow: <%= rdf_attr("omnom:workflow").id %>
+        <br/>
+        Config Label: <input type="text" id="config-label" value='<%= rdf_attr("rdfs:label") %>' />
     </div>
 </div>
 <div class="row">
