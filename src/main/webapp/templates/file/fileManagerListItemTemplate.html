@@ -39,7 +39,7 @@
 <td>
   <%= human_readable_size(rdf_attr("dcterms:extent")) %>
 </td>
-<td>
+<td sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'>
   <%= human_readable_date(rdf_attr("dcterms:modified")) %>
 </td>
 <td>
