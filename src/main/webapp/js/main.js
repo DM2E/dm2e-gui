@@ -100,8 +100,11 @@ require([
     'router',
     'views/app',
     'vm',
+    'sorttable',
     'util/backbone.sync',
-], function(Router, AppView, Vm) {
+], function(Router, AppView, Vm, sorttable) {
+
+    sorttable.init();
 
     var appView = Vm.createView({}, 'AppView', AppView);
     appView.render();
