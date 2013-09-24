@@ -291,3 +291,6 @@ dl {
 .file span.fileOwner {
   float: right;
 }
+.ui-draggable-dragging {
+  background: #111111;
+}

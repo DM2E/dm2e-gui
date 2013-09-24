@@ -25,7 +25,6 @@ define([
             // TODO draggable
             this.$el.draggable({
                 helper: 'clone',
-
             });
 
 			return this;
