@@ -120,14 +120,36 @@ define([
         },
 
         renderResourceLists: function() {
-            _.each(this.fileCollections, function(coll, collName) {
-                this.$(".resource-list").append("<div data-omnom-fileservice='" + collName + "']> </div>");
-                var subview = Vm.createSubView(this, FileListView, {
+          _.each(this.fileCollections, function(coll, collName) {
+            var collId = collName.replace(/[^a-zA-Z0-9-]/g, '');
+            $("#config-resource-nav").append(
+              $('<li></li>').append(
+                $('<a ></a>')
+                .attr('data-toggle', 'tab')
+                .attr("href", "#" + collId)
+                .attr("data-omnom-fileservice", collId)
+                // .on('click', function() { $(this).tab('show');})
+                .append(collName)));
+                $(".tab-content").append(
+                  $("<div></div>")
+                  .addClass("tab-pane")
+                  .attr("id", collId)
+                  .append(collId));
+                  var subview = Vm.createSubView(this, FileListView, {
                     collection: this.fileCollections[collName]
-                });
-                console.warn(subview);
-                this.assign(subview, "div[data-omnom-fileservice='" + collName + "']");
-            }, this);
+                  });
+                  this.assign(subview, "#" + collId);
+
+
+                  // this.$(".resource-list").append("<div data-omnom-fileservice='" + collName + "']> </div>");
+                  // console.warn(subview);
+                  // this.assign(subview, "div[data-omnom-fileservice='" + collName + "']");
+          }, this);
+
+          // show first tab
+          // window.setTimeout(function(){
+            $("#config-resource-nav a:first").tab('show');
+          // }, 2000);
         },
 
     });

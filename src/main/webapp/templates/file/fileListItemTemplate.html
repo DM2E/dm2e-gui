@@ -1,4 +1,4 @@
-<div class="file" data-location="<%= obj.data_location %>">
+<div class="file">
 	<!--<strong><%= rdf_attr("omnom:originalName") %></strong>-->
     <!--FOOFOFOFO-->
 	<!--<br />-->
@@ -10,20 +10,13 @@
 	<!--<br />-->
 	<!--Content-Type: <%= rdf_attr("dcterms:format") %>-->
 	<!--<br />-->
-    <%= rdf_attr("rdfs:label") || model.id %> (<%= last_url_segment(rdf_attr("omnom:fileType")) %>)
-<!--	<br />
-	URL: <a href="<%= model.id %>"><%= model.url %></a>
-	<br />
-	<a class="btn btn-file-edit"
-			href='<%= rdf_attr("omnom:fileEditURI") %>'>
-&lt;!&ndash; 		href="<% if (obj.edit_url) { %><%= obj.edit_url %><% } else { %>editor?id=<%= obj.id %><% } %>"> &ndash;&gt;
-		<i class="icon-edit">&nbsp;</i>
-		edit
-	</a>
-	<button class="btn btn-danger btn-file-delete disabled">
-		<i class="icon-trash">&nbsp;</i>
-		delete
-	</button>
+    <strong><%= rdf_attr("rdfs:label") || model.id %></strong>
+    <span class="fileType"><%= last_url_segment(rdf_attr("omnom:fileType")) %></span>
+    <br/>
+    <span class="lastUpdated"><%= human_readable_date(rdf_attr("dcterms:modified")) %></span>
+    <span class="fileOwner"><%= rdf_attr("omnom:fileOwner") ? last_url_segment(rdf_attr("omnom:fileOwner").id) : "UNKNOWN" %>
+    </span>
+    <!--
 	<a class="btn btn-download" href='<%= rdf_attr("omnom:fileRetrievalURI") %>'>
 		<i class="icon-download">&nbsp;</i>
 		Download
