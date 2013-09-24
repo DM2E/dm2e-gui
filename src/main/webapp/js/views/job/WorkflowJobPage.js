@@ -75,15 +75,19 @@ define([
                     }
                 }
             });
+            // .each(rdf_attr("omnom:workflowPosition", workflow), function(pos) {
+              // var thisId = pos.
+            // });
         },
 
         renderLog: function () {
-            this.$("pre#job-log").html(this.jobLog);
+            this.$("pre#workflow-job-log").html(this.jobLog);
         },
         render : function() {
             this.renderModel({ workflow: this.workflow.toJSON() });
             this.renderLog();
             this.renderProgressBar();
+            this.refreshLog();
         }
 
     });

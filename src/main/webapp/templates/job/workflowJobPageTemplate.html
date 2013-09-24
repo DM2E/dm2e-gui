@@ -45,22 +45,23 @@
         </div>
         <div id="log-workflow" class="accordion-body collapse">
           <div class="accordion-inner">
-            <pre id="job-log">No log messages yet ...</pre>
+            <pre id="workflow-job-log">No log messages yet ...</pre>
           </div>
         </div>
       </div>
       <% _.each(rdf_attr("omnom:workflowPosition", workflow), function(pos) { %>
-      <% var uid = "log-pos-" + unique_id() %>
+      <% /* var uid = "log-pos-" + unique_id() */ %>
+      <% var uid = last_url_segment(pos.id) %>
       <div class="accordion-group">
         <div class="accordion-heading">
           <a class="accordion-toggle" 
             data-toggle="collapse" 
             data-parent="#workflow-log"
-            href="#<%= uid %>">
+            href="#log-pos<%= uid %>">
             POS #<%= last_url_segment(pos.id) %>
           </a>
         </div>
-        <div id="<%= uid %>" class="accordion-body collapse">
+        <div id="log-pos<%= uid %>" class="accordion-body collapse">
           <div class="accordion-inner">
             Anim pariatur cliche...
             <a><%= pos.id %></a>
