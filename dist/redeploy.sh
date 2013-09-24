@@ -31,14 +31,13 @@ stop_servers() {
 	bash bin/stop-tomcat.sh
 }
 start_servers() {
-	cd $base_deploy_dir/$appname
+	cd $deploy_dir
 	bash bin/start-fuseki.sh
 	bash bin/start-tomcat.sh
 }
 
 undeploy() {
 	message "Undeploying"
-	sleep 3
 	cd $base_deploy_dir
 	mv $deploy_dir $deploy_dir.$(date '+%s')
 }
@@ -53,6 +52,7 @@ rebuild_dm2e_gui() {
 	message "Rebuilding and packaging dm2e_gui"
 	cd $repos_dir/dm2e-gui
 	git pull
+    bin/download-assets.sh bower-deps
     mvn -o -q clean
 	mvn -o -q -DskipTests package
 	cp target/$appname.zip $base_deploy_dir/$appname.zip
@@ -80,6 +80,7 @@ rebuild_dm2e_gui
 
 if [ -d $deploy_dir ];then
 	stop_servers
+    sleep 5
 	undeploy
 fi
 
