@@ -22,7 +22,7 @@
     <a class="btn btn-success" href="#job/<%= rdf_attr('prov:wasGeneratedBy').id %>">View Job</a>
   <% } %>
 </td>
-<td>
+<td sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'>
   <%= human_readable_date(rdf_attr("dcterms:modified")) %>
 </td>
 <td>

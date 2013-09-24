@@ -20,6 +20,6 @@
 <td>
     <%= rdf_attr("dcterms:creator") ? last_url_segment(rdf_attr("dcterms:creator").id) :  'UNKNOWN' %>
 </td>
-<td>
+<td sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'>
     <%= rdf_attr("dcterms:modified") ? human_readable_date(rdf_attr("dcterms:modified")) : 'UNKNOWN' %>
 </td>
