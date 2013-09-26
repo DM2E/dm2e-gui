@@ -10,11 +10,11 @@
 	<!--<br />-->
 	<!--Content-Type: <%= rdf_attr("dcterms:format") %>-->
 	<!--<br />-->
-    <strong><%= rdf_attr("rdfs:label") || model.id %></strong>
-    <span class="fileType"><%= last_url_segment(rdf_attr("omnom:fileType")) %></span>
+    <strong><%= rdf_attr("rdfs:label") || rdf_attr("omnom:originalName") || model.id %></strong>
+    <span class="fileType"><%= last_url_segment(rdf_attr("omnom:fileType")) || 'Unknown type' %></span>
     <br/>
-    <span class="lastUpdated"><%= human_readable_date(rdf_attr("dcterms:modified")) %></span>
-    <span class="fileOwner"><%= rdf_attr("omnom:fileOwner") ? last_url_segment(rdf_attr("omnom:fileOwner").id) : "UNKNOWN" %>
+    <span class="lastUpdated"><%= human_readable_date(rdf_attr("dcterms:modified")) || 'Unknown Date' %></span>
+    <span class="fileOwner"><%= rdf_attr("omnom:fileOwner") ? last_url_segment(rdf_attr("omnom:fileOwner").id) : "Unknown User" %>
     </span>
     <!--
 	<a class="btn btn-download" href='<%= rdf_attr("omnom:fileRetrievalURI") %>'>

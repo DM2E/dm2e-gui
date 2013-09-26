@@ -43,7 +43,8 @@ define([
             this.workflow.fetch({async:true});
             console.log(this.workflow);
             this.listenTo(this.model, "change", this.render);
-            this.jobLog = "";
+            this.workflowLog = "";
+            this.positionLogs = {};
             this.refreshLog();
         },
 
@@ -60,6 +61,8 @@ define([
 
         refreshLog : function() {
             var that = this;
+
+            // retrieve workflow log messages
             $.ajax({
                 url : this.model.id + "/log",
                 type : "GET",
@@ -70,24 +73,53 @@ define([
                     if (jqXHR > 200) {
                         dialogs.notify("Could not retrieve log messages.", 'error');
                     } else {
-                        that.jobLog = jqXHR.responseText;
+                        that.workflowLog = jqXHR.responseText;
                         that.model.trigger("change");
                     }
                 }
             });
+            // TODO retrieve current job
+            $.ajax({
+                url: this.model.id + "/relatedJobs",
+                dataType: "json",
+                complete: function(jqXHR) {
+                    console.log(jqXHR.reponseText);
+                },
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+                // console.log(curJob);
+                // $.ajax({
+                    // url: curJob.id,
+                    // dataType: 'json',
+                    // complete : function(jqXHR) {
+                        // console.error(jqXHR.responseText);
+                    // },
+                    // success : function(data) {
+                        // var curPosLogURL = RDFNS.rdf_attr("omnom:executesPosition", data);
+                        // console.error(data);
+                        // console.error(curPosLogURL);
+                        // // this.positionLogs[curJob.id] = logStr;
+                        // // console.error(jqXHR.responseText);
+                    // },
+                // });
+            // TODO retrieve finished jobs
+            // console.log(this.model);
             // .each(rdf_attr("omnom:workflowPosition", workflow), function(pos) {
               // var thisId = pos.
             // });
         },
 
         renderLog: function () {
-            this.$("pre#workflow-job-log").html(this.jobLog);
+            this.$("pre#workflow-job-log").html(this.workflowLog);
         },
         render : function() {
             this.renderModel({ workflow: this.workflow.toJSON() });
             this.renderLog();
             this.renderProgressBar();
-            this.refreshLog();
+            // FIXME I smell infinite recursion
+            // this.refreshLog();
         }
 
     });
