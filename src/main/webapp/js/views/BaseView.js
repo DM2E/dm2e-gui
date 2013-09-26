@@ -10,6 +10,7 @@ define([
     'vm',
     'uuid',
     'util/UriUtils',
+    'util/HtmlUtils',
     'util/SizeUtils',
     "humaneDate",
     'constants/RDFNS'
@@ -21,6 +22,7 @@ define([
     Vm,
     UUID,
     UriUtils,
+    HtmlUtils,
     SizeUtils,
     humaneDate,
     RDFNS) {
@@ -111,13 +113,7 @@ define([
                     /**
                      * Escapes angle brackets and ampersands
                      */
-                    html_escape : function(raw) {
-                      var ret = raw || "";
-                      ret = ret.replace(/&/g, "&amp;");
-                      ret = ret.replace(/</g, "&lt;");
-                      ret = ret.replace(/>/g, "&gt;");
-                      return ret;
-                    },
+                    html_escape : HtmlUtils.html_escape,
 
                     /**
                      * Displays dates nicely
