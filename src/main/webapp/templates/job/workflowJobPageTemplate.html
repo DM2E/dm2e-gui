@@ -30,7 +30,48 @@
     </div>
     Progress: <%= rdf_attr("omnom:finishedPosition").length %> / <%= rdf_attr("omnom:workflowPosition", workflow).length %>
 
-    <h3>Produced files</h3>
+    <h3>Output assignments of workflow</h3>
+    <% _.each(rdf_attr("omnom:assignment"), function(ass) { %>
+    <table class="table sortable">
+      <tr>
+        <th>Actions</th>
+        <th>Parameter</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>
+          <div class="btn-group btn-group-vertical">
+            <a class="btn">Download</a>
+            <a class="btn">Show in Pubby</a>
+          </div>
+        </td>
+        <td><%= last_url_segment(rdf_attr("omnom:forParam", ass).id) %></td>
+        <td><div style="max-height: 100px; overflow: scroll"><%= rdf_attr("omnom:parameterValue", ass) %></div></td>
+      </tr>
+    </table>
+    <% }); %>
+    <% console.error(workflow) %>
+
+    <h3>Output assignments of positions</h3>
+    <% _.each(relatedJobAssignments, function(ass) { %>
+    <table class="table sortable">
+      <tr>
+        <th>Actions</th>
+        <th>Parameter</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>
+          <div class="btn-group btn-group-vertical">
+            <a class="btn">Download</a>
+            <a class="btn">Show in Pubby</a>
+          </div>
+        </td>
+        <td><%= last_url_segment(rdf_attr("omnom:forParam", ass).id) %></td>
+        <td><%= rdf_attr("omnom:parameterValue", ass) %></td>
+      </tr>
+    </table>
+    <% }); %>
 
     <h3>Log</h3>
     <div class="accordion" id="workflow-log">
@@ -50,7 +91,6 @@
         </div>
       </div>
       <% _.each(rdf_attr("omnom:workflowPosition", workflow), function(pos) { %>
-      <% /* var uid = "log-pos-" + unique_id() */ %>
       <% var uid = last_url_segment(pos.id) %>
       <div class="accordion-group">
         <div class="accordion-heading">
@@ -63,12 +103,12 @@
         </div>
         <div id="log-pos<%= uid %>" class="accordion-body collapse">
           <div class="accordion-inner">
-            Anim pariatur cliche...
-            <a><%= pos.id %></a>
+            <pre><%= positionLogs[pos.id] %>
+            </pre>
           </div>
         </div>
       </div>
-      <% }); %>
+      <% }) %>
       <div class="accordion-group">
         <div class="accordion-heading">
           <a class="accordion-toggle" 
@@ -79,10 +119,9 @@
           </a>
         </div>
         <div id="log-workflow-complete" class="accordion-body collapse">
-            <pre id="complete-workflow-log"><%=
+          <pre id="complete-workflow-log"><%=
              html_escape(rdf_attr("omnom:parameterValue", rdf_attr("omnom:assignment")[0]) || "")
             %></pre>
-          </div>
         </div>
       </div>
     </div>

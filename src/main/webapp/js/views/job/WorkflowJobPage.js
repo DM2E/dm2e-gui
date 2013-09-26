@@ -6,6 +6,7 @@ define([
     'logging',
     'vm',
     'util/dialogs',
+    'util/UriUtils',
     'constants/RDFNS',
     'BaseView',
     'models/workflow/WorkflowModel',
@@ -15,6 +16,7 @@ define([
     logging,
     Vm,
     dialogs,
+    UriUtils,
     RDFNS,
     BaseView,
     WorkflowModel,
@@ -45,6 +47,7 @@ define([
             this.listenTo(this.model, "change", this.render);
             this.workflowLog = "";
             this.positionLogs = {};
+            this.relatedJobAssignments = [];
             this.refreshLog();
         },
 
@@ -78,44 +81,63 @@ define([
                     }
                 }
             });
-            // TODO retrieve current job
+            /**
+             * Retrieve logs
+             */
             $.ajax({
                 url: this.model.id + "/relatedJobs",
                 dataType: "json",
-                complete: function(jqXHR) {
-                    console.log(jqXHR.reponseText);
-                },
+                // complete: function(jqXHR) {
+                //     console.log(jqXHR.reponseText);
+                // },
                 success: function(data) {
-                    console.log(data);
+                    // for each relatedJob
+                    that.relatedJobAssignments = [];
+                    _.each(data, function(subJob) {
+
+                        // determine the position
+                        var subJobPos = RDFNS.rdf_attr("omnom:executesPosition", RDFNS.rdf_attr("omnom:webserviceConfig", subJob)).id;
+
+                        // Store assignments
+                        _.each(RDFNS.rdf_attr("omnom:assignment", subJob), function(ass) {
+                            that.relatedJobAssignments.push(ass);
+                        });
+
+                        // gather logs
+                        $.ajax({
+                            url: subJob.id + "/log",
+                            type : "GET",
+                            headers : {
+                                Accept : "text/x-log"
+                            },
+                            complete : function(jqXHR) {
+                                if (jqXHR > 200) {
+                                    dialogs.notify("Could not retrieve log messages.", 'error');
+                                } else {
+                                    that.positionLogs[subJobPos] = jqXHR.responseText;
+                                    // trigger change so the page is re-rendered
+                                    that.model.trigger("change");
+                                }
+                            }
+                        });
+                    });
                 }
             });
-                // console.log(curJob);
-                // $.ajax({
-                    // url: curJob.id,
-                    // dataType: 'json',
-                    // complete : function(jqXHR) {
-                        // console.error(jqXHR.responseText);
-                    // },
-                    // success : function(data) {
-                        // var curPosLogURL = RDFNS.rdf_attr("omnom:executesPosition", data);
-                        // console.error(data);
-                        // console.error(curPosLogURL);
-                        // // this.positionLogs[curJob.id] = logStr;
-                        // // console.error(jqXHR.responseText);
-                    // },
-                // });
-            // TODO retrieve finished jobs
-            // console.log(this.model);
-            // .each(rdf_attr("omnom:workflowPosition", workflow), function(pos) {
-              // var thisId = pos.
-            // });
         },
 
         renderLog: function () {
             this.$("pre#workflow-job-log").html(this.workflowLog);
+            _.each(RDFNS.rdf_attr("omnom:workflowPosition", this.workflow), function(pos) { 
+                var uid = UriUtils.last_url_segment(pos.id);
+                $("pre", "#" + uid).replaceWith(this.positionLogs[pos.id]);
+            }, this);
         },
         render : function() {
-            this.renderModel({ workflow: this.workflow.toJSON() });
+            this.renderModel({ 
+                workflow: this.workflow.toJSON(),
+                positionLogs: this.positionLogs,
+                relatedJobAssignments: this.relatedJobAssignments
+            });
             this.renderLog();
             this.renderProgressBar();
             // FIXME I smell infinite recursion
