@@ -31,7 +31,7 @@ boilerplate_url="http://localhost:9998/api"
 
 
 publishWorkflow() {
-    wf=$1
+wf=$1
 
     echoerr "----------------------"
     echoerr "#"
