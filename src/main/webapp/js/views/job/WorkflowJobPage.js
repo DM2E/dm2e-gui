@@ -7,6 +7,7 @@ define([
     'vm',
     'util/dialogs',
     'util/UriUtils',
+    'util/HtmlUtils',
     'constants/RDFNS',
     'BaseView',
     'models/workflow/WorkflowModel',
@@ -17,6 +18,7 @@ define([
     Vm,
     dialogs,
     UriUtils,
+    HtmlUtils,
     RDFNS,
     BaseView,
     WorkflowModel,
@@ -87,14 +89,13 @@ define([
             $.ajax({
                 url: this.model.id + "/relatedJobs",
                 dataType: "json",
-                // complete: function(jqXHR) {
-                //     console.log(jqXHR.reponseText);
-                // },
                 success: function(data) {
+                    console.log(data);
                     // for each relatedJob
                     that.relatedJobAssignments = [];
                     _.each(data, function(subJob) {
 
+                        console.error(subJob);
                         // determine the position
                         var subJobPos = RDFNS.rdf_attr("omnom:executesPosition", RDFNS.rdf_attr("omnom:webserviceConfig", subJob)).id;
 
@@ -103,6 +104,7 @@ define([
                             that.relatedJobAssignments.push(ass);
                         });
 
+                        console.error(subJobPos);
                         // gather logs
                         $.ajax({
                             url: subJob.id + "/log",
@@ -115,6 +117,7 @@ define([
                                     dialogs.notify("Could not retrieve log messages.", 'error');
                                 } else {
                                     that.positionLogs[subJobPos] = jqXHR.responseText;
+                                    console.error(jqXHR.responseText);
                                     // trigger change so the page is re-rendered
                                     that.model.trigger("change");
                                 }
@@ -126,10 +129,10 @@ define([
         },
 
         renderLog: function () {
-            this.$("pre#workflow-job-log").html(this.workflowLog);
+            this.$("pre#workflow-job-log").html(HtmlUtils.html_escape(this.workflowLog));
             _.each(RDFNS.rdf_attr("omnom:workflowPosition", this.workflow), function(pos) { 
                 var uid = UriUtils.last_url_segment(pos.id);
-                $("pre", "#" + uid).replaceWith(this.positionLogs[pos.id]);
+                $("pre", "#" + uid).html(HtmlUtils.html_escape(this.positionLogs[pos.id]));
             }, this);
         },
         render : function() {

@@ -101,12 +101,13 @@
         </div>
         <div id="log-pos<%= uid %>" class="accordion-body collapse">
           <div class="accordion-inner">
-            <pre><%= positionLogs[pos.id] %>
+            <pre><%= html_escape(positionLogs[pos.id]) %>
             </pre>
           </div>
         </div>
       </div>
       <% }) %>
+      <% console.error(positionLogs) %>
       <div class="accordion-group">
         <div class="accordion-heading">
           <a class="accordion-toggle" 
