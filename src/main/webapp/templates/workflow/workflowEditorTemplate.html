@@ -7,7 +7,8 @@
     <div class="span9">
     	Workflow ID <%= model.id %>
     	<br/>
-    	Workflow URL <a href="<%= rawModel.url() %>"><%= rawModel.url() %></a>
+        <% console.log(rawModel) %>
+    	Workflow URL <a href="<%= rawModel.url %>"><%= rawModel.url %></a>
     	<br/>
         Workflow Label: <input type="text" id="workflow-label" value='<%= rdf_attr("rdfs:label") %>' />
     </div>
