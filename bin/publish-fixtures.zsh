@@ -61,7 +61,7 @@ publishWorkflow() {
     echoerr "# Replacing boilerplate URL with real URL"
     if [ "$SRV" != "$boilerplate_url" ];then
         echo "Replacing... $boilerplate_url with $SRV"
-        sed -i "s!http://localhost:9998/api!$SRV!" $wf_demo
+        sed -i "s!http://localhost:9998/api!$SRV!" $wf
     fi
 }
 
@@ -72,5 +72,6 @@ wf_xslt_publish=$(mktemp)
 cat src/main/resources/test-fixtures/demo-workflow.json > $wf_demo
 cat src/main/resources/test-fixtures/xslt-publish-workflow.json > $wf_xslt_publish
 
+publishFiles
 publishWorkflow $wf_demo
 publishWorkflow $wf_xslt_publish
