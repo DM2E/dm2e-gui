@@ -57,12 +57,6 @@ wf=$1
     JOB=$(PUT "-H$CT_TEXT" "$WORKFLOW" -d "$CONFIG" \
         2>&1 | grep 'Location: ' | sed 's///' | grep 'Location' | grep -o 'http.*')
     echo "JOB='$JOB'"
-
-    echoerr "# Replacing boilerplate URL with real URL"
-    if [ "$SRV" != "$boilerplate_url" ];then
-        echo "Replacing... $boilerplate_url with $SRV"
-        sed -i "s!http://localhost:9998/api!$SRV!" $wf
-    fi
 }
 
 echoerr "# Create workflow tempfiles"
@@ -71,6 +65,13 @@ wf_demo=$(mktemp)
 wf_xslt_publish=$(mktemp)
 cat src/main/resources/test-fixtures/demo-workflow.json > $wf_demo
 cat src/main/resources/test-fixtures/xslt-publish-workflow.json > $wf_xslt_publish
+
+    echoerr "# Replacing boilerplate URL with real URL"
+    if [ "$SRV" != "$boilerplate_url" ];then
+        echo "Replacing... $boilerplate_url with $SRV"
+        sed -i "s!http://localhost:9998/api!$SRV!" $wf_demo
+        sed -i "s!http://localhost:9998/api!$SRV!" $wf_xslt_publish
+    fi
 
 publishFiles
 publishWorkflow $wf_demo
