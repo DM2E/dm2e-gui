@@ -164,7 +164,13 @@ define([
          * @param listSelector
          * @param ItemView
          */
-        renderCollection: function (itemViewOptions, listSelector, ItemView) {
+        renderCollection: function (itemViewOptions, listSelector, ItemView, collectionArray, context) {
+            if (typeof context === 'undefined') {
+              context = this;
+            }
+            if (typeof collectionArray === 'undefined') {
+              collectionArray = this.collection.models;
+            }
             if (typeof ItemView === 'undefined') {
                 ItemView = this.itemView;
                 if (typeof ItemView === 'undefined') {
@@ -182,9 +188,9 @@ define([
                 }
             }
             log.debug("renderCollection() in BaseView called (Selector: '" + listSelector + "')");
-            Vm.cleanupSubViews(this);
+            Vm.cleanupSubViews(context);
             // FIXME FIXME
-            _.each(this.collection.models, function (model) {
+            _.each(collectionArray, function (model) {
                 var subview = Vm.createSubView(this, ItemView,
                     _.extend({
                         model: model,
