@@ -1,0 +1,140 @@
+{
+    "uuid": "_:foobarmagoo",
+    "http://purl.org/dc/terms/creator": { "id": "http://localhost:9998/api/user/the-test-user" },
+    "http://www.w3.org/2000/01/rdf-schema#label": "XSLTZIP-Publish Workflow",
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": "http://onto.dm2e.eu/omnom/Workflow",
+    "http://onto.dm2e.eu/omnom/inputParam": [
+        {
+            "uuid": "_:label",
+      "http://onto.dm2e.eu/omnom/defaultValue": "",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+            "http://www.w3.org/2000/01/rdf-schema#label": "label"
+        },
+        {
+            "uuid": "pollInterval",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+            "http://www.w3.org/2000/01/rdf-schema#comment": "Time to wait between polls for job status, in milliseconds. [Default: 2000ms]",
+            "http://onto.dm2e.eu/omnom/defaultValue": "2000",
+            "http://www.w3.org/2000/01/rdf-schema#label": "pollInterval"
+        },
+        {
+            "uuid": "_:xmlInput",
+      "http://onto.dm2e.eu/omnom/defaultValue": "",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+            "http://www.w3.org/2000/01/rdf-schema#comment": "XML input",
+            "http://www.w3.org/2000/01/rdf-schema#label": "xmlInput"
+        },
+        {
+            "uuid": "_:xslInput",
+      "http://onto.dm2e.eu/omnom/defaultValue": "",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+            "http://www.w3.org/2000/01/rdf-schema#comment": "XSLTZIP input",
+            "http://www.w3.org/2000/01/rdf-schema#label": "xsltZipInput"
+        },
+        {
+            "uuid": "_:dataset-id",
+      "http://onto.dm2e.eu/omnom/defaultValue": "",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+            "http://www.w3.org/2000/01/rdf-schema#label": "dataset-id"
+        },
+        {
+            "uuid": "_:provider-id",
+      "http://onto.dm2e.eu/omnom/defaultValue": "",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+            "http://www.w3.org/2000/01/rdf-schema#label": "provider-id"
+        },
+        {
+            "uuid": "_:jobTimeout",
+      "http://onto.dm2e.eu/omnom/isRequired": false,
+            "http://www.w3.org/2000/01/rdf-schema#comment": "Maximum time to wait for a job to finish, in seconds. [Default: 120s]",
+            "http://onto.dm2e.eu/omnom/defaultValue": "120",
+            "http://www.w3.org/2000/01/rdf-schema#label": "jobTimeout"
+        }
+    ],
+    "http://onto.dm2e.eu/omnom/outputParam": [
+        {
+            "uuid": "_:xmlOutput",
+            "http://www.w3.org/2000/01/rdf-schema#comment": "XML output",
+            "http://www.w3.org/2000/01/rdf-schema#label": "xmlOutput"
+        },
+        {
+            "uuid": "_:completeLog",
+            "http://www.w3.org/2000/01/rdf-schema#comment": "The complete log file of the workflow job and its webservice jobs.",
+            "http://www.w3.org/2000/01/rdf-schema#label": "completeLog"
+        },
+        {
+            "uuid": "_:result-dataset-id",
+            "http://www.w3.org/2000/01/rdf-schema#label": "result-dataset-id"
+        }
+    ],
+    "http://onto.dm2e.eu/omnom/parameterConnector": [
+        {
+            "uuid": "_:connector/3",
+            "http://onto.dm2e.eu/omnom/fromPosition": { "uuid": "_:pos1" },
+            "http://onto.dm2e.eu/omnom/toPosition": { "uuid": "_:pos2" },
+            "http://onto.dm2e.eu/omnom/fromParam": { "id": "http://localhost:9998/api/service/xslt-zip/param/xmlOutput" },
+            "http://onto.dm2e.eu/omnom/toParam": { "id": "http://localhost:9998/api/publish/param/to-publish" }
+        },
+        {
+            "uuid": "_:connector/1",
+            "http://onto.dm2e.eu/omnom/fromWorkflow": { "uuid": "_:foobarmagoo" },
+            "http://onto.dm2e.eu/omnom/toPosition": { "uuid": "_:pos1" },
+            "http://onto.dm2e.eu/omnom/fromParam": { "uuid": "_:xmlInput" },
+            "http://onto.dm2e.eu/omnom/toParam": { "id": "http://localhost:9998/api/service/xslt-zip/param/xmlInput" }
+        },
+        {
+            "uuid": "_:connector/6",
+            "http://onto.dm2e.eu/omnom/fromWorkflow": { "uuid": "_:foobarmagoo" },
+            "http://onto.dm2e.eu/omnom/toPosition": { "uuid": "_:pos2" },
+            "http://onto.dm2e.eu/omnom/fromParam": { "uuid": "_:provider-id" },
+            "http://onto.dm2e.eu/omnom/toParam": { "id": "http://localhost:9998/api/publish/param/provider-id" }
+        },
+        {
+            "uuid": "_:connector/5",
+            "http://onto.dm2e.eu/omnom/fromWorkflow": { "uuid": "_:foobarmagoo" },
+            "http://onto.dm2e.eu/omnom/toPosition": { "uuid": "_:pos1" },
+            "http://onto.dm2e.eu/omnom/fromParam": { "uuid": "_:xslInput" },
+            "http://onto.dm2e.eu/omnom/toParam": { "id": "http://localhost:9998/api/service/xslt-zip/param/xsltZipInput" }
+        },
+        {
+            "uuid": "_:connector/4",
+            "http://onto.dm2e.eu/omnom/fromPosition": { "uuid": "_:pos2" },
+            "http://onto.dm2e.eu/omnom/fromParam": { "id": "http://localhost:9998/api/publish/param/result-dataset-id" },
+            "http://onto.dm2e.eu/omnom/toWorkflow": { "uuid": "_:foobarmagoo" },
+            "http://onto.dm2e.eu/omnom/toParam": { "uuid": "_:result-dataset-id" }
+        },
+        {
+            "uuid": "_:connector/2",
+            "http://onto.dm2e.eu/omnom/fromWorkflow": { "uuid": "_:foobarmagoo" },
+            "http://onto.dm2e.eu/omnom/toPosition": { "uuid": "_:pos2" },
+            "http://onto.dm2e.eu/omnom/fromParam": { "uuid": "_:label" },
+            "http://onto.dm2e.eu/omnom/toParam": { "id": "http://localhost:9998/api/publish/param/label" }
+        },
+        {
+            "uuid": "_:connector/8",
+            "http://onto.dm2e.eu/omnom/fromPosition": { "uuid": "_:pos1" },
+            "http://onto.dm2e.eu/omnom/fromParam": { "id": "http://localhost:9998/api/service/xslt-zip/param/xmlOutput" },
+            "http://onto.dm2e.eu/omnom/toWorkflow": { "uuid": "_:foobarmagoo" },
+            "http://onto.dm2e.eu/omnom/toParam": { "uuid": "_:xmlOutput" }
+        },
+        {
+            "uuid": "_:connector/7",
+            "http://onto.dm2e.eu/omnom/fromWorkflow": { "uuid": "_:foobarmagoo" },
+            "http://onto.dm2e.eu/omnom/toPosition": { "uuid": "_:pos2" },
+            "http://onto.dm2e.eu/omnom/fromParam": { "uuid": "_:dataset-id" },
+            "http://onto.dm2e.eu/omnom/toParam": { "id": "http://localhost:9998/api/publish/param/dataset-id" }
+        }
+    ],
+    "http://onto.dm2e.eu/omnom/workflowPosition": [
+        {
+            "uuid": "_:pos1",
+            "http://onto.dm2e.eu/omnom/webservice": { "id": "http://localhost:9998/api/service/xslt-zip" },
+            "http://onto.dm2e.eu/omnom/inWorkflow": { "uuid": "_:foobarmagoo" }
+        },
+        {
+            "uuid": "_:pos2",
+            "http://onto.dm2e.eu/omnom/webservice": { "id": "http://localhost:9998/api/publish" },
+            "http://onto.dm2e.eu/omnom/inWorkflow": { "uuid": "_:foobarmagoo" }
+        }
+    ]
+}

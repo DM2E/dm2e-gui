@@ -12,67 +12,67 @@ if [ -z "$SRV" ];then
 fi
 
 
-echoerr() {
-    echo "$@" 1>&2;
+echoe() {
+    echo "#- $@"1>&2;
 }
 
 ##
 ## FIXME this will break if dm2e-ws repo is not in the parent directory
 ## TODO metadata
-publishFiles() {
-    echoerr "# publish some files"
-    FILE1=$(zsh bin/ingest-file.sh ../dm2e-ws/src/test/resources/mappings/xslt/KBA_BBAW_TO_EDM.xsl)
-    echo "FILE1='$FILE1'"
-    FILE2=$(zsh bin/ingest-file.sh ../dm2e-ws/src/test/resources/provider-examples/dta/grimm_meistergesang_1811.TEI-P5.xml)
-    echo "FILE2='$FILE2'"
+#
+publishFile() {
+    file=$1
+    file_counter=$((file_counter + 1))
+    file_uploaded=$(zsh bin/ingest-file.sh $file)
+    echoe "uploaded $file as $file_uploaded"
+    echo "FILE$file_counter='$file'"
 }
 
 boilerplate_url="http://localhost:9998/api"
 
 
 publishWorkflow() {
-wf=$1
+    wf_counter=$((wf_counter + 1))
+    wf_file=$1
+    wf=$(mktemp)
+    tempfile=$(mktemp)
 
-    echoerr "----------------------"
-    echoerr "#"
-    echoerr "# WORKFLOW: $wf"
-    echoerr "#"
+    cat $wf_file \
+        | sed "s!http://localhost:9998/api!$SRV!g"\
+        > $wf
+
+    echoe "----------------------"
+    echoe "WORKFLOW: $wf"
 
     WORKFLOW=$(POST -H $CT_JSON $SRV/workflow -d @$wf \
         2>&1 | grep 'Location: ' | sed 's///' | grep 'Location' | grep -o 'http.*')
-    echo "WORKFLOW='$WORKFLOW'"
+    echo "WORKFLOW$wf_counter='$WORKFLOW'"
 
-    echoerr "# get empty config"
+    echoe "get empty config"
     GETJ $WORKFLOW/blankConfig 2>/dev/null | sed 's/bottles of beer on the wall/flailing piglets/' > $tempfile
     sed -i '/^{/a \
         "http://purl.org/dc/terms/creator":"http://omnom.hu-berlin.de/api/user/command-line",
     ' $tempfile
 
-    echoerr "# persist it"
+    echoe "persist it"
     CONFIG=$(POST -H $CT_JSON $SRV/config -d @$tempfile \
         2>&1 | grep 'Location: ' | sed 's///' | grep 'Location' | grep -o 'http.*')
     echo "CONFIG='$CONFIG'"
 
-    echoerr "# run a job"
+    echoe "run a job"
     JOB=$(PUT "-H$CT_TEXT" "$WORKFLOW" -d "$CONFIG" \
         2>&1 | grep 'Location: ' | sed 's///' | grep 'Location' | grep -o 'http.*')
     echo "JOB='$JOB'"
 }
 
-echoerr "# Create workflow tempfiles"
-tempfile=$(mktemp)
-wf_demo=$(mktemp)
-wf_xslt_publish=$(mktemp)
-cat src/main/resources/test-fixtures/demo-workflow.json > $wf_demo
-cat src/main/resources/test-fixtures/xslt-publish-workflow.json > $wf_xslt_publish
+file_counter=0;
+wf_counter=0;
 
-    echoerr "# Replacing boilerplate URL with real URL"
-    if [ "$SRV" != "$boilerplate_url" ];then
-        echo "Replacing... $boilerplate_url with $SRV"
-        sed -i "s!http://localhost:9998/api!$SRV!" $wf_demo
-        sed -i "s!http://localhost:9998/api!$SRV!" $wf_xslt_publish
-    fi
+publishFile ../dm2e-ws/src/test/resources/mappings/xslt/KBA_BBAW_TO_EDM.xsl
+publishFile ../dm2e-ws/src/test/resources/provider-examples/dta/grimm_meistergesang_1811.TEI-P5.xml
+publishFile ../dm2e-ws/src/test/resources/mappings/xslt-zip/TEI2DM2E_xslt_20130605.zip
 
-publishFiles
-publishWorkflow $wf_demo
-publishWorkflow $wf_xslt_publish
+publishWorkflow src/main/resources/test-fixtures/demo-workflow.json
+publishWorkflow src/main/resources/test-fixtures/xslt-publish-workflow.json
+publishWorkflow src/main/resources/test-fixtures/xsltzip-publish-workflow.json
+
