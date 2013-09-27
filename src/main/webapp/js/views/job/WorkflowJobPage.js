@@ -11,6 +11,9 @@ define([
     'constants/RDFNS',
     'BaseView',
     'models/workflow/WorkflowModel',
+    'collections/job/AssignmentCollection',
+    'models/job/AssignmentModel',
+    'views/job/AssignmentTableRowView',
     'text!templates/job/workflowJobPageTemplate.html'
 ], function($,
     _,
@@ -22,6 +25,9 @@ define([
     RDFNS,
     BaseView,
     WorkflowModel,
+    AssignmentCollection,
+    AssignmentModel,
+    AssignmentTableRowView,
     workflowJobTemplate
     ) {
 
@@ -139,13 +145,17 @@ define([
             this.renderModel({ 
                 workflow: this.workflow.toJSON(),
                 positionLogs: this.positionLogs,
-                relatedJobAssignments: this.relatedJobAssignments
             });
+            var workflowAssignments = new AssignmentCollection(RDFNS.rdf_attr("omnom:assignment", this.model.toJSON()));
+            var theRelatedJobAssignments = new AssignmentCollection(this.relatedJobAssignments); 
+            console.error(theRelatedJobAssignments);
+            this.renderCollection({}, "#workflow-assignments", AssignmentTableRowView, workflowAssignments.models, {});
+            this.renderCollection({}, "#positions-assignments", AssignmentTableRowView, theRelatedJobAssignments.models, {});
             this.renderLog();
             this.renderProgressBar();
             // FIXME I smell infinite recursion
             // this.refreshLog();
         }
 
-    });
+   });
 });

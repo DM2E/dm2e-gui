@@ -30,45 +30,21 @@
     Progress: <%= rdf_attr("omnom:finishedPosition").length %> / <%= rdf_attr("omnom:workflowPosition", workflow).length %>
 
     <h3>Output assignments of workflow</h3>
-    <table class="table sortable">
+    <table class="table sortable" id="workflow-assignments">
       <tr>
         <th>Actions</th>
         <th>Parameter</th>
         <th>Value</th>
       </tr>
-    <% _.each(rdf_attr("omnom:assignment"), function(ass) { %>
-      <tr>
-        <td>
-          <div class="btn-group btn-group-vertical">
-            <a class="btn">Download</a>
-            <a class="btn">Show in Pubby</a>
-          </div>
-        </td>
-        <td><%= last_url_segment(rdf_attr("omnom:forParam", ass).id) %></td>
-        <td><div style="max-height: 100px; overflow: auto"><%= rdf_attr("omnom:parameterValue", ass) %></div></td>
-      </tr>
-    <% }); %>
     </table>
 
     <h3>Output assignments of positions</h3>
-    <table class="table sortable">
+    <table class="table sortable" id="positions-assignments">
       <tr>
         <th>Actions</th>
         <th>Parameter</th>
         <th>Value</th>
       </tr>
-    <% _.each(relatedJobAssignments, function(ass) { %>
-      <tr>
-        <td>
-          <div class="btn-group btn-group-vertical">
-            <a class="btn">Download</a>
-            <a class="btn">Show in Pubby</a>
-          </div>
-        </td>
-        <td><%= last_url_segment(rdf_attr("omnom:forParam", ass).id) %></td>
-        <td><%= rdf_attr("omnom:parameterValue", ass) %></td>
-      </tr>
-    <% }); %>
     </table>
 
     <h3>Log</h3>
