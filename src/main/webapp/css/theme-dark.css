@@ -294,3 +294,14 @@ dl {
 .ui-draggable-dragging {
   background: #111111;
 }
+span.filter-heading {
+  font-weight: bold;
+  margin-right: 2em;
+}
+tr.filtered {
+  display: none;
+}
+.filter-bar {
+  color: #317eac;
+  padding-left: 1em;
+}
