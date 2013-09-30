@@ -39,19 +39,29 @@
 <td>
   <%= human_readable_size(rdf_attr("dcterms:extent")) %>
 </td>
-<td sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'>
+<td
+  sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'
+  data-filter-property='dcterms:modified'>
   <%= human_readable_date(rdf_attr("dcterms:modified")) %>
 </td>
-<td>
+<td 
+  data-filter-property="<%= NS.expand('omnom:fileType') %>" 
+  data-filter-value="<%= rdf_attr('omnom:fileType') %>">
   <%= NS.shorten(rdf_attr("omnom:fileType")) %>
 </td>
-<td>
+<td 
+  data-filter-property="omnom:fileStatus" 
+  data-filter-value="<%= rdf_attr('omnom:fileStatus') %>">
   <%= rdf_attr("omnom:fileStatus") %>
 </td>
-<td>
+<td
+  data-filter-property="dcterms:format" 
+  data-filter-value="<%= rdf_attr('dcterms:format') %>">
   <%= rdf_attr("dcterms:format") %>
 </td>
-<td>
+<td 
+  data-filter-property="<%= NS.expand('omnom:fileOwner') %>" 
+  data-filter-value=<%= rdf_attr("omnom:fileOwner") ? rdf_attr("omnom:fileOwner").id : '' %>>
   <%= rdf_attr("omnom:fileOwner") ? last_url_segment(rdf_attr("omnom:fileOwner").id) : "UNKNOWN" %>
 </td>
 <td>

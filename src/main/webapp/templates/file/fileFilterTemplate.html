@@ -1,0 +1,11 @@
+<span class="filter-heading">Filter</span>
+Owner:
+<select data-filter-property="omnom:fileOwner">
+  <option value="none">&mdash;</option>
+  <option value="<%= session.user.id %>">My files</option>
+</select>
+File Type:
+<select data-filter-property="omnom:fileType">
+  <option value="none">&mdash;</option>
+</select>
+<button class="btn filter-apply"><i class="icon-filter">&nbsp;</i> Apply</button>
