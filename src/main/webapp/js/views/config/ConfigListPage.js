@@ -23,10 +23,17 @@ define([
         itemView: ConfigListTableRowView,
 
         listSelector : "tbody",
+        
+		hideLoadingIndicator : function() {
+			if (this.collection.models.length === 0) {
+				this.$el.append("No Configurations found.");
+			}
+			this.$(".loading-indicator").hide();
+		},
 
         initialize : function() {
             this.listenTo(this.collection, "sync", this.render);
-            console.error("FNAQR");
+            this.listenTo(this.collection, "sync", this.hideLoadingIndicator);
             this.collection.fetch();
         },
 

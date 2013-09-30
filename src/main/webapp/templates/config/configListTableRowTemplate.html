@@ -4,7 +4,9 @@
   <% if (shortType === 'WorkflowConfig') { %>
   <div class="btn-group btn-group-vertical">
     <a class="btn btn-success edit-config" href="#/config-edit/<%= model.id %>">Edit Config</a>
-    <a class="btn btn-success edit-workflow" href='#/workflow-edit/<%= rdf_attr("omnom:workflow").id %>'>Edit Workflow</a>
+    <% if (rdf_attr("omnom:workflow")) { %>
+      <a class="btn btn-success edit-workflow" href='#/workflow-edit/<%= rdf_attr("omnom:workflow").id %>'>Edit Workflow</a>
+    <% } %>
   </div>
   <% } %>
 </td>
@@ -12,7 +14,7 @@
 <td><%= rdf_attr("rdfs:label") %></td>
 <td>
   <% if (shortType === 'WorkflowConfig') { %>
-    <%= rdf_attr("omnom:workflow").id %>
+    <%= rdf_attr("omnom:workflow") ? rdf_attr("omnom:workflow").id : '???????' %>
   <% } %>
 </td>
 <td>
