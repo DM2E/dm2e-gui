@@ -22,8 +22,16 @@ define([
 
         listSelector : "tbody",
 
+        hideLoadingIndicator : function() {
+          if (this.collection.models.length === 0) {
+            this.$el.append("No Jobs found.");
+          }
+          this.$(".loading-indicator").hide();
+        },
+
         initialize : function() {
             this.listenTo(this.collection, "sync", this.render);
+            this.listenTo(this.collection, "sync", this.hideLoadingIndicator);
             this.collection.fetch();
         },
 
