@@ -298,7 +298,7 @@ span.filter-heading {
   font-weight: bold;
   margin-right: 2em;
 }
-tr.filtered {
+.filtered {
   display: none;
 }
 .filter-bar {
