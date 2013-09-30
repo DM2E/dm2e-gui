@@ -9,7 +9,7 @@ define([
     'collections/file/FilesCollection',
     'views/file/FileManagerListItemView',
     'text!templates/file/fileManagerListTemplate.html',
-    'views/file/FileFilterView',
+    'views/FilterView',
 	'text!templates/file/fileFilterTemplate.html'
 ], function($,
     _,
@@ -21,7 +21,7 @@ define([
     FilesCollection,
     FileManagerListItemView,
     fileManagerListTemplate,
-    FileFilterView,
+    FilterView,
     fileFilterTemplate) {
 
     var log = logging.getLogger("views.file.FileManageListView");
@@ -44,25 +44,13 @@ define([
 
         renderFilterBar: function() {
             var that = this;
-            var filterbar = new FileFilterView({
+            var filterbar = new FilterView({
                 collection: this.collection,
                 el: this.$(".filter-bar"),
             });
             filterbar.template = fileFilterTemplate;
             filterbar.tableToFilter = this.$("table");
             filterbar.render();
-            // filterbar.bind('filter', function(currentFilters) {
-                // that.$("tr").removeClass('filtered');
-                // _.each(currentFilters, function(value, property) {
-                    // _.each(that.$("tbody tr"), function(tr){
-                        // var td = $("td[data-filter-property='" + property + "']", tr);
-                        // console.log(tr);
-                        // if ($(td).attr('data-filter-value') !== value) {
-                            // $(tr).addClass('filtered');
-                        // }
-                    // });
-                // });
-            // });
         },
 
         initialize : function() {

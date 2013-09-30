@@ -11,10 +11,20 @@
 	<!--Content-Type: <%= rdf_attr("dcterms:format") %>-->
 	<!--<br />-->
     <strong><%= rdf_attr("rdfs:label") || rdf_attr("omnom:originalName") || model.id %></strong>
-    <span class="fileType"><%= last_url_segment(rdf_attr("omnom:fileType")) || 'Unknown type' %></span>
+    <span 
+      class="fileType"
+      data-filter-property="<%= NS.expand('omnom:fileType') %>"
+      data-filter-value="<%= rdf_attr('omnom:fileType') %>"
+      >
+      <%= last_url_segment(rdf_attr("omnom:fileType")) || 'Unknown type' %></span>
     <br/>
     <span class="lastUpdated"><%= human_readable_date(rdf_attr("dcterms:modified")) || 'Unknown Date' %></span>
-    <span class="fileOwner"><%= rdf_attr("omnom:fileOwner") ? last_url_segment(rdf_attr("omnom:fileOwner").id) : "Unknown User" %>
+    <span 
+      class="fileOwner"
+      data-filter-property="<%= NS.expand('omnom:fileOwner') %>"
+      data-filter-value="<%= rdf_attr('omnom:fileOwner') ? rdf_attr('omnom:fileOwner').id : '' %>"
+      >
+      <%= rdf_attr("omnom:fileOwner") ? last_url_segment(rdf_attr("omnom:fileOwner").id) : "Unknown User" %>
     </span>
     <!--
 	<a class="btn btn-download" href='<%= rdf_attr("omnom:fileRetrievalURI") %>'>
