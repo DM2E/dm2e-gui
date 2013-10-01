@@ -1,6 +1,15 @@
 <% var shortType = NS.shorten(rdf_attr("rdf:type")) %>
-<td>
+<td
+  data-filter-property='<%= NS.expand("rdf:type") %>'
+  data-filter-value='<%= rdf_attr("rdf:type") %>'
+  >
   <%= shortType %>
+</td>
+<td
+  data-filter-property='<%= NS.expand("omnom:status") %>'
+  data-filter-value='<%= rdf_attr("omnom:status") %>'
+  >
+  <%= rdf_attr("omnom:status") %>
 </td>
 <td>
   <% if (shortType === 'omnom:WorkflowJob') { %>
@@ -14,7 +23,7 @@
 <td>
   <%= model.id %>
 </td>
-<td>
-  <%= rdf_attr("dcterms:modified") %>
-</td>
+<!-- <td> -->
+<!--   <%= rdf_attr("dcterms:modified") %> -->
+<!-- </td> -->
 <% console.log(model) %>
