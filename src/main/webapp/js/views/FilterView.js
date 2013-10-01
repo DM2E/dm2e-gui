@@ -59,6 +59,7 @@ define([
 
     buildCategories: function() {
       var that = this;
+      this.filters = {};
       _.each(this.collection.models, function(file) {
         _.each(that.filterCategories, function(category) {
           if (RDFNS.rdf_attr(category, file.attributes)) {
