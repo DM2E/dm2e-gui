@@ -80,6 +80,7 @@ define([
 
     render: function() {
       this.renderModel();
+      this.filters = {};
       _.each(this.filterCategories, function(category) {
         // console.log('category ' + category);
         // console.log(this.filters);
