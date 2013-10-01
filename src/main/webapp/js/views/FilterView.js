@@ -54,6 +54,7 @@ define([
       'omnom:fileType',
       'dcterms:creator',
       'rdf:type',
+      'omnom:status'
     ],
 
     buildCategories: function() {
