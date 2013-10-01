@@ -15,9 +15,9 @@ define([
   return BaseView.extend({
 
     // template: theTemplate,
-    initialize : function() {
-      this.buildCategories();
-    },
+    // initialize : function() {
+      // this.buildCategories();
+    // },
 
     applyFiltersToList : function(currentFilters) {
       var list = this.listToFilter;
@@ -60,13 +60,13 @@ define([
     buildCategories: function() {
       var that = this;
       this.filters = {};
-      _.each(this.collection.models, function(file) {
+      _.each(this.collection.models, function(model) {
         _.each(that.filterCategories, function(category) {
-          if (RDFNS.rdf_attr(category, file.attributes)) {
+          if (RDFNS.rdf_attr(category, model.attributes)) {
             if (! that.filters[RDFNS.expand(category)]) {
               that.filters[RDFNS.expand(category)] = {};
             }
-            var val = RDFNS.rdf_attr(category, file.attributes);
+            var val = RDFNS.rdf_attr(category, model.attributes);
             if (! val) {
               return;
             } else if (typeof val === 'object') {
@@ -80,7 +80,7 @@ define([
 
     render: function() {
       this.renderModel();
-      this.filters = {};
+      this.buildCategories();
       _.each(this.filterCategories, function(category) {
         // console.log('category ' + category);
         // console.log(this.filters);
