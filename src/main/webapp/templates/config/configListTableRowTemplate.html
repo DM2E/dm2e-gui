@@ -1,5 +1,10 @@
 <% var shortType = last_url_segment(rdf_attr("rdf:type")) %>
-<td><%= shortType %></td>
+<td
+  data-filter-property='<%= NS.expand("rdf:type") %>'
+  data-filter-value='<%= rdf_attr("rdf:type") %>'
+>
+  <%= shortType %>
+</td>
 <td>
   <% if (shortType === 'WorkflowConfig') { %>
   <div class="btn-group btn-group-vertical">
@@ -17,13 +22,18 @@
     <%= rdf_attr("omnom:workflow") ? rdf_attr("omnom:workflow").id : '???????' %>
   <% } %>
 </td>
-<td>
   <% if (rdf_attr("dcterms:creator")) { %>
+<td
+  data-filter-property='<%= NS.expand("dcterms:creator") %>'
+  data-filter-value='<%= rdf_attr("dcterms:creator").id %>'
+  >
   <a class="btn btn-info">User <%= last_url_segment(rdf_attr("dcterms:creator").id) %></a>
-  <% } else if(rdf_attr("prov:wasGeneratedBy")) { %>
-    <a class="btn btn-success" href="#job/<%= rdf_attr('prov:wasGeneratedBy').id %>">View Job</a>
-  <% } %>
 </td>
+  <% } else if(rdf_attr("prov:wasGeneratedBy")) { %>
+<td>
+    <a class="btn btn-success" href="#job/<%= rdf_attr('prov:wasGeneratedBy').id %>">View Job</a>
+</td>
+  <% } %>
 <td sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'>
   <%= human_readable_date(rdf_attr("dcterms:modified")) %>
 </td>

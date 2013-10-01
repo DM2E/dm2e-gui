@@ -11,8 +11,23 @@ define([
         'sorttable',
         'singletons/UserSession',
         'views/config/ConfigListTableRowView',
-        'text!templates/config/ConfigListTemplate.html'
-], function($, _, logging, Vm, BaseView, NS, dialogs, sorttable, session, ConfigListTableRowView, theTemplate) {
+        'text!templates/config/ConfigListTemplate.html',
+        'views/FilterView',
+        'text!templates/config/configFilterTemplate.html'
+], function($,
+         _,
+         logging,
+         Vm,
+         BaseView,
+         NS,
+         dialogs,
+         sorttable,
+         session,
+         ConfigListTableRowView,
+         theTemplate,
+         FilterView,
+         configFilterTemplate
+           ) {
 
     var log = logging.getLogger("views.config.ConfigListPage");
 
@@ -31,9 +46,21 @@ define([
 			this.$(".loading-indicator").hide();
 		},
 
+        renderFilterBar: function() {
+            var that = this;
+            var filterbar = new FilterView({
+                collection: this.collection,
+                el: this.$(".filter-bar"),
+            });
+            filterbar.template = configFilterTemplate;
+            filterbar.tableToFilter = this.$("table");
+            filterbar.render();
+        },
+
         initialize : function() {
             this.listenTo(this.collection, "sync", this.render);
             this.listenTo(this.collection, "sync", this.hideLoadingIndicator);
+            this.listenTo(this.collection, "sync", this.renderFilterBar);
             this.collection.fetch();
         },
 

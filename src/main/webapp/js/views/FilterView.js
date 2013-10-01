@@ -53,6 +53,7 @@ define([
       'omnom:fileOwner',
       'omnom:fileType',
       'dcterms:creator',
+      'rdf:type',
     ],
 
     buildCategories: function() {
