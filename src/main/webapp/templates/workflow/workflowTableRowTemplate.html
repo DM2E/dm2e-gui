@@ -17,9 +17,16 @@
 <td>
     <%= rdf_attr("omnom:parameterConnector").length %>
 </td>
-<td>
+<td
+  data-filter-property='<%= NS.expand("dcterms:creator") %>'
+  data-filter-value='<%= rdf_attr("dcterms:creator") ? rdf_attr("dcterms:creator").id :  "" %>'
+  >
     <%= rdf_attr("dcterms:creator") ? last_url_segment(rdf_attr("dcterms:creator").id) :  'UNKNOWN' %>
 </td>
-<td sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'>
+<td 
+  data-filter-property='<%= NS.expand("dcterms:modified") %>'
+  data-filter-value='<%= rdf_attr("dcterms:modified") ? rdf_attr("dcterms:modified").id :  "" %>'
+  sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'
+  >
     <%= rdf_attr("dcterms:modified") ? human_readable_date(rdf_attr("dcterms:modified")) : 'UNKNOWN' %>
 </td>

@@ -52,6 +52,7 @@ define([
     filterCategories : [
       'omnom:fileOwner',
       'omnom:fileType',
+      'dcterms:creator',
     ],
 
     buildCategories: function() {

@@ -1,4 +1,4 @@
-//Filename: WorkflowView.js
+//Filename: js/views/workflow/WorkflowListPage.js
 
 define([
 	'jquery', // lib/jquery/jquery
@@ -12,7 +12,9 @@ define([
 //	'collections/workflow/WorkflowCollection',
 //	'models/workflow/WorkflowModel',
 	'text!templates/workflow/workflowListPage.html',
-    'views/workflow/WorkflowTableRow'
+    'views/workflow/WorkflowTableRow',
+    'views/FilterView',
+	'text!templates/workflow/workflowFilterTemplate.html'
 ], function($,
 	_,
 	BaseView,
@@ -24,7 +26,9 @@ define([
 //	WorkflowCollection,
 //	WorkflowModel,
 	workflowListTemplate,
-    WorkflowTableRow
+    WorkflowTableRow,
+    FilterView,
+    workflowFilterTemplate
 	) {
 
 	var log = logging.getLogger("views.workflow.WorkflowListPage");
@@ -44,12 +48,23 @@ define([
                 this.$el.append("No workflows found");
             }
         },
+        renderFilterBar: function() {
+            var that = this;
+            var filterbar = new FilterView({
+                collection: this.collection,
+                el: this.$(".filter-bar"),
+            });
+            filterbar.template = workflowFilterTemplate;
+            filterbar.tableToFilter = this.$("table");
+            filterbar.render();
+        },
 
 		initialize : function() {
 			
 //			this.listenTo(this.collection, "add", this.render);
             this.listenTo(this.collection, "sync", this.render);
             this.listenTo(this.collection, "sync", this.hideLoadingIndicator);
+            this.collection.on('sync', this.renderFilterBar, this);
             this.collection.fetch();
 
 //			/*

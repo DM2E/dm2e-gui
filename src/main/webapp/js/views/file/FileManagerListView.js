@@ -39,7 +39,6 @@ define([
                 this.$el.append("No Files found.");
             }
             this.$(".loading-indicator").hide();
-            // TODO load renderFilterBar here
         },
 
         renderFilterBar: function() {
