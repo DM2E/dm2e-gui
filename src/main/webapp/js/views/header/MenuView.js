@@ -26,15 +26,25 @@ define([
                 session.user.setQN("omnom:preferredTheme", themeSwitcher.getTheme());
                 session.user.save();
                 this.render();
+            },
+            "click #mystuff-filter" : function(e) {
+              e.preventDefault();
+                session.user.setQN("omnom:globalUserFilter", this.$("#mystuff-filter").is(':checked'));
+                session.user.save();
+                this.render();
             }
         },
 		initialize : function() {
 			log.trace("MenuView initialized.");
 			this.model = session.user;
+
 		},
 		render : function() {
             this.renderModel();
             this.$("#switch-theme").html(session.user.getQN("omnom:preferredTheme"));
+            // console.error('global filter: ' + session.user.getQN("omnom:globalUserFilter"));
+            // console.error(session.user.attributes);
+            this.$("#mystuff-filter").attr('checked', session.user.getQN("omnom:globalUserFilter"));
         },
 //			this.$el.html(_.template(menuTemplate, {
 //				user : session.get("user")

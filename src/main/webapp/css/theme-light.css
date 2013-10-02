@@ -305,3 +305,6 @@ span.filter-heading {
   color: #317eac;
   padding-left: 1em;
 }
+#mystuff-filter {
+  margin: 0 0 3px;
+}
