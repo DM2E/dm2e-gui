@@ -4,12 +4,14 @@ define([
     'BaseView',
     'logging',
     'vm',
+	'singletons/UserSession',
+	'constants/RDFNS',
     'collections/file/FilesCollection',
     'views/file/FileListItemView',
     'text!templates/file/fileListTemplate.html',
     'views/FilterView',
    'text!templates/file/fileFilterTemplate.html'
-], function ($, _, BaseView, logging, Vm, FilesCollection, FileListItemView, fileListTemplate, FilterView, fileFilterTemplate) {
+], function ($, _, BaseView, logging, Vm, session, RDFNS, FilesCollection, FileListItemView, fileListTemplate, FilterView, fileFilterTemplate) {
 
     var log = logging.getLogger("FileListView");
 
@@ -42,6 +44,7 @@ define([
           });
           filterbar.template = fileFilterTemplate;
           filterbar.listToFilter = this.$(".file-list");
+          // session.user.on("sync", this.renderFilterBar, this);
           filterbar.render();
         },
 

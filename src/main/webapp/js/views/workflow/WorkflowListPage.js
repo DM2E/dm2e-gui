@@ -49,6 +49,7 @@ define([
             }
         },
         renderFilterBar: function() {
+
             var that = this;
             var filterbar = new FilterView({
                 collection: this.collection,
@@ -57,6 +58,14 @@ define([
             filterbar.template = workflowFilterTemplate;
             filterbar.tableToFilter = this.$("table");
             filterbar.render();
+
+            session.user.on("sync", this.renderFilterBar, this);
+
+            var globalUserFilter = {};
+            if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+              globalUserFilter[NS.expand("dcterms:creator")] = session.user.id;
+            }
+            filterbar.applyFilters(globalUserFilter);
         },
 
 		initialize : function() {

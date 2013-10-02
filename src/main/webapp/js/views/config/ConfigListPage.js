@@ -55,6 +55,14 @@ define([
             filterbar.template = configFilterTemplate;
             filterbar.tableToFilter = this.$("table");
             filterbar.render();
+
+            session.user.on("sync", this.renderFilterBar, this);
+
+            var globalUserFilter = {};
+            if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+              globalUserFilter[NS.expand("dcterms:creator")] = session.user.id;
+            }
+            filterbar.applyFilters(globalUserFilter);
         },
 
         initialize : function() {

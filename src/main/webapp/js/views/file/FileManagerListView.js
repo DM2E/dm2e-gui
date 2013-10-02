@@ -5,6 +5,7 @@ define([
     'logging',
     'sorttable',
     'vm',
+    'singletons/UserSession',
     'constants/RDFNS',
     'collections/file/FilesCollection',
     'views/file/FileManagerListItemView',
@@ -17,6 +18,7 @@ define([
     logging,
     sorttable,
     Vm,
+    session,
     RDFNS,
     FilesCollection,
     FileManagerListItemView,
@@ -50,6 +52,17 @@ define([
             filterbar.template = fileFilterTemplate;
             filterbar.tableToFilter = this.$("table");
             filterbar.render();
+
+            session.user.on("sync", this.renderFilterBar, this);
+
+            var globalUserFilter = {};
+            if (session.user.getQN("omnom:globalUserFilter") === 'true'
+                ||
+                session.user.getQN("omnom:globalUserFilter") === true
+               ) {
+              globalUserFilter[RDFNS.expand("omnom:fileOwner")] = session.user.id;
+            }
+            filterbar.applyFilters(globalUserFilter);
         },
 
         initialize : function() {

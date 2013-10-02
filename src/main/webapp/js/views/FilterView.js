@@ -5,10 +5,11 @@ define([
        'underscore', 
        'BaseView', 
        'logging', 
+       'singletons/UserSession',
        'constants/RDFNS',
        'util/dialogs',
        'util/UriUtils',
-], function($, _, BaseView, logging, RDFNS, dialogs, UriUtils, theTemplate) {
+], function($, _, BaseView, logging, session, RDFNS, dialogs, UriUtils, theTemplate) {
 
   var log = logging.getLogger('js/views/file/FileFilterView.js');
 
@@ -21,7 +22,7 @@ define([
 
     applyFiltersToList : function(currentFilters) {
       var list = this.listToFilter;
-      $("li", list).removeClass('filtered');
+      this.resetFilters();
       _.each(currentFilters, function(value, property) {
         _.each($("div", list), function(li){
           var td = $("*[data-filter-property='" + property + "']", li);
@@ -35,7 +36,8 @@ define([
     applyFiltersToTable : function(currentFilters) {
       var table = this.tableToFilter;
       // console.log(table);
-      $("tr", table).removeClass('filtered');
+      // $("tr", table).removeClass('filtered');
+      this.resetFilters();
       _.each(currentFilters, function(value, property) {
         _.each($("tbody tr", table), function(tr){
           var td = $("td[data-filter-property='" + property + "']", tr);
@@ -104,23 +106,31 @@ define([
           }
           currentFilters[RDFNS.expand(category)] = val;
         });
-        if (that.tableToFilter) {
-          that.applyFiltersToTable(currentFilters);
+        that.applyFilters(currentFilters);
+      });
+      that.$("button.filter-reset").on('click', function() {
+        that.resetFilters();
+      });
+
+      return this;
+    },
+
+    resetFilters: function() {
+        $(".filtered").removeClass("filtered");
+    },
+
+    applyFilters: function(currentFilters) {
+      console.error(currentFilters);
+        if (this.tableToFilter) {
+          this.applyFiltersToTable(currentFilters);
         }
-        else if (that.listToFilter) {
-          that.applyFiltersToList(currentFilters);
+        else if (this.listToFilter) {
+          this.applyFiltersToList(currentFilters);
         }
         else {
           window.alert("Can filter only tables and lists :(");
         }
         // that.trigger('filter', currentFilters);
-      });
-      that.$("button.filter-reset").on('click', function() {
-        $(".filtered").removeClass("filtered");
-        console.log("fnop");
-      });
-
-      return this;
     }
 
   });
