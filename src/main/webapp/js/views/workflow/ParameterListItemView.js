@@ -58,7 +58,7 @@ define([
                 this.model.setQN(qname, this.formView.$("input[name='" + qname + "']").val());
             }, this);
             // FIXME TODO
-            this.model.setQN("omnom:isRequired", this.formView.$("input[name='omnom:isRequired']:checked").val());
+            // this.model.setQN("omnom:isRequired", this.formView.$("input[name='omnom:isRequired']:checked").val());
             //            , "omnom:isRequired"
             this.trigger("parameter-was-saved");
             this.render();
@@ -66,6 +66,7 @@ define([
 
         showForm: function() {
             var that = this;
+            console.log(this);
             this.formView = Vm.createView(this, 'ModalView', BaseView.extend({
                 model: this.model,
                 tagName : 'form',
