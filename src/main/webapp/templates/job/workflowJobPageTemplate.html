@@ -15,7 +15,7 @@
   </div>
 
   <div class="span10">
-    <h2>Job <%= last_url_segment(model.id) %></h2>
+    <h2><%= rdf_attr("rdfs:label") %></h2>
 
     <div class="job-status">Status:
       <span class="status-<%=rdf_attr('omnom:status')%>">

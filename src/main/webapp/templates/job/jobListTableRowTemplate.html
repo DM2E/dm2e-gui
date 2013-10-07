@@ -6,6 +6,12 @@
   <%= shortType %>
 </td>
 <td
+  data-filter-property='<%= NS.expand("rdfs:label") %>'
+  data-filter-value='<%= rdf_attr("rdfs:label") %>'
+  >
+  <%= rdf_attr("rdfs:label") %>
+</td>
+<td
   data-filter-property='<%= NS.expand("omnom:status") %>'
   data-filter-value='<%= rdf_attr("omnom:status") %>'
   >
