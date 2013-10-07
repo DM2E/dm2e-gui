@@ -46,6 +46,17 @@ define([
           filterbar.listToFilter = this.$(".file-list");
           // session.user.on("sync", this.renderFilterBar, this);
           filterbar.render();
+
+            session.user.on("sync", this.renderFilterBar, this);
+
+            var globalUserFilter = {};
+            if (session.user.getQN("omnom:globalUserFilter") === 'true'
+                ||
+                session.user.getQN("omnom:globalUserFilter") === true
+               ) {
+              globalUserFilter[RDFNS.expand("omnom:fileOwner")] = session.user.id;
+            }
+            filterbar.applyFilters(globalUserFilter);
         },
 
         render: function () {
