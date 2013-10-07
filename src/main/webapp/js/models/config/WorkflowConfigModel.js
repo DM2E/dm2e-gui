@@ -6,12 +6,14 @@ define([
     'constants/RDFNS',
     'RelationalModel',
     'models/config/ParameterAssignmentModel',
+    'collections/job/AssignmentCollection',
 ], function($,
     _,
     logging,
     NS,
     RelationalModel,
-    ParameterAssignmentModel
+    ParameterAssignmentModel,
+    AssignmentCollection
    ) {
 
     var moduleName="WorkflowConfigModel";
@@ -28,8 +30,8 @@ define([
             {
                 type : Backbone.HasMany,
                 key : NS.expand("omnom:assignment"),
-                relatedModel : ParameterAssignmentModel
-//                collectionType: PositionCollection,
+                relatedModel : ParameterAssignmentModel,
+                collectionType: AssignmentCollection,
 
             }
         ],

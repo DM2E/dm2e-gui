@@ -111,7 +111,7 @@ define([
 
         renderParameterList: function() {
             _.each(this.model.getQN("omnom:assignment").models, function(ass) {
-                console.error(ass);
+                // console.error(ass);
                 var assView = Vm.createSubView(this, ParameterAssignmentView, {
                     model: ass
                 });

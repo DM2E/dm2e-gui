@@ -5,11 +5,13 @@ define([
 	'underscore',
 	'logging',
 	'BaseCollection',
+	'constants/RDFNS',
 	'models/workflow/ParameterModel'
 ], function($,
 	_,
 	logging,
 	BaseCollection,
+	RDFNS,
 	ParameterModel) {
 
 	var log = logging.getLogger("ParameterCollection.js");
@@ -17,6 +19,8 @@ define([
 	return BaseCollection.extend({
 
 		model : ParameterModel,
+
+		comparator : RDFNS.expand('rdfs:label')
 
 	});
 });
