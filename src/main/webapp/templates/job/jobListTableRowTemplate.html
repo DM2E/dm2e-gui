@@ -26,10 +26,12 @@
   </div>
   <% } %>
 </td>
+<td
+  data-filter-property='<%= NS.expand("dcterms:created") %>'
+  data-filter-value='<%= rdf_attr("dcterms:created") %>'
+  >
+  <%= human_readable_date(rdf_attr("dcterms:created")) %>
+</td>
 <td>
   <%= model.id %>
 </td>
-<!-- <td> -->
-<!--   <%= rdf_attr("dcterms:modified") %> -->
-<!-- </td> -->
-<% console.log(model) %>
