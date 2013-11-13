@@ -4,9 +4,9 @@
     <h4>Actions</h4>
     <div class="btn-group btn-group-vertical">
       <a class="btn btn-primary btn-small" id="job-refresh">Refresh</a>
-      <a class="btn btn-info btn-small" href="#workflow-edit/<%= rdf_attr('omnom:workflow').id %>"
+      <a class="btn btn-info btn-small" href="#workflow-edit/<%= workflow.id.replace('^.*api/','') %>"
         id="workflow-edit">Edit Workflow</a>
-      <a class="btn btn-info btn-small" href="#config-edit/<%= rdf_attr('omnom:workflowConfig').id %>"
+      <a class="btn btn-info btn-small" href="#config-edit/<%= rdf_attr('omnom:webserviceConfig').id %>"
         id="config-edit">Edit Workflow Config</a>
     </div>
     <!-- <div class="position-job-list"> -->
@@ -27,7 +27,7 @@
       <div class="bar bar-success"></div>
       <div class="bar bar-fail"></div>
     </div>
-    Progress: <%= rdf_attr("omnom:finishedPosition").length %> / <%= rdf_attr("omnom:workflowPosition", workflow).length %>
+    Progress: <%= rdf_attr("omnom:finishedJobs").length %> / <%= rdf_attr("omnom:workflowPosition", workflow).length %>
 
     <h3>Output assignments of workflow</h3>
     <table class="table sortable" id="workflow-assignments">

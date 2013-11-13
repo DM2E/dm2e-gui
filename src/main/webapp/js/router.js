@@ -22,6 +22,11 @@ define([
 
         var appView = args.appView;
 
+        var onError = function(xhr, status, err) {
+            dialogs.errorXHR(xhr);
+        };
+
+
         /**
          * The fallback/default route
          */
@@ -101,7 +106,8 @@ define([
             require([
                     'views/workflow/WorkflowEditorPage',
                     'models/workflow/WorkflowModel',
-            ], function(WorkflowEditorPage, WorkflowModel) {
+                    'constants/RDFNS',
+            ], function(WorkflowEditorPage, WorkflowModel, RDFNS) {
                 var model;
                 if (workflowURL) {
                     console.error(workflowURL);
@@ -126,25 +132,23 @@ define([
                         }
                     });
                 } else {
-                    model = new WorkflowModel();
-                    var urlRoot = 'api/workflow';
-                    model.urlRoot = urlRoot;
-                    model.save(null, {
-                        success: function() {
-                            console.warn("Resetting URL");
-                            model.url = function() {
-                                return model.get("id");
-                            };
-                            model.trigger("change");
-                            var redirectRoute = "workflow-edit/" + urlRoot + model.url().split(urlRoot, 2)[1];
-                            appRouter.navigate(redirectRoute);
-                            appView.showPage(Vm.createView({}, 'WorkflowEditorPage', WorkflowEditorPage, {
-                                model: model
-                            }));
+                    var modelAsJSON = new WorkflowModel().toJSON();
+                    delete modelAsJSON[RDFNS.expand('omnom:isExecutableAt')];
+                    console.log(modelAsJSON);
+                    $.ajax({
+                        async: false,
+                        url: '/api/workflow',
+                        type: "POST",
+                        processData: false,
+                        // dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify(modelAsJSON),
+                        success: function(namedConfigData, status, xhr) {
+                            var respLocation = xhr.getResponseHeader("Location");
+                            log.debug("Posted worklfow to " + respLocation);
+                            appRouter.navigate("workflow-edit/" + respLocation, true);
                         },
-                        error: function(model, xhr) {
-                            dialogs.errorXHR(xhr);
-                        }
+                        error: onError,
                     });
                 }
             });
@@ -183,10 +187,6 @@ define([
                     return;
                 }
 
-                var onError = function(xhr, status, err) {
-                    dialogs.errorXHR(xhr);
-                };
-
                 // Persist the workflow config
                 var onGenerateSuccess = function(blankConfigData, status, xhr) {
                     $.ajax({
@@ -207,9 +207,11 @@ define([
                     });
                 };
 
+                var execUri = fromWorkflowUri.replace("/workflow/", "/exec/workflow/");
+                execUri += "/blankConfig";
                 // Let the server create an empty config for this workflow
                 $.ajax({
-                    url: fromWorkflowUri + "/blankConfig",
+                    url: execUri,
                     type: "GET",
                     dataType: "json",
                     async: false, // wait for result

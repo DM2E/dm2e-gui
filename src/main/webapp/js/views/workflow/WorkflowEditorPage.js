@@ -166,7 +166,7 @@ define([
 
         saveWorkflow: function() {
             log.debug(JSON.stringify(this.model.toJSON(), undefined, 2));
-            log.debug(this.model.toJSON());
+            console.debug(this.model.toJSON());
             this.setButtonLoading("button#save-workflow");
             var that = this;
 

@@ -4,7 +4,9 @@
         Select one of your registered file services:
         <ul>
             <%console.log(obj.session.user)%>
-            <% _.each(rdf_attr("omnom:fileservice", session.user), function(service) { %>
+            <% var fileservice_list = rdf_attr("omnom:fileservice", session.user); %>
+            <% fileservice_list = fileservice_list.sort(function(a,b){return a.id >= b.id ? a : b; }); %>
+            <% _.each(fileservice_list, function(service) { %>
             <li>
                 <a href="#file-list/<%= service %>"><%= service %></a>
             </li>

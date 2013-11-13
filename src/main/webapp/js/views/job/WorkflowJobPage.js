@@ -46,10 +46,11 @@ define([
         },
 
         initialize : function(options) {
-            this.workflow = WorkflowModel.findOrCreate(
-                this.model.getQN("omnom:workflow")
-            );
-            this.workflow.url = this.model.getQN("omnom:workflow").id;
+            var workflowID = this.model.getQN("omnom:webservice").id.replace("/exec/", "/");
+            console.log(workflowID);
+            this.workflow = WorkflowModel.findOrCreate({"id": workflowID});
+            console.log(this.workflow);
+            this.workflow.url = workflowID;
             this.workflow.fetch({async:true});
             console.log(this.workflow);
             this.listenTo(this.model, "change", this.render);
@@ -61,7 +62,7 @@ define([
 
         renderProgressBar : function() {
             var progress = 100 *
-                ( this.model.getQN("omnom:finishedPosition").length /
+                ( this.model.getQN("omnom:finishedJobs").length /
                  this.workflow.getQN("omnom:workflowPosition").length );
             this.$("div.progress div.bar").css("width", progress + "%");
         },
@@ -141,7 +142,7 @@ define([
                 $("pre", "#" + uid).html(HtmlUtils.html_escape(this.positionLogs[pos.id]));
             }, this);
         },
-        render : function() {
+        render: function() {
             this.renderModel({ 
                 workflow: this.workflow.toJSON(),
                 positionLogs: this.positionLogs,
@@ -149,6 +150,7 @@ define([
             var workflowAssignments = new AssignmentCollection(RDFNS.rdf_attr("omnom:assignment", this.model.toJSON()));
             var theRelatedJobAssignments = new AssignmentCollection(this.relatedJobAssignments); 
             console.error(theRelatedJobAssignments);
+            console.log(this.model);
             this.renderCollection({}, "#workflow-assignments", AssignmentTableRowView, workflowAssignments.models, {});
             this.renderCollection({}, "#positions-assignments", AssignmentTableRowView, theRelatedJobAssignments.models, {});
             this.renderLog();

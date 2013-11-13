@@ -59,7 +59,7 @@ define([
             session.user.on("sync", this.renderFilterBar, this);
 
             var globalUserFilter = {};
-            if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+            if (session.user.getQN("omnom:globalUserFilter")) {
               globalUserFilter[NS.expand("dcterms:creator")] = session.user.id;
             }
             filterbar.applyFilters(globalUserFilter);

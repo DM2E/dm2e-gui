@@ -20,7 +20,7 @@ define([
     var log = logging.getLogger("models.config.WorkflowConfigModel");
 
     var theDefaults = {};
-    theDefaults[NS.expand("rdf:type")] = NS.expand("omnom:WorkflowConfig");
+    theDefaults[NS.expand("rdf:type")] = NS.expand("omnom:WebserviceConfig");
 
     return RelationalModel.extend({
 

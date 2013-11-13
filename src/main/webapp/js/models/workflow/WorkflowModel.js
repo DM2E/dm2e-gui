@@ -8,9 +8,11 @@ define(['jquery', // lib/jquery/jquery
         'models/workflow/PositionModel',
         'models/workflow/ParameterModel',
         'models/workflow/ConnectorModel',
+        'models/workflow/WebserviceModel',
         'collections/workflow/PositionCollection',
         'collections/workflow/ParameterCollection',
         'collections/workflow/ConnectorCollection',
+        'collections/workflow/WebserviceCollection',
 ], function($,
     _,
     RelationalModel,
@@ -19,9 +21,12 @@ define(['jquery', // lib/jquery/jquery
     PositionModel,
     ParameterModel,
     ConnectorModel,
+    WebserviceModel,
     PositionCollection,
     ParameterCollection,
-    ConnectorCollection) {
+    ConnectorCollection,
+    WebserviceCollection
+           ) {
 
     var log = logging.getLogger("WorkflowModel.js");
 
@@ -72,6 +77,12 @@ define(['jquery', // lib/jquery/jquery
                 //                  key : NS.expand("omnom:inWorkflow"),
                 //                  includeInJSON : true
                 //              }
+            },
+            {
+                type: Backbone.HasMany,
+                key: NS.expand("omnom:isExecutableAt"),
+                relatedModel: WebserviceModel,
+                collectionType: WebserviceCollection,
             },
         ],
 
@@ -142,8 +153,6 @@ define(['jquery', // lib/jquery/jquery
             console.log(asJSON);
             return JSON.stringify(asJSON, replacer, 2);
         }
-
-        // TODO
 
     });
     model.setup();

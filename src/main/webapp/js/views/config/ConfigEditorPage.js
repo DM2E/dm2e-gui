@@ -39,9 +39,9 @@ define([
                 var that = this;
                 this.saveConfig();
                 var config = this.model;
-                console.warn("PUT " + config.getQN("omnom:workflow").id);
+                console.warn("PUT " + config.getQN("omnom:webservice").id);
                 $.ajax({
-                    url: config.getQN("omnom:workflow").id,
+                    url: config.getQN("omnom:webservice").id,
                     type: "PUT",
                     processData: false,
                     dataType: "json",
@@ -102,7 +102,8 @@ define([
         },
 
         render: function() {
-            this.renderModel();
+            var workflowURL = this.model.get(NS.expand("omnom:webservice")).id.replace("/exec/", "/");
+            this.renderModel({'workflowURL' : workflowURL});
             Vm.cleanupSubViews(this);
             this.renderResourceLists();
             this.renderParameterList();
