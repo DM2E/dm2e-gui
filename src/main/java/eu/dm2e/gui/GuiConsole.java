@@ -15,6 +15,8 @@ import javax.ws.rs.client.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.dm2e.ws.Config;
+import eu.dm2e.ws.ConfigProp;
 import eu.dm2e.ws.wsmanager.ManageService;
 
 public class GuiConsole {
@@ -44,6 +46,8 @@ public class GuiConsole {
 		} catch (BindException e) {
 			log.warn("Manage server already running!", e);
 		}
+		
+		System.out.println(Config.get(ConfigProp.ENDPOINT_QUERY));
 	}
 	
 	
