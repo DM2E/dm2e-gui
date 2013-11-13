@@ -1,19 +1,22 @@
 #!env zsh
 #
 source bin/curl_rest.sh
+source bin/functions.sh
 
-die() {
-	echo $1 | boxes -d nuke
-	exit 128
-}
+ensure_SRV
 
-if [ -z "$SRV" ];then
-	die "Must set SRV to base path of omnom api (e.g. export SRV='http://localhost:9998/api')";
+if [[ $1 = "-d" ]];then
+    DEBUG_FLAG=true
 fi
 
-
-echoe() {
-    echo "#- $@"1>&2;
+grep_location() {
+    curl_response=$1
+    # echo $1
+    loc=$(echo $curl_response|grep 'Location: ' | sed 's///' | grep 'Location' | grep -o 'http.*')
+    if [ "x$loc" = "x" ];then
+        die $1
+    fi
+    echo $loc
 }
 
 ##
@@ -23,7 +26,11 @@ echoe() {
 publishFile() {
     file=$1
     file_counter=$((file_counter + 1))
-    file_uploaded=$(zsh bin/ingest-file.sh $file)
+    # if [ $DEBUG_FLAG ];then 
+    #     file_uploaded=$(zsh bin/ingest-file.sh -d $file)
+    # else
+        file_uploaded=$(zsh bin/ingest-file.sh $file)
+    # fi
     echoe "uploaded $file as $file_uploaded"
     echo "FILE$file_counter='$file'"
 }
@@ -44,24 +51,27 @@ publishWorkflow() {
     echoe "----------------------"
     echoe "WORKFLOW: $wf"
 
-    WORKFLOW=$(POST -H $CT_JSON $SRV/workflow -d @$wf \
-        2>&1 | grep 'Location: ' | sed 's///' | grep 'Location' | grep -o 'http.*')
+    WORKFLOW=$(grep_location "$(POST -H $CT_JSON $SRV/workflow -d @$wf 2>&1)")
     echo "WORKFLOW$wf_counter='$WORKFLOW'"
 
     echoe "get empty config"
-    GETJ $WORKFLOW/blankConfig 2>/dev/null | sed 's/bottles of beer on the wall/flailing piglets/' > $tempfile
+    WORKFLOW_EXEC=$(echo $WORKFLOW|sed 's@/workflow@/exec/workflow@')
+    if [ $DEBUG_FLAG ];then
+        configResp=$(GETJ $WORKFLOW_EXEC/blankConfig)
+        echo $configResp
+    fi
+    configResp=$(GETJ $WORKFLOW_EXEC/blankConfig 2>/dev/null | sed 's/bottles of beer on the wall/flailing piglets/')
+    echo $configResp > $tempfile
     sed -i '/^{/a \
         "http://purl.org/dc/terms/creator":"http://omnom.hu-berlin.de/api/user/command-line",
     ' $tempfile
 
     echoe "persist it"
-    CONFIG=$(POST -H $CT_JSON $SRV/config -d @$tempfile \
-        2>&1 | grep 'Location: ' | sed 's///' | grep 'Location' | grep -o 'http.*')
+    CONFIG=$(grep_location "$(POST -H $CT_JSON $SRV/config -d @$tempfile 2>&1)")
     echo "CONFIG='$CONFIG'"
 
     echoe "run a job"
-    JOB=$(PUT "-H$CT_TEXT" "$WORKFLOW" -d "$CONFIG" \
-        2>&1 | grep 'Location: ' | sed 's///' | grep 'Location' | grep -o 'http.*')
+    JOB=$(grep_location "$(PUT -H $CT_TEXT $WORKFLOW_EXEC -d $CONFIG 2>&1)")
     echo "JOB='$JOB'"
 }
 
