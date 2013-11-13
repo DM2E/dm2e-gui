@@ -3,8 +3,9 @@ define([
 	'backbone',
 	'logging',
 	'constants/FILESTATUS',
+	'constants/RDFNS',
 	'models/file/FileModel',
-], function(_, Backbone, logging, FILESTATUS, FileModel) {
+], function(_, Backbone, logging, FILESTATUS, RDFNS, FileModel) {
 
 	'use strict';
 
@@ -12,6 +13,8 @@ define([
 	return Backbone.Collection.extend({
 
 		model: FileModel,
+
+		comparator : RDFNS.expand('rdfs:label'),
 
 		initialize: function(models, options) {
 			options = options || {};

@@ -12,7 +12,7 @@ define([
 
         model : WebserviceModel,
 
-        comparator : RDFNS.expand('rdfs:label'),
+        comparator : 'id',
         
 //      initialize : function(models, options) {
 //          options = options || {};

@@ -51,7 +51,7 @@ define([
 
         this.findOrCreateUser = function() {
             var userID = this.determineUserID();
-            user = new UserModel({ id : userID });
+            var user = new UserModel({ id : userID });
             user.fetch({
                 async:false,
                 complete : function(jqXHR) {
@@ -76,6 +76,9 @@ define([
             this.services[id].fetch({async:false});
             this[category] = this[category] || [];
             this[category].push(this.services[id]);
+            // console.log(this[category]);
+            this[category].sort(function(a,b) { return a.id >= b.id ? 1 : -1; });
+            // console.log(this[category]);
             return true;
         };
 
