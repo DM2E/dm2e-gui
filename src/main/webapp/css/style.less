@@ -40,7 +40,10 @@
 .highlight {
   .dark-border-solid-content(@highlightFirstLevel);
   .parameter.highlight {
-    background-color: @highlightSecondLevel;
+      background-color: @highlightSecondLevel !important;
+      * {
+          background-color: @highlightSecondLevel !important;
+      }
   }
 }
 
@@ -153,3 +156,8 @@ span.filter-heading {
 #mystuff-filter {
     margin: 0 0 3px;
 }
+
+*[data-forParam="workflow"]     { display: none; }
+*[data-forParam="completeLog"]  { display: none; }
+*[data-forParam="jobTimeout"]   { display: none; }
+*[data-forParam="pollInterval"] { display: none; }

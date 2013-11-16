@@ -22,12 +22,11 @@
         <%= rdf_attr("omnom:status") %>
       </span>
     </div>
-
     <div class="progress">
       <div class="bar bar-success"></div>
       <div class="bar bar-fail"></div>
     </div>
-    Progress: <%= rdf_attr("omnom:finishedJobs").length %> / <%= rdf_attr("omnom:workflowPosition", workflow).length %>
+    <!-- Progress: <%// rdf_attr("omnom:finishedPositions").length %> / <%// rdf_attr("omnom:workflowPosition", workflow).length %> -->
 
     <h3>Output assignments of workflow</h3>
     <table class="table sortable" id="workflow-assignments">
@@ -38,14 +37,14 @@
       </tr>
     </table>
 
-    <h3>Output assignments of positions</h3>
-    <table class="table sortable" id="positions-assignments">
-      <tr>
-        <th>Actions</th>
-        <th>Parameter</th>
-        <th>Value</th>
-      </tr>
-    </table>
+    <!-- <h3>Output assignments of positions</h3> -->
+    <!-- <table class="table sortable" id="positions-assignments"> -->
+    <!--   <tr> -->
+    <!--     <th>Actions</th> -->
+    <!--     <th>Parameter</th> -->
+    <!--     <th>Value</th> -->
+    <!--   </tr> -->
+    <!-- </table> -->
 
     <h3>Log</h3>
     <div class="accordion" id="workflow-log">
@@ -64,26 +63,27 @@
           </div>
         </div>
       </div>
-      <% _.each(rdf_attr("omnom:workflowPosition", workflow), function(pos) { %>
-      <% var uid = last_url_segment(pos.id) %>
+      <% _.each(rdf_attr("omnom:finishedJobs"), function(job) { %>
+      <% var uid = last_url_segment(job.id) %>
       <div class="accordion-group">
         <div class="accordion-heading">
           <a class="accordion-toggle" 
             data-toggle="collapse" 
             data-parent="#workflow-log"
-            href="#log-pos<%= uid %>">
-            POS #<%= last_url_segment(pos.id) %>
+            data-job-load="<%= job.id %>"
+            data-job-uid="<%= uid %>"
+            href="#log-job-<%= uid %>">
+            JOB #<%= uid %>
           </a>
         </div>
-        <div id="log-pos<%= uid %>" class="accordion-body collapse">
+        <div id="log-job-<%= uid %>" class="accordion-body collapse">
           <div class="accordion-inner">
-            <pre><%= html_escape(positionLogs[pos.id]) %>
+            <pre>Loading ...
             </pre>
           </div>
         </div>
       </div>
       <% }) %>
-      <% console.error(positionLogs) %>
       <div class="accordion-group">
         <div class="accordion-heading">
           <a class="accordion-toggle" 

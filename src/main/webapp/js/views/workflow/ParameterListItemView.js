@@ -64,6 +64,12 @@ define([
             this.render();
         },
 
+        render: function() {
+            this.renderModel();
+            this.$el.attr("data-forParam", this.model.getQN("rdfs:label"));
+            return this;
+        },
+
         showForm: function() {
             var that = this;
             console.log(this);

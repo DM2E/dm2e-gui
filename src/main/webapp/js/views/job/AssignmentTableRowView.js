@@ -5,6 +5,7 @@ define([
     'vm',
     'constants/RDFNS',
     'BaseView',
+    'util/UriUtils',
     'text!templates/job/assignmentTableRowTemplate.html'
 ], function($,
     _,
@@ -12,6 +13,7 @@ define([
     Vm,
     RDFNS,
     BaseView,
+    UriUtils,
     theTemplate
  ) {
     var log = logging.getLogger("views.job.AssignmentTableRowView");
@@ -24,27 +26,27 @@ define([
 
         renderActions : function() {
           var parameterValue = RDFNS.rdf_attr("omnom:parameterValue", this.model.toJSON());
-          if (parameterValue.substring(0, 7) === "http://") {
-            this.$("div.assignment-actions").append($("<a></a>")
-                  .addClass("btn")
-                  .attr("href", parameterValue)
-                  .append("Open link"));
-          }
           // if it's a link to a dataset display it
           if (parameterValue.substring(0, 19) === "http://data.dm2e.eu") {
-            this.$("div.assignment-actions").append($("<a></a>")
-                  .addClass("btn btn-success")
-                  .attr("href", parameterValue.replace(
-                                          /http:\/\/data.dm2e.eu\/data/, 
-                                          'http://lelystad.informatik.uni-mannheim.de:3000/data/ingested'))
-                  .append("Show in Pubby"))
-                  ;
+              this.$("div.assignment-actions").append($("<a></a>")
+                                                      .addClass("btn btn-success btn-small")
+                                                      .attr("href", parameterValue.replace(
+                                                          /http:\/\/data.dm2e.eu\/data/, 
+                                                          'http://lelystad.informatik.uni-mannheim.de:3000/data/ingested'))
+                                                          .append("Show in Pubby"))
+                                                          ;
+          } else if (parameterValue.substring(0, 7) === "http://") {
+              this.$("div.assignment-actions").append($("<a></a>")
+                                                      .addClass("btn btn-small")
+                                                      .attr("href", parameterValue)
+                                                      .append("Open link"));
           }
         },
 
         render: function() {
           this.renderModel();
           this.renderActions();
+          this.$el.attr("data-forParam", UriUtils.last_url_segment(this.model.getQN("omnom:forParam").id));
           return this;
         },
 

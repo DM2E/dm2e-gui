@@ -33,8 +33,8 @@ _.each(rdf_attr("omnom:assignment"), function(ass) {
 <td><%= model.id %></td>
 <td><%= rdf_attr("rdfs:label") %></td>
 <td>
-  <% if (shortType === 'WorkflowConfig') { %>
-    <%= rdf_attr("omnom:workflow") ? rdf_attr("omnom:workflow").id : '???????' %>
+  <% if (isWorkflowConfig) { %>
+    <%= workflow %>
   <% } %>
 </td>
   <% if (rdf_attr("dcterms:creator")) { %>

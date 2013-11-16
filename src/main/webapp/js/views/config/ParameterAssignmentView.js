@@ -6,12 +6,14 @@ define([
     'logging',
     'vm',
     'BaseView',
+    'util/UriUtils',
     'text!templates/config/parameterAssignmentTemplate.html'
 ], function($,
             _,
             logging,
             Vm,
             BaseView,
+            UriUtils,
             theTemplate
     ) {
 
@@ -44,6 +46,8 @@ define([
         render: function() {
 
             this.renderModel();
+
+            this.$el.attr("data-forParam", UriUtils.last_url_segment(this.model.getQN("omnom:forParam").id));
 
             var that = this;
             this.$el.droppable({
