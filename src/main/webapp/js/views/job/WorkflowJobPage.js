@@ -85,11 +85,12 @@ define([
                     Accept : "text/x-log"
                 },
                 complete : function(jqXHR) {
-                    if (jqXHR > 200) {
+                    if (jqXHR.status > 200) {
                         dialogs.notify("Could not retrieve log messages.", 'error');
                     } else {
                         that.workflowLog = jqXHR.responseText;
                         that.model.trigger("change");
+                        that.renderLog();
                     }
                 }
             });
@@ -181,7 +182,6 @@ define([
             console.log(this.model);
             this.renderCollection({}, "#workflow-assignments", AssignmentTableRowView, workflowAssignments.models, {});
             // this.renderCollection({}, "#positions-assignments", AssignmentTableRowView, theRelatedJobAssignments.models, {});
-            this.renderLog();
             this.renderProgressBar();
             // FIXME I smell infinite recursion
             // this.refreshLog();

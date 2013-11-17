@@ -28,7 +28,7 @@
     </div>
     <!-- Progress: <%// rdf_attr("omnom:finishedPositions").length %> / <%// rdf_attr("omnom:workflowPosition", workflow).length %> -->
 
-    <h3>Output assignments of workflow</h3>
+    <h3>Output assignments</h3>
     <table class="table sortable" id="workflow-assignments">
       <tr>
         <th>Actions</th>
@@ -64,25 +64,41 @@
         </div>
       </div>
       <% _.each(rdf_attr("omnom:finishedJobs"), function(job) { %>
-      <% var uid = last_url_segment(job.id) %>
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a class="accordion-toggle" 
-            data-toggle="collapse" 
-            data-parent="#workflow-log"
-            data-job-load="<%= job.id %>"
-            data-job-uid="<%= uid %>"
-            href="#log-job-<%= uid %>">
-            JOB #<%= uid %>
-          </a>
-        </div>
-        <div id="log-job-<%= uid %>" class="accordion-body collapse">
-          <div class="accordion-inner">
-            <pre>Loading ...
-            </pre>
+        <% 
+          $.ajax({
+              async: false,
+              dataType: "json",
+              url: job.id,
+              success: function(data) {
+                job = data;
+              },
+          });
+          var pos = rdf_attr("omnom:executesPosition", job);
+          var jobStatus = rdf_attr("omnom:status", job);
+          var uid = last_url_segment(job.id);
+        %>
+        <div class="accordion-group">
+          <div class="accordion-heading status-bg-<%= jobStatus %>" >
+            <a class="accordion-toggle" 
+              data-toggle="collapse" 
+              data-parent="#workflow-log"
+              data-job-load="<%= job.id %>"
+              data-job-uid="<%= uid %>"
+              href="#log-job-<%= uid %>">
+              POS #<%= last_url_segment(rdf_attr("omnom:executesPosition", rdf_attr("omnom:webserviceConfig", job)).id) %>
+              &mdash;
+              <%= last_url_segment(rdf_attr("omnom:webservice", rdf_attr("omnom:webserviceConfig", job)).id) %>
+              &mdash;
+              (JOB #<%= uid %>)
+            </a>
+          </div>
+          <div id="log-job-<%= uid %>" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <pre>Loading ...
+              </pre>
+            </div>
           </div>
         </div>
-      </div>
       <% }) %>
       <div class="accordion-group">
         <div class="accordion-heading">
@@ -94,9 +110,12 @@
           </a>
         </div>
         <div id="log-workflow-complete" class="accordion-body collapse">
-          <pre id="complete-workflow-log"><%=
-             html_escape(rdf_attr("omnom:parameterValue", rdf_attr("omnom:assignment")[0]) || "")
-            %></pre>
+          <pre id="complete-workflow-log">
+          <% _.each(rdf_attr("omnom:assignment"), function(ass) {
+            if (/\/completeLog/.test(rdf_attr("omnom:forParam", ass).id)) { %>
+            <%= rdf_attr("omnom:parameterValue", ass) %>
+            <% }}) %>
+          </pre>
         </div>
       </div>
     </div>

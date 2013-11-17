@@ -268,6 +268,15 @@ dl {
 .status-FAILED {
   color: #aa0000;
 }
+.status-bg-FINISHED {
+  background-color: #ccffcc;
+}
+.status-bg-NOT_STARTED {
+  background-color: #ffffaa;
+}
+.status-bg-FAILED {
+  background-color: #ffaaaa;
+}
 /*
  disable transition animation of progress bars
  */
