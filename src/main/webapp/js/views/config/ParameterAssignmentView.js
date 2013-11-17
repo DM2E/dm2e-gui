@@ -29,15 +29,16 @@ define([
         },
 
         populateModelFromForm : function() {
-            if (this.$("input#paramValue").val() !== "") {
-                this.model.setQN("omnom:parameterValue", this.$("input#paramValue").val());
+            if (this.$("input[name=paramValue]").val() !== "") {
+                this.model.setQN("omnom:parameterValue", this.$("input[name=paramValue]").val());
             }
-            log.debug("Model updated");
+            log.debug("Model updated.");
+            console.log(this.model);
         },
         drop : function(event, ui) {
             var droppedModel = ui.draggable.data("model");
             console.log(droppedModel.absoluteURL());
-            this.$("input#paramValue").val(droppedModel.absoluteURL());
+            this.$("input[name=paramValue]").val(droppedModel.absoluteURL());
             this.populateModelFromForm();
         },
         accept: function(draggable) {

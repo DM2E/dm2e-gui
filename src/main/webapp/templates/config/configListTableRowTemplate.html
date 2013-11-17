@@ -1,40 +1,24 @@
 <% var shortType = last_url_segment(rdf_attr("rdf:type")) %>
-<%
-isWorkflowConfig = false;
-workflow = null;
-_.each(rdf_attr("omnom:assignment"), function(ass) {
-    if (isWorkflowConfig) {
-      return;
-    }
-    var forParamId = rdf_attr("omnom:forParam", ass).id;
-    if(/\/workflow$/.test(forParamId)) {
-        isWorkflowConfig = true;
-        workflow = rdf_attr("omnom:parameterValue", ass);
-    };
-});
-%>
-<td
-  data-filter-property='<%= NS.expand("rdf:type") %>'
-  data-filter-value='<%= rdf_attr("rdf:type") %>'
->
-  <%= shortType %>
-</td>
+<!-- <td -->
+<!--   data-filter-property='<%= NS.expand("rdf:type") %>' -->
+<!--   data-filter-value='<%= rdf_attr("rdf:type") %>' -->
+<!-- > -->
+<!--   <%= shortType %> -->
+<!-- </td> -->
 <td>
   <% console.log(model) %>
-  <% if (isWorkflowConfig) { %>
+  <% if (model.workflow) { %>
   <div class="btn-group btn-group-vertical">
     <a class="btn btn-success edit-config" href="#/config-edit/<%= model.id %>">Edit Config</a>
-    <% if (workflow) { %>
-      <a class="btn btn-success edit-workflow" href='#/workflow-edit/<%= workflow %>'>Edit Workflow</a>
-    <% } %>
+    <a class="btn btn-success edit-workflow" href='#/workflow-edit/<%= model.workflow %>'>Edit Workflow</a>
   </div>
   <% } %>
 </td>
 <td><%= model.id %></td>
 <td><%= rdf_attr("rdfs:label") %></td>
 <td>
-  <% if (isWorkflowConfig) { %>
-    <%= workflow %>
+  <% if (model.workflow) { %>
+    <%= model.workflow %>
   <% } %>
 </td>
   <% if (rdf_attr("dcterms:creator")) { %>
@@ -48,7 +32,10 @@ _.each(rdf_attr("omnom:assignment"), function(ass) {
 <td>
     <a class="btn btn-success" href="#job/<%= rdf_attr('prov:wasGeneratedBy').id %>">View Job</a>
 </td>
-  <% } %>
+<% } else {  %>
+<td></td>
+<% } %>
+
 <td sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'>
   <%= human_readable_date(rdf_attr("dcterms:modified")) %>
 </td>
