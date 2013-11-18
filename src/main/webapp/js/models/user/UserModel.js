@@ -34,6 +34,7 @@ define([
             'service/xslt',
             'service/xslt-zip',
             'publish',
+            'service/zip-iterator',
             'service/demo'
     ], function(id) {
         return SERVICE_URLS.BASE + id;

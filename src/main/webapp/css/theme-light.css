@@ -212,7 +212,10 @@ html.lt-ie8 .hover-grp:hover .show-hover {
   background-color: #ffffdd;
 }
 .highlight .parameter.highlight {
-  background-color: #eeee00;
+  background-color: #eeee00 !important;
+}
+.highlight .parameter.highlight * {
+  background-color: #eeee00 !important;
 }
 div.loading-indicator {
   background-image: url(../img/pacman-black.gif);
@@ -265,6 +268,15 @@ dl {
 .status-FAILED {
   color: #aa0000;
 }
+.status-bg-FINISHED {
+  background-color: #ccffcc;
+}
+.status-bg-NOT_STARTED {
+  background-color: #ffffaa;
+}
+.status-bg-FAILED {
+  background-color: #ffaaaa;
+}
 /*
  disable transition animation of progress bars
  */
@@ -307,4 +319,16 @@ span.filter-heading {
 }
 #mystuff-filter {
   margin: 0 0 3px;
+}
+*[data-forParam="workflow"] {
+  display: none;
+}
+*[data-forParam="completeLog"] {
+  display: none;
+}
+*[data-forParam="jobTimeout"] {
+  display: none;
+}
+*[data-forParam="pollInterval"] {
+  display: none;
 }

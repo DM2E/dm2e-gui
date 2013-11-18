@@ -6,7 +6,8 @@ define([
     'logging',
     'constants/RDFNS',
     'BaseModel',
-//    'RelationalModel',
+    'models/job/JobModel',
+    'RelationalModel',
 ],
 /**
  * A model representing a Job.
@@ -17,7 +18,9 @@ function($,
     _,
     logging,
     NS,
-    BaseModel
+    BaseModel,
+    JobModel,
+    RelationalModel
     ) {
 
     var log = logging.getLogger("models.job.JobModel");
@@ -30,7 +33,7 @@ function($,
       @requires Backbone
       @augments module:Backbone.Model
       */
-    return BaseModel.extend({
+    return RelationalModel.extend({
       /** 
         @#lends module:models/job/JobModel~JobModel.prototype
         */
@@ -39,7 +42,15 @@ function($,
 
         initialize : function () {
             log.debug("Initialized JobModel");
-        }
+        },
+		relations: [
+            {
+				type : Backbone.HasMany,
+				key : NS.expand("omnom:finishedJobs"),
+				relatedModel : JobModel,
+                // includeInJSON : ["id", "uuid"],
+			},
+        ],
 
     });
 });

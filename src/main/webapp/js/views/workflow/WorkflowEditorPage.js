@@ -49,7 +49,16 @@ define([
             },
             "click button#render": function() {
                 this.render();
-            }
+            },
+            "click button#visualize": function() {
+
+              var visualizationImage = $('<img />').attr('src', this.model.id + "/png");
+              var winHeight = 300;
+              var winWidth = 960;
+              window.open(visualizationImage.attr('src'),
+                          "_blank",
+                          'height=' + winHeight + ', width=' + winWidth + ', toolbar=0, location=0, status=0, scrollbars=0, resizable=0');
+            },
         },
 
         initialize: function() {

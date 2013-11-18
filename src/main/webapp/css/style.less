@@ -40,7 +40,10 @@
 .highlight {
   .dark-border-solid-content(@highlightFirstLevel);
   .parameter.highlight {
-    background-color: @highlightSecondLevel;
+      background-color: @highlightSecondLevel !important;
+      * {
+          background-color: @highlightSecondLevel !important;
+      }
   }
 }
 
@@ -94,15 +97,12 @@ dl {
   min-height: 400px;
 }
 
-.status-FINISHED {
-  color: @fgStatus-FINISHED;
-}
-.status-NOT_STARTED {
-  color: @fgStatus-NOT_STARTED;
-}
-.status-FAILED {
-  color: @fgStatus-FAILED;
-}
+.status-FINISHED {          color: @fgStatus-FINISHED; }
+.status-NOT_STARTED {       color: @fgStatus-NOT_STARTED; }
+.status-FAILED {            color: @fgStatus-FAILED; }
+.status-bg-FINISHED {       background-color: @bgStatus-FINISHED; }
+.status-bg-NOT_STARTED {    background-color: @bgStatus-NOT_STARTED; }
+.status-bg-FAILED {         background-color: @bgStatus-FAILED; }
 
 /*
  disable transition animation of progress bars
@@ -153,3 +153,8 @@ span.filter-heading {
 #mystuff-filter {
     margin: 0 0 3px;
 }
+
+*[data-forParam="workflow"]     { display: none; }
+*[data-forParam="completeLog"]  { display: none; }
+*[data-forParam="jobTimeout"]   { display: none; }
+*[data-forParam="pollInterval"] { display: none; }

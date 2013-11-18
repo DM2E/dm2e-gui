@@ -1,0 +1,166 @@
+# Pubby Example Configuration
+#
+# This configuration connects to the DBpedia SPARQL endpoint and
+# re-publishes on your local machine, with dereferenceable
+# localhost URIs.
+#
+# This assumes you already have a servlet container running
+# on your machine at http://localhost:8080/ .
+#
+# Install Pubby as the root webapp of your servlet container,
+# and make sure the config-file parameter in Pubby's web.xml
+# points to this configuration file.
+#
+# Then browse to http://localhost:8080/ .
+
+# Prefix declarations to be used in RDF output
+@prefix conf: <http://richard.cyganiak.de/2007/pubby/config.rdf#> .
+@prefix meta: <http://example.org/metadata#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dbpedia: <http://localhost:8080/resource/> .
+@prefix p: <http://localhost:8080/property/> .
+@prefix yago: <http://localhost:8080/class/yago/> .
+@prefix units: <http://dbpedia.org/units/> .
+@prefix geonames: <http://www.geonames.org/ontology#> .
+@prefix prv:      <http://purl.org/net/provenance/ns#> .
+@prefix prvTypes: <http://purl.org/net/provenance/types#> .
+@prefix doap:     <http://usefulinc.com/ns/doap#> .
+@prefix void:     <http://rdfs.org/ns/void#> .
+@prefix ir:       <http://www.ontologydesignpatterns.org/cp/owl/informationrealization.owl#> .
+@prefix edm: <http://www.europeana.eu/schemas/edm/> .
+@prefix ore: <http://www.openarchives.org/ore/terms/> .
+@prefix wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix xalan: <http://xml.apache.org/xalan> .
+@prefix tei2edm: <http://sbb.spk-berlin.de/dm2e/tei2edm> .
+@prefix dm2e: <http://data.dm2e.eu/schemas/dm2e/0.1/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+
+# Server configuration section
+<> a conf:Configuration;
+    # Project name for display in page titles
+    conf:projectName "DM2E";
+    # Homepage with description of the project for the link in the page header
+    conf:projectHomepage <http://dm2e.eu>;
+    # The Pubby root, where the webapp is running inside the servlet container.
+    # Recommended. If not available, automatic detection is used.
+    # conf:webBase <http://lelystad.informatik.uni-mannheim.de:8080/pubby/>;
+    # URL of an RDF file whose prefix mapping is to be used by the
+    # server; defaults to <>, which is *this* file.
+    # conf:usePrefixesFrom <http://lelystad.informatik.uni-mannheim.de:8080/prefixes.n3>;
+    # conf:usePrefixesFrom <https://dl.dropbox.com/u/14362931/DM2E/prefixes.n3>;
+    # If labels and descriptions are available in multiple languages,
+    # prefer this one.
+    conf:defaultLanguage "en";
+    # When the homepage of the server is accessed, this resource will
+    # be shown.
+    conf:indexResource <http://dm2e.eu/resource/oib/wittgenstein-repo/Ms-114>;
+    conf:labelProperty rdfs:label, dc:title, dc:identifier;
+    conf:imageProperty edm:hasView;
+    conf:showLabels "true";
+    conf:loadVocabularyFromURL
+        <http://data.dm2e.eu/edm.rdf>,
+        <http://data.dm2e.eu/crm.rdf>,
+        <http://data.dm2e.eu/dm2e.rdf>,
+        <http://data.dm2e.eu/abc.rdf>,
+        <http://data.dm2e.eu/edmplus.rdf>,
+        <http://www.openarchives.org/ore/1.0/terms>,
+        <http://dublincore.org/2012/06/14/dcelements.rdf>;
+#    conf:loadVocabularyFromFile
+#        "";
+
+
+# Dataset configuration section #1 (for Aggregations)
+#
+# Aggregations are Named Graphs, they are published as information resources without 303.
+#
+    conf:dataset [
+        conf:sparqlEndpoint <http://lelystad.informatik.uni-mannheim.de:8080/openrdf-sesame/repositories/dm2etest>;
+        conf:datasetBase <http://dm2e.eu/aggregation/>;
+        conf:addSameAsStatements "true";
+        conf:webResourcePrefix "aggregation/";
+        conf:webDataPrefix "aggregation/";
+        conf:webPagePrefix "html/aggregation/";
+        conf:useSparqlMapping [
+            conf:uriPattern "http://dm2e.eu/aggregation/(.*)";
+            conf:sparqlQuery '''CONSTRUCT {
+                ?s ?p ?o .
+
+            } WHERE {
+                ?s ?p ?o .
+                FILTER (
+                    ?s = <http://dm2e.eu/resource/$1> || ?s = <http://dm2e.eu/aggregation/$1>
+                    || ?o = <http://dm2e.eu/resource/$1> || ?o = <http://dm2e.eu/aggregation/$1>
+                )
+            } ''';
+            conf:publishResources
+                "http://dm2e.eu/aggregation/$1",
+                "http://dm2e.eu/resource/$1";
+            conf:primaryResource
+                "http://dm2e.eu/resource/$1";
+        ];
+    ];
+
+# Dataset configuration section #2 (Default)
+#
+    conf:dataset [
+        # SPARQL endpoint URL of the dataset
+        conf:sparqlEndpoint <http://lelystad.informatik.uni-mannheim.de:8080/openrdf-sesame/repositories/dm2etest>;
+        # Default graph name to query (not necessary for most endpoints)
+        # conf:sparqlDefaultGraph <http://141.20.126.155/api/file/50b8c6d228f37c3d62000007/data>;
+        # Common URI prefix of all resource URIs in the SPARQL dataset
+        conf:datasetBase <http://dm2e.eu/resource/>;
+        conf:addSameAsStatements "true";
+        # Will be appended to the conf:webBase to form the public
+        # resource URIs; if not present, defaults to ""
+        conf:webResourcePrefix "resource/";
+        conf:customRedirect "de.fuberlin.wiwiss.pubby.dm2e.ResourceRedirector";
+        # Will be appended to the conf:webBase to form the public
+        # data URIs; if not present, defaults to "data/"
+        conf:webDataPrefix "/data/resource/";
+        # Will be appended to the conf:webBase to form the public
+        # page URIs; if not present, defaults to "page/"
+        conf:webPagePrefix "html/resource/";
+        # Fixes an issue with the server running behind an Apache proxy;
+        # can be ignored otherwise
+        conf:fixUnescapedCharacters "(),'!$&*+;=@";
+
+        # include metadata
+        conf:metadataTemplate "metadata.ttl";
+
+        # configure your metadata here
+        # Use properties with the meta: prefix where the property name
+        # corresponds to the placeholder URIs in metadata.ttl that begin
+        # with about:metadata:metadata:
+        # Examples for such properties are:
+#        meta:pubbyUser <URI of the data publisher who uses this Pubby>;
+#        meta:pubbyOperator <URI of the service provider who operates this Pubby>;
+#        meta:endpointUser <URI of the data publisher who uses the SPARQL endpoint queried by this Pubby>;
+#        meta:endpointOperator <URI of the service provider who operates the SPARQL endpoint>;
+#        meta:endpointDataset <URI of the linked dataset that is exposed via the SPARQL endpoint>;
+    ];
+
+# Dataset configuration section #2 (for DBpedia classes and properties)
+#
+# URIs in the SPARQL endpoint: http://dbpedia.org/class/*
+#                              http://dbpedia.org/property/*
+# URIs on the Web:             http://localhost:8080/class/*
+#                              http://localhost:8080/property/*
+#    conf:dataset [
+#        conf:sparqlEndpoint <http://lelystad.informatik.uni-mannheim.de:8080/openrdf-workbench/repositories/altedrucke/query>;
+#        conf:sparqlDefaultGraph <file://altedrucke.rdf>;
+#        conf:datasetBase <file:/home/eckertk/altedrucke/>;
+#        # Dataset URIs are mapped only if the part after the
+#        # conf:webBase matches this regular expression
+#        conf:datasetURIPattern "(class|property)/.*";
+#        conf:fixUnescapedCharacters "(),'!$&*+;=@";
+#    ];
+    .

@@ -13,7 +13,8 @@ define([
         'views/config/ConfigListTableRowView',
         'text!templates/config/ConfigListTemplate.html',
         'views/FilterView',
-        'text!templates/config/configFilterTemplate.html'
+        'text!templates/config/configFilterTemplate.html',
+        'collections/config/WorkflowConfigCollection'
 ], function($,
          _,
          logging,
@@ -26,7 +27,8 @@ define([
          ConfigListTableRowView,
          theTemplate,
          FilterView,
-         configFilterTemplate
+         configFilterTemplate,
+         WorkflowConfigCollection
            ) {
 
     var log = logging.getLogger("views.config.ConfigListPage");
@@ -73,8 +75,28 @@ define([
         },
 
         render : function() {
+            _.each(this.collection.models, function(config) {
+                _.each(config.getQN("omnom:assignment").models, function(ass) {
+                    if (config.get("workflow")) { return; }
+                    console.log(ass);
+                    var forParamId = ass.getQN("omnom:forParam").id;
+                    if(/\/workflow$/.test(forParamId)) {
+                        config.set("workflow", ass.getQN("omnom:parameterValue"));
+                    }
+                });
+            });
+
+
+
+
+
+            // this.collection = new WorkflowConfigCollection( this.collection.models
+                // // _.filter(this.collection.models, function(model) { return model.get("workflow") !== null; }));
+                // // _.filter(this.collection.models, function(model) { return true; }));
+            // );
+            var collectionArray = this.collection.filter(function(model) { return model.get("workflow"); });
             this.renderModel();
-            this.renderCollection();
+            this.renderCollection({}, this.listSelector, this.itemView, collectionArray);
             sorttable.makeSortable(this.$("table")[0]);
             return this;
         },

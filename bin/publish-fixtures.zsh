@@ -81,8 +81,10 @@ wf_counter=0;
 publishFile ../dm2e-ws/src/test/resources/mappings/xslt/KBA_BBAW_TO_EDM.xsl
 publishFile ../dm2e-ws/src/test/resources/provider-examples/dta/grimm_meistergesang_1811.TEI-P5.xml
 publishFile ../dm2e-ws/src/test/resources/mappings/xslt-zip/TEI2DM2E_xslt_20130605.zip
+publishFile ../dm2e-ws/src/test/resources/provider-examples/dta/grimm_meistergesang_1811.TEI-P5.xml.zip
 
 publishWorkflow src/main/resources/test-fixtures/demo-workflow.json
 publishWorkflow src/main/resources/test-fixtures/xslt-publish-workflow.json
 publishWorkflow src/main/resources/test-fixtures/xsltzip-publish-workflow.json
+publishWorkflow src/main/resources/test-fixtures/zipiterator-xsltzip-publish-workflow.json
 
