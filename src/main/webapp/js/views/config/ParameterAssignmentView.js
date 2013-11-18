@@ -25,7 +25,7 @@ define([
 
         events : {
             // FIXME
-            "focusout input#paramValue": function() { this.populateModelFromForm(); },
+            "focusout input[name=paramValue]": function() { this.populateModelFromForm(); },
         },
 
         populateModelFromForm : function() {
