@@ -76,7 +76,9 @@ define([
         saveConfig: function() {
             var that = this;
             this.model.setQN("rdfs:label", $("#config-label").val());
-            this.model.setQN("dcterms:creator", {"id":session.user.id});
+            if( ! this.model.getQN("dcterms:creator")) {
+                this.model.setQN("dcterms:creator", { "id": session.user.id });
+            }
             this.model.setQN("dcterms:modified", new Date().toISOString());
             this.model.save().then(function(data, textStatus, xhr) {
                 if (xhr.status === 201) {

@@ -52,12 +52,12 @@ define([
             },
             "click button#visualize": function() {
                 this.saveWorkflow();
-                var visualizationImage = $('<img />').attr('src', this.model.id + "/png");
-                var winHeight = 300;
-                var winWidth = 960;
-                window.open(visualizationImage.attr('src'),
-                            "_blank",
-                            'height=' + winHeight + ', width=' + winWidth + ', toolbar=0, location=0, status=0, scrollbars=0, resizable=0');
+              var visualizationImage = $('<img />').attr('src', this.model.id + "/png");
+              var winHeight = 300;
+              var winWidth = 960;
+              window.open(visualizationImage.attr('src'),
+                          "_blank",
+                          'height=' + winHeight + ', width=' + winWidth + ', toolbar=0, location=0, status=0, scrollbars=0, resizable=0');
             },
         },
 
@@ -180,10 +180,12 @@ define([
             var that = this;
 
             this.model.setQN("rdfs:label", $("#workflow-label").val());
-
-            this.model.setQN("dcterms:creator", {
-                "id": session.user.id
-            });
+ 
+ 
+            // only save creator initially
+            if( ! this.model.getQN("dcterms:creator")) {
+                this.model.setQN("dcterms:creator", { "id": session.user.id });
+            }
             this.model.setQN("dcterms:modified", new Date().toISOString());
             // Un-Skolemize positions (i.e. make them blank nodes and let the
             // server rename them again
