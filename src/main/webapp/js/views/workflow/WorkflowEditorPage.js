@@ -63,6 +63,7 @@ define([
 
         initialize: function() {
 
+            var that = this;
             /* Re-render on changes and when synced */
             this.listenTo(this.model, "change", this.render);
             this.listenTo(this.model, "sync", this.render);
@@ -75,7 +76,19 @@ define([
             // this.listenTo(this.model.getQN("omnom:parameterConnector"), "add", this.saveWorkflow);
             // this.listenTo(this.model.getQN("omnom:parameterConnector"), "remove", this.saveWorkflow);
             this.listenTo(this.model.getQN("omnom:workflowPosition"), "add", this.saveWorkflow);
-            this.listenTo(this.model.getQN("omnom:workflowPosition"), "remove", this.saveWorkflow);
+            this.listenTo(this.model.getQN("omnom:workflowPosition"), "remove", function(pos) {
+                console.log(arguments);
+                var toBeRemoved = [];
+                _.each(this.model.getQN("omnom:parameterConnector").models, function(conn) {
+                    if(conn.getQN("omnom:toPosition") && pos.id === conn.getQN("omnom:toPosition").id) {
+                        toBeRemoved.push(conn);
+                    } else if(conn.getQN("omnom:fromPosition") && pos.id === conn.getQN("omnom:fromPosition").id) {
+                        toBeRemoved.push(conn);
+                    }
+                });
+                that.model.getQN("omnom:parameterConnector").remove(toBeRemoved);
+                this.saveWorkflow();
+            });
 
             this.listenTo(this.model.getQN("omnom:outputParam"), "remove", function() {
               console.error("I NOTICED YOU STEALING MY PARAMZ!");
@@ -174,7 +187,7 @@ define([
         },
 
         saveWorkflow: function() {
-            log.debug(JSON.stringify(this.model.toJSON(), undefined, 2));
+            // log.debug(JSON.stringify(this.model.toJSON(), undefined, 2));
             console.debug(this.model.toJSON());
             this.setButtonLoading("button#save-workflow");
             var that = this;
