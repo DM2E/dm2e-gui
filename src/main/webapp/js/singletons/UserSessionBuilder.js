@@ -64,6 +64,25 @@ define([
                     }
                 },
             });
+
+            /*
+             * HACK
+             * to always keep these core services in the user
+             */
+            var user_ws = user.getQN("omnom:webservice");
+            _.each([
+                'service/xslt',
+                'service/xslt-zip',
+                'publish',
+                'service/zip-iterator',
+                'service/demo'
+            ], function(id) {
+                var ws = SERVICE_URLS.BASE + id;
+                if (! _.contains(user_ws, ws)) {
+                    console.log("Adding " + ws);
+                    user_ws.push(ws);
+                }
+            });
             this.user = user;
             return user;
         };
