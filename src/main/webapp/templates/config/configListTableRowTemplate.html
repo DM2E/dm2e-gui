@@ -1,4 +1,7 @@
-<% var shortType = last_url_segment(rdf_attr("rdf:type")) %>
+<% 
+  var shortType = last_url_segment(rdf_attr("rdf:type")) 
+  var workflowID = rdf_attr("omnom:webservice").id.replace("/exec", "");
+%>
 <!-- <td -->
 <!--   data-filter-property='<%= NS.expand("rdf:type") %>' -->
 <!--   data-filter-value='<%= rdf_attr("rdf:type") %>' -->
@@ -6,35 +9,30 @@
 <!--   <%= shortType %> -->
 <!-- </td> -->
 <td>
-  <% console.log(model) %>
-  <% if (model.workflow) { %>
   <div class="btn-group btn-group-vertical">
     <a class="btn btn-success edit-config" href="#/config-edit/<%= model.id %>">Edit Config</a>
-    <a class="btn btn-success edit-workflow" href='#/workflow-edit/<%= model.workflow %>'>Edit Workflow</a>
+    <a class="btn btn-success edit-workflow" href='#/workflow-edit/<%= workflowID %>'>Edit Workflow</a>
   </div>
-  <% } %>
 </td>
 <td><%= model.id %></td>
 <td><%= rdf_attr("rdfs:label") %></td>
 <td>
-  <% if (model.workflow) { %>
-    <%= model.workflow %>
-  <% } %>
+    <%= workflowID %>
 </td>
-  <% if (rdf_attr("dcterms:creator")) { %>
+  <!-- <% if (rdf_attr("dcterms:creator")) { %> -->
 <td
   data-filter-property='<%= NS.expand("dcterms:creator") %>'
   data-filter-value='<%= rdf_attr("dcterms:creator").id %>'
   >
   <a class="btn btn-info">User <%= last_url_segment(rdf_attr("dcterms:creator").id) %></a>
 </td>
-  <% } else if(rdf_attr("prov:wasGeneratedBy")) { %>
-<td>
-    <a class="btn btn-success" href="#job/<%= rdf_attr('prov:wasGeneratedBy').id %>">View Job</a>
-</td>
-<% } else {  %>
-<td></td>
-<% } %>
+<!--   <% } else if(rdf_attr("prov:wasGeneratedBy")) { %> -->
+<!-- <td> -->
+<!--     <a class="btn btn-success" href="#job/<%= rdf_attr('prov:wasGeneratedBy').id %>">View Job</a> -->
+<!-- </td> -->
+<!-- <% } else {  %> -->
+<!-- <td></td> -->
+<!-- <% } %> -->
 
 <td sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'>
   <%= human_readable_date(rdf_attr("dcterms:modified")) %>

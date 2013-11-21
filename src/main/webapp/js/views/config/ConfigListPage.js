@@ -75,28 +75,26 @@ define([
         },
 
         render : function() {
-            _.each(this.collection.models, function(config) {
-                _.each(config.getQN("omnom:assignment").models, function(ass) {
-                    if (config.get("workflow")) { return; }
-                    console.log(ass);
-                    var forParamId = ass.getQN("omnom:forParam").id;
-                    if(/\/workflow$/.test(forParamId)) {
-                        config.set("workflow", ass.getQN("omnom:parameterValue"));
-                    }
-                });
-            });
-
-
-
+            // _.each(this.collection.models, function(config) {
+            //     _.each(config.getQN("omnom:assignment").models, function(ass) {
+            //         if (config.get("workflow")) { return; }
+            //         console.log(ass);
+            //         var forParamId = ass.getQN("omnom:forParam").id;
+            //         if(/\/workflow$/.test(forParamId)) {
+            //             config.set("workflow", ass.getQN("omnom:parameterValue"));
+            //         }
+            //     });
+            // });
 
 
             // this.collection = new WorkflowConfigCollection( this.collection.models
                 // // _.filter(this.collection.models, function(model) { return model.get("workflow") !== null; }));
                 // // _.filter(this.collection.models, function(model) { return true; }));
             // );
-            var collectionArray = this.collection.filter(function(model) { return model.get("workflow"); });
+            // var collectionArray = this.collection.filter(function(model) { return model.get("workflow"); });
             this.renderModel();
-            this.renderCollection({}, this.listSelector, this.itemView, collectionArray);
+            // this.renderCollection({}, this.listSelector, this.itemView, collectionArray);
+            this.renderCollection();
             sorttable.makeSortable(this.$("table")[0]);
             return this;
         },
