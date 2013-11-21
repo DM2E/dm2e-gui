@@ -83,6 +83,17 @@ define([
                     user_ws.push(ws);
                 }
             });
+            var user_fs = user.getQN("omnom:fileservice");
+            _.each([
+                'file',
+                'mint-file'
+            ], function(id) {
+                var ws = SERVICE_URLS.BASE + id;
+                if (! _.contains(user_fs, ws)) {
+                    console.log("Adding " + ws);
+                    user_fs.push(ws);
+                }
+            });
             this.user = user;
             return user;
         };
