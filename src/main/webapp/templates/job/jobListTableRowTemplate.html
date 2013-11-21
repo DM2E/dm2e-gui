@@ -1,11 +1,11 @@
 <% console.log(model) %>
 <%
-    var isWorkflowJob = false;
-    var webservice = rdf_attr("omnom:webservice");
-    implementationID = rdf_attr("omnom:implementationID", webservice);
-    if (implementationID && implementationID === "eu.dm2e.ws.services.workflow.WorkflowExecutionService") {
-        isWorkflowJob = true;
-    }
+    // var isWorkflowJob = false;
+    // var webservice = rdf_attr("omnom:webservice");
+    // implementationID = rdf_attr("omnom:implementationID", webservice);
+    // if (implementationID && implementationID === "eu.dm2e.ws.services.workflow.WorkflowExecutionService") {
+    //     isWorkflowJob = true;
+    // }
 %>
 <% var shortType = NS.shorten(rdf_attr("rdf:type")) %>
 <td
@@ -23,17 +23,16 @@
 <td
   data-filter-property='<%= NS.expand("omnom:status") %>'
   data-filter-value='<%= rdf_attr("omnom:status") %>'
+  class="status-bg-<%= rdf_attr("omnom:status") %>"
   >
   <%= rdf_attr("omnom:status") %>
 </td>
 <td>
-  <% if (isWorkflowJob) { %>
   <div class="btn-group">
     <a class="btn btn-success show-job" href="#job/<%= model.id %>">
       Show Job
     </a>
   </div>
-  <% } %>
 </td>
 <td
   data-filter-property='<%= NS.expand("dcterms:created") %>'

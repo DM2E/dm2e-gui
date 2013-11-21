@@ -269,13 +269,13 @@ dl {
   color: #ff0000;
 }
 .status-bg-FINISHED {
-  background-color: #003300;
+  background-color: #003300 !important;
 }
 .status-bg-NOT_STARTED {
-  background-color: #333300;
+  background-color: #333300 !important;
 }
 .status-bg-FAILED {
-  background-color: #330000;
+  background-color: #330000 !important;
 }
 /*
  disable transition animation of progress bars
