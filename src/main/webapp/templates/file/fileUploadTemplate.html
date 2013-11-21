@@ -1,6 +1,6 @@
 <div class="span11 offset1" xmlns="http://www.w3.org/1999/html">
     <h2>Upload a file</h2>
-    <form class="form-horizontal" class="inline-form">
+    <form class="form-horizontal inline-form">
         <div class="fileupload fileupload-new" data-provides="fileupload">
             <div class="input-append">
                 <div class="uneditable-input span5">
@@ -21,8 +21,10 @@
             <select id="inputFiletype">
             </select>
         </div>
-        <br />
-        <!-- <input type="submit" class="btn btn-info" value="Upload" /> -->
+        <div class="control-group">
+            <label for="inputFileLabel" class="control-label">File label</label>
+            <input type="text" id="inputFileLabel" placeholder="From uploaded file" />
+        </div>
         <input type="submit" class="btn btn-info" id="submit-upload" value="Upload">
         <span class="loading-indicator">
         </span>

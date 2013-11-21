@@ -1,16 +1,13 @@
 <% console.log(obj) %>
 <td>
   <div class="btn-group btn-group-vertical">
-    <a class="btn btn-file-edit btn-small"
-      href='<%= rdf_attr("omnom:fileEditURI") %>'>
-      <!--         href="<% if (obj.edit_url) { %><%= obj.edit_url %><% } else { %>editor?id=<%= obj.id %><% } %>">
- -->
+    <a class="btn btn-file-edit btn-small btn-success">
       <i class="icon-edit">
         &nbsp;
       </i>
       edit
     </a>
-    <a class="btn btn-danger btn-file-delete disabled btn-small">
+    <a class="btn btn-danger btn-file-delete btn-small">
       <i class="icon-trash">
         &nbsp;
       </i>

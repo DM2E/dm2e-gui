@@ -38,6 +38,9 @@ define([
 				metaStr += blank + ' a <' + NS.expand('omnom:File') + '> .\n';
                 metaStr += blank + ' <' + NS.expand('omnom:fileOwner') + '> <' + session.user.id + '>.\n';
                 metaStr += blank + ' <' + NS.expand('omnom:fileType') + '> <' + this.$("#inputFiletype").val() + '>.\n';
+                if (this.$("#inputFileLabel").val()) {
+                    metaStr += blank + ' <' + NS.expand('omnom:originalName') + '> "' + this.$("#inputFileLabel").val() + '".\n';
+                }
 				metaStr += blank + ' <' + NS.expand('dcterms:modified') + '> "' + now.toISOString() + '".\n';
                 console.log(metaStr);
 
@@ -117,8 +120,9 @@ define([
 			//noinspection JSUnresolvedFunction
             _.each(NS.OMNOM_TYPES(), function(url_func, label) {
                 // skip the filetype if it contians lowercase characters or is BASE
-                if (label === 'BASE' || ! /^[^a-z]+$/.test(label))
+                if (label === 'BASE' || ! /^[^a-z]+$/.test(label)) {
                     return;
+                }
                 console.log(label);
 				this.$("select#inputFiletype").append($("<option>")
 					.attr("value", url_func()).append(label));

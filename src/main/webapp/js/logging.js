@@ -9,7 +9,8 @@ define([ 'log4javascript' ], function(log4javascript) {
 //	var dumpAppender = new log4javascript.BrowserConsoleAppender();
 //	log4javascript.getRootLogger().addAppender(dumpAppender);
 //
-	log4javascript.getLogger("vm").setLevel(log4javascript.Level.DEBUG);
+	log4javascript.getLogger("vm").setLevel(log4javascript.Level.WARN);
+	log4javascript.getLogger("views.BaseView").setLevel(log4javascript.Level.WARN);
 	
 	return {
 		getLogger: function(loggerName) {
