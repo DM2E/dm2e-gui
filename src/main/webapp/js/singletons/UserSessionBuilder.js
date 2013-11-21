@@ -88,10 +88,10 @@ define([
                 'file',
                 'mint-file'
             ], function(id) {
-                var ws = SERVICE_URLS.BASE + id;
-                if (! _.contains(user_fs, ws)) {
-                    console.log("Adding " + ws);
-                    user_fs.push(ws);
+                var fs = SERVICE_URLS.BASE + id;
+                if (! _.contains(user_fs, fs)) {
+                    console.log("Adding " + fs);
+                    user_fs.push(fs);
                 }
             });
             this.user = user;
