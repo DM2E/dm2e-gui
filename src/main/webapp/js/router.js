@@ -60,14 +60,26 @@ define([
         /**
          * --- #file-list/{fileService} -- Shows a list of files sorted by file service
          */
-        appRouter.route(/file-list\/?(.*)/, 'showFileManager');
-        appRouter.on('route:showFileManager', function(fileService) {
+        appRouter.route(/file-list\/([^\?]*)\??(.*)?/, 'showFileManager');
+        appRouter.on('route:showFileManager', function(fileService, queryStr) {
+            var queryParams= {};
+            if (queryStr) {
+                console.log(queryStr);
+                _.each(queryStr.split('&'), function(kvStr) {
+                    var kvArr = kvStr.split('=', 2);
+                    queryParams[kvArr[0]] = kvArr[1];
+                });
+            }
+            console.log(queryParams);
             require(['views/file/FileManagerPage'], function(FileManagerPage) {
                 var fileManagerPage = Vm.createView({},
                     'FileManagerPage',
-                    FileManagerPage, {
-                    selectedFileService: fileService
-                });
+                    FileManagerPage,
+                    {
+                        selectedFileService: fileService,
+                        queryParams: queryParams
+                    }
+                );
                 appView.showPage(fileManagerPage);
             });
 
