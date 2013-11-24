@@ -23,6 +23,13 @@ define([ 'jquery', 'underscore', 'backbone',
             }).show();
         },
 
+        errorInvalid :function(what) {
+            new Backbone.BootstrapModal({
+                title : 'Invalid',
+                content : what,
+            }).open();
+        },
+
         errorNotFound : function() {
             new Backbone.BootstrapModal({
                 content : "404 : Not found.",

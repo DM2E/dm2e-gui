@@ -32,6 +32,9 @@ define([
             "click button#save-config": function() {
                 this.saveConfig();
             },
+            "click button#validate-config": function() {
+                this.validateConfig();
+            },
             "click button#run-config": function() {
                 //                var button = this.$("button#run-config");
                 //                $("span", button).addClass("loading-indicator");
@@ -89,6 +92,19 @@ define([
                 }
             });
 
+        },
+
+        validateConfig: function() {
+            $.ajax({
+                url: this.model.id + '/validate',
+                success: function(data) {
+                    dialogs.notify('Config is valid', 'info');
+                },
+                error: function(xhr, textStatus, err) {
+                    console.log(arguments);
+                    dialogs.errorInvalid(xhr.responseText);
+                }
+            });
         },
 
         initialize: function() {

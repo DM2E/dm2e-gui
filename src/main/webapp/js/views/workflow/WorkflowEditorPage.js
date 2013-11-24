@@ -44,6 +44,9 @@ define([
             "click button#save-workflow": function() {
                 this.saveWorkflow();
             },
+            "click button#validate-workflow": function() {
+                this.validateWorkflow();
+            },
             "click button#create-config": function() {
                 this.createConfig();
             },
@@ -59,6 +62,19 @@ define([
                           "_blank",
                           'height=' + winHeight + ', width=' + winWidth + ', toolbar=0, location=0, status=0, scrollbars=0, resizable=0');
             },
+        },
+
+        validateWorkflow: function() {
+            $.ajax({
+                url: this.model.id + '/validate',
+                success: function(data) {
+                    dialogs.notify('Config is valid', 'info');
+                },
+                error: function(xhr, textStatus, err) {
+                    console.log(arguments);
+                    dialogs.errorInvalid(xhr.responseText);
+                }
+            });
         },
 
         initialize: function() {
