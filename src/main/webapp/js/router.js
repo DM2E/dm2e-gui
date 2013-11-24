@@ -60,7 +60,7 @@ define([
         /**
          * --- #file-list/{fileService} -- Shows a list of files sorted by file service
          */
-        appRouter.route(/file-list\/([^\?]*)\??(.*)?/, 'showFileManager');
+        appRouter.route(/file-list\/?([^\?]*)\??(.*)?/, 'showFileManager');
         appRouter.on('route:showFileManager', function(fileService, queryStr) {
             var queryParams= {};
             if (queryStr) {

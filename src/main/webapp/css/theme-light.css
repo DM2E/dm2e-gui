@@ -317,6 +317,12 @@ span.filter-heading {
   color: #317eac;
   padding-left: 1em;
 }
+.filter-bar span {
+  margin-right: 0.5em;
+}
+.filter-bar button {
+  margin-bottom: 0.75em;
+}
 #mystuff-filter {
   margin: 0 0 3px;
 }

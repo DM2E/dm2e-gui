@@ -49,7 +49,7 @@ define([
 			if (this.pageView) {
 				this.assign(this.pageView, '#page');
 			}
-			log.debug("DONE rendering page.");
+			log.debug("DONE rendering page ");
 
 		},
 

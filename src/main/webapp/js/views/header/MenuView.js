@@ -4,6 +4,7 @@ define([
 	'BaseView',
 	'logging',
     'util/themeSwitcher',
+    'util/dialogs',
 	'singletons/UserSession',
 	'text!templates/header/menuTemplate.html'
 ], function($,
@@ -11,6 +12,7 @@ define([
 	BaseView,
 	logging,
     themeSwitcher,
+    dialogs,
 	session,
 	menuTemplate) {
 
@@ -28,10 +30,13 @@ define([
                 this.render();
             },
             "click #mystuff-filter" : function(e) {
-              e.preventDefault();
-                session.user.setQN("omnom:globalUserFilter", this.$("#mystuff-filter").is(':checked'));
-                session.user.save();
-                this.render();
+                var onoff = this.$("#mystuff-filter").is(':checked');
+                session.user.setQN("omnom:globalUserFilter", onoff);
+                session.user.save({}, {
+                    success : function() {
+                        dialogs.notify("Persisted 'My Stuff' choice: " + onoff);
+                    }
+                });
             }
         },
 		initialize : function() {
@@ -44,7 +49,11 @@ define([
             this.$("#switch-theme").html(session.user.getQN("omnom:preferredTheme"));
             // console.error('global filter: ' + session.user.getQN("omnom:globalUserFilter"));
             // console.error(session.user.attributes);
-            this.$("#mystuff-filter").attr('checked', session.user.getQN("omnom:globalUserFilter"));
+            if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+                this.$("#mystuff-filter").attr('checked', 'checked');
+            } else {
+                this.$("#mystuff-filter").removeAttr('checked');
+            }
         },
 //			this.$el.html(_.template(menuTemplate, {
 //				user : session.get("user")

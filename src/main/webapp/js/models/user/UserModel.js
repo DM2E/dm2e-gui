@@ -37,7 +37,7 @@ define([
             'service/zip-iterator',
             'service/demo'
     ], function(id) {
-        console.log(SERVICE_URLS.BASE);
+        // console.log(SERVICE_URLS.BASE);
         return SERVICE_URLS.BASE + id;
     }));
 

@@ -1,4 +1,4 @@
-<% console.log(obj) %>
+<% //console.log(obj) %>
 <td>
   <div class="btn-group btn-group-vertical">
     <a class="btn btn-file-edit btn-small btn-success">
@@ -39,6 +39,7 @@
 <td
   sorttable_customkey='<%= rdf_attr("dcterms:modified") %>'
   data-filter-property='dcterms:modified'>
+  <!-- <%= rdf_attr("dcterms:modified") %> -->
   <%= human_readable_date(rdf_attr("dcterms:modified")) %>
 </td>
 <td 
@@ -58,8 +59,8 @@
 </td>
 <td 
   data-filter-property="<%= NS.expand('omnom:fileOwner') %>" 
-  data-filter-value=<%= rdf_attr("omnom:fileOwner") ? rdf_attr("omnom:fileOwner").id : '' %>>
-  <%= rdf_attr("omnom:fileOwner") ? last_url_segment(rdf_attr("omnom:fileOwner").id) : "UNKNOWN" %>
+  data-filter-value=<%= rdf_attr("omnom:fileOwner") ? rdf_attr("omnom:fileOwner") : '' %>>
+  <%= rdf_attr("omnom:fileOwner") ? last_url_segment(rdf_attr("omnom:fileOwner")) : "UNKNOWN" %>
 </td>
 <td>
   <%= model.id %>

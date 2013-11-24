@@ -14,7 +14,7 @@ define([
 
 		model: FileModel,
 
-		comparator : RDFNS.expand('rdfs:label'),
+		// comparator : RDFNS.expand('rdfs:label'),
 
 		initialize: function(models, options) {
 			options = options || {};

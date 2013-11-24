@@ -67,6 +67,7 @@ define([
         var that = this;
 
          _.each(view.subViews || [], function(subview) {
+
              // console.log(subview);
              log.debug("Closing subview " + subview);
              that.cleanupView(subview);

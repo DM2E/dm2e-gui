@@ -5,6 +5,7 @@ define([
     'logging',
     'vm',
     'singletons/UserSession',
+    'constants/RDFNS',
     'collections/file/FilesCollection',
     'views/file/FileManagerListView',
     'text!templates/file/fileManagerTemplate.html'
@@ -15,6 +16,7 @@ define([
     logging,
     Vm,
     userSession,
+    RDFNS,
     FilesCollection,
     FileManagerListView,
     fileManagerTemplate
@@ -31,24 +33,49 @@ define([
             var options = options_arg || {};
             var that = this;
 
+            this.queryParams = options.queryParams ? options.queryParams : {};
+            if (! this.queryParams.start) { this.queryParams.start = 0; }
+            if (! this.queryParams.limit) { this.queryParams.limit = 200; }
+            if (! this.queryParams.sort) { this.queryParams.sort = RDFNS.expand("dcterms:created"); }
+            if (! this.queryParams.order) { this.queryParams.order = 'desc'; }
+            this.listenTo(userSession.user, "change", function() {
+                if (userSession.user.getQN("omnom:globalUserFilter") === 'true') {
+                    this.queryParams.user = userSession.user.id;
+                } else {
+                    delete this.queryParams.user;
+                }
+                this.fetchCollection();
+            }, this);
+
+
             if (options.selectedFileService) {
-                var onDataHandler = function(collection) {
-                    log.debug("FilesCollection retrieved, size: " + collection.models.length);
-                    that.render();
-                };
-                var onErrorHandler = function(collection, resp) {
-                    log.warn("Error retrieving collection");
-                    console.log(resp);
-                };
+                this.serviceURL = options.selectedFileService;
                 this.collection = new FilesCollection([], {
-                    url: options.selectedFileService
+                    url: this.serviceURL + "/list" 
                 });
-                that.collection.fetch({
-                    success : onDataHandler,
-                    error : onErrorHandler,
-                    dataType : "json",
-                });
+                // this.collection.on('reset', this.render, this);
+                // this.collection.on('sync', this.render, this);
+                this.fetchCollection();
             }
+        },
+
+        fetchCollection : function() {
+            var that = this;
+            // console.log(this.collection.url());
+            that.collection.fetch({
+                dataType : "json",
+                processData : true,
+                reset : true,   // important to make sort work
+                data : this.queryParams,
+                success : function(collection) {
+                    log.debug("FilesCollection retrieved, size: " + collection.models.length);
+                    // that.render();
+                },
+                error: function(collection, resp) {
+                    log.warn("Error retrieving collection");
+                    console.error(resp);
+                },
+            });
         },
 
         render : function() {
@@ -64,17 +91,12 @@ define([
 
         renderFileList : function() {
             this.fileListView = Vm.createView(this, 'FileManagerListView', FileManagerListView, {
+                parentView : this,
+                serviceURL: this.serviceURL,
                 collection : this.collection,
+                queryParams: this.queryParams,
             });
             this.assign(this.fileListView, 'div.file-list');
-//          Vm.cleanupSubViews(this);
-//          _.each(this.collection.models, function(fileModel) {
-//              var subview = Vm.createSubView(this, FileManagerListView, {
-//                  model : fileModel
-//              });
-//              this.appendHTML(subview, "div.list-container");
-//          }, this);
-
         },
 
         clean : function() {
