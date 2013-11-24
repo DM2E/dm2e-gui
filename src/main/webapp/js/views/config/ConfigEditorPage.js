@@ -92,11 +92,10 @@ define([
         },
 
         initialize: function() {
-            //            this.listenTo(this.model, "change", this.render);
             _.each(NS.rdf_attr("omnom:fileservice", session), function(fileService) {
                 // FIXME this might not be very efficient in the long run...
                 this.fileCollections[fileService.id] = new FilesCollection([], {
-                    url: fileService.id,
+                    url: fileService.id + '/list',
                 });
                 this.fileCollections[fileService.id].fetch();
             }, this);

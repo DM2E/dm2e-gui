@@ -9,9 +9,19 @@ define([
     'collections/file/FilesCollection',
     'views/file/FileListItemView',
     'text!templates/file/fileListTemplate.html',
-    'views/FilterView',
-   'text!templates/file/fileFilterTemplate.html'
-], function ($, _, BaseView, logging, Vm, session, RDFNS, FilesCollection, FileListItemView, fileListTemplate, FilterView, fileFilterTemplate) {
+    'views/filter/QueryFilterView',
+], function (
+    $,
+    _,
+    BaseView,
+    logging,
+    Vm,
+    session,
+    RDFNS,
+    FilesCollection,
+    FileListItemView,
+    fileListTemplate,
+    QueryFilterView) {
 
     var log = logging.getLogger("FileListView");
 
@@ -30,40 +40,67 @@ define([
             this.$(".loading-indicator").hide();
         },
 
-        initialize: function () {
+        initialize: function (options) {
+            this.queryParams = options.queryParams ? options.queryParams : {};
+            if (! this.queryParams.start) { this.queryParams.start = 0; }
+            if (! this.queryParams.limit) { this.queryParams.limit = 200; }
+            if (! this.queryParams.sort) { this.queryParams.sort = RDFNS.expand("dcterms:created"); }
+            if (! this.queryParams.order) { this.queryParams.order = 'desc'; }
+            this.listenTo(session.user, "change", function() {
+                if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+                    this.queryParams.user = session.user.id;
+                } else {
+                    delete this.queryParams.user;
+                }
+                this.fetchCollection();
+            }, this);
             this.collection.on('sync', this.render, this);
             this.collection.on('sync', this.hideLoadingIndicator, this);
             this.collection.on('error', this.hideLoadingIndicator, this);
         },
 
-        renderFilterBar: function() {
-          var that = this;
-          var filterbar = new FilterView({
-            el: that.$(".filter-bar"),
-            collection: this.collection,
-          });
-          filterbar.template = fileFilterTemplate;
-          filterbar.listToFilter = this.$(".file-list");
-          // session.user.on("sync", this.renderFilterBar, this);
-          filterbar.render();
-
-            session.user.on("sync", this.renderFilterBar, this);
-
-            var globalUserFilter = {};
-            if (session.user.getQN("omnom:globalUserFilter") === 'true'
-                ||
-                session.user.getQN("omnom:globalUserFilter") === true
-               ) {
-              globalUserFilter[RDFNS.expand("omnom:fileOwner")] = session.user.id;
-            }
-            filterbar.applyFilters(globalUserFilter);
+        fetchCollection : function() {
+            var that = this;
+            // console.log(this.collection.url());
+            that.collection.fetch({
+                dataType : "json",
+                processData : true,
+                reset : true,   // important to make sort work
+                data : this.queryParams,
+                success : function(collection) {
+                    log.debug("FilesCollection retrieved, size: " + collection.models.length);
+                    // that.render();
+                },
+                error: function(collection, resp) {
+                    log.warn("Error retrieving collection");
+                    console.error(resp);
+                },
+            });
         },
 
         render: function () {
             this.renderModel({ fileService: this.collection.url() });
 //            console.warn(this.el);
             this.renderCollection({}, '.file-list');
-            this.renderFilterBar();
+            var filterView = new QueryFilterView({
+                $el : this.$(".filter-bar"),
+                parentView: this,
+                facets: [
+                    {'queryParam': 'user',
+                     'label': 'Owner',
+                     'rdfProp' : RDFNS.expand('omnom:fileOwner')},
+                    {'queryParam': 'type',
+                     'label': 'Type',
+                     'rdfProp' : RDFNS.expand('omnom:fileType')},
+                ],
+                sortOpts: {
+                    'owner' : RDFNS.expand('omnom:fileOwner'),
+                    'type' : RDFNS.expand('omnom:fileType'),
+                    'created' : RDFNS.expand('dcterms:created'),
+                },
+            });
+            filterView.render();
+            // this.renderFilterBar();
             return this;
         },
 

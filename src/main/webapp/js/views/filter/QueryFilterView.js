@@ -98,7 +98,7 @@ define([
             _.each(this.facets, function(facetObj) {
                 var span = $("<span>")
                              .append(facetObj.label)
-                             .append(" : ")
+                             .append("&nbsp;:&nbsp;")
                              .append($("<select>")
                                        .attr("data-filter-prop", facetObj.rdfProp)
                                        .attr("data-filter-query-param", facetObj.queryParam)
