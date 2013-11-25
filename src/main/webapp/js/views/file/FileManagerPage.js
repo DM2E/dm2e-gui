@@ -15,7 +15,7 @@ define([
     BaseView,
     logging,
     Vm,
-    userSession,
+    session,
     RDFNS,
     FilesCollection,
     FileManagerListView,
@@ -38,9 +38,12 @@ define([
             if (! this.queryParams.limit) { this.queryParams.limit = 200; }
             if (! this.queryParams.sort) { this.queryParams.sort = RDFNS.expand("dcterms:created"); }
             if (! this.queryParams.order) { this.queryParams.order = 'desc'; }
-            this.listenTo(userSession.user, "change", function() {
-                if (userSession.user.getQN("omnom:globalUserFilter") === 'true') {
-                    this.queryParams.user = userSession.user.id;
+            if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+                this.queryParams.user = session.user.id;
+            }
+            this.listenTo(session.user, "change", function() {
+                if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+                    this.queryParams.user = session.user.id;
                 } else {
                     delete this.queryParams.user;
                 }

@@ -1,11 +1,16 @@
-<span>Sort : 
-  <select class="sort-select"></select>
-</span>
-  <button name="filters-apply" class="btn">Apply</button>
-  <button name="filters-reset" class="btn btn-danger">Reset</button>
-<% if (obj.prevPageHref) { %>
+<button type="button" class="btn toggle-filter-sort">
+  <i class="icon-filter"></i> Filter / Sort
+</button>
+<div class="query-filter-container">
+  <span class="sort"><span class="label">Sort</span><select class="sort-select"></select></span>
+  <div class="btn-group">
+    <button name="filters-apply" class="btn btn-primary btn-small">Apply</button>
+    <button name="filters-reset" class="btn btn-danger btn-small">Reset</button>
+  </div>
+  <% if (obj.prevPageHref) { %>
   <a href="<%= prevPageHref %>">Prev</a>
-<% } %>
-<% if (obj.nextPageHref) { %>
+  <% } %>
+  <% if (obj.nextPageHref) { %>
   <a href="<%= nextPageHref %>">Next</a>
-<% } %>
+  <% } %>
+</div>

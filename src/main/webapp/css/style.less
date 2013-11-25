@@ -120,17 +120,24 @@ dl {
 }*/
 
 .tab-content {
-  max-height: 450px;
+  /* max-height: 450px; */
+  .file-list {
+    height: 400px;
+    overflow-y: scroll;
+  }
+  
 }
 
 .resource-list .file {
   /* border: 1px solid @color; */
 }
-.file span.fileType {
-  float: right;
-}
-.file span.fileOwner {
- float: right;
+.file {
+  span.fileType {
+    float: right;
+  }
+  span.fileOwner {
+    float: right;
+  }
 }
 .ui-draggable-dragging {
   background: @drag-active-color;
@@ -145,22 +152,46 @@ span.filter-heading {
     display: none;
 }
 
-.filter-bar {
+#mystuff-filter {
+    margin: 0 0 3px;
+}
+
+#config-editor-page {
+    div.btn-group-vertical {
+        padding-left: 2em;
+        width: 90%;
+        button.btn {
+            width: 80%;
+        }
+    }
+}
+
+.query-filter-container {
     color: #317eac;
     padding-left: 1em;
-    span {
+    span.filter, span.sort {
+        select {
+          margin-bottom: 0;
+          margin-left: 1em;
+          padding: 0;
+        }
+        white-space: nowrap;
         margin-right: 0.5em;
+    }
+    span.label {
+        width: 3.2em;
     }
     button {
         margin-bottom: 0.75em;
     }
 }
 
-#mystuff-filter {
-    margin: 0 0 3px;
-}
+/*
+ * Hide parameters that are not meant to be changed by users
+ */
 
 *[data-forParam="workflow"]     { display: none; }
 *[data-forParam="completeLog"]  { display: none; }
 *[data-forParam="jobTimeout"]   { display: none; }
 *[data-forParam="pollInterval"] { display: none; }
+

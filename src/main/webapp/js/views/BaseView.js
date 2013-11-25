@@ -191,6 +191,7 @@ define([
             Vm.cleanupSubViews(context);
             // FIXME FIXME
             _.each(collectionArray, function (model) {
+              // console.error(model);
                 var subview = Vm.createSubView(this, ItemView,
                     _.extend({
                         model: model,

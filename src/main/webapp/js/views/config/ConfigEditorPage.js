@@ -8,12 +8,13 @@ define([
         'BaseView',
         'constants/RDFNS',
         'util/dialogs',
+        'util/UriUtils',
         'singletons/UserSession',
         'views/file/FileListView',
         'views/config/ParameterAssignmentView',
         'collections/file/FilesCollection',
         'text!templates/config/ConfigEditorTemplate.html'
-], function($, _, logging, Vm, BaseView, NS, dialogs, session, FileListView, ParameterAssignmentView,
+], function($, _, logging, Vm, BaseView, NS, dialogs, UriUtils, session, FileListView, ParameterAssignmentView,
     FilesCollection, theTemplate) {
 
     var log = logging.getLogger("views.config.ConfigEditorPage");
@@ -147,7 +148,7 @@ define([
                 .attr("href", "#" + collId)
                 .attr("data-omnom-fileservice", collId)
                 // .on('click', function() { $(this).tab('show');})
-                .append(collName)));
+                .append('/' + UriUtils.last_url_segment(collName))));
                 $(".tab-content").append(
                   $("<div></div>")
                   .addClass("tab-pane")

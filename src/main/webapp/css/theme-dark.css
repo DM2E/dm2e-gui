@@ -291,7 +291,12 @@ dl {
   overflow: hidden;
 }*/
 .tab-content {
-  max-height: 450px;
+  /* max-height: 450px; */
+
+}
+.tab-content .file-list {
+  height: 400px;
+  overflow-y: scroll;
 }
 .resource-list .file {
   /* border: 1px solid @color; */
@@ -313,19 +318,40 @@ span.filter-heading {
 .filtered {
   display: none;
 }
-.filter-bar {
-  color: #317eac;
-  padding-left: 1em;
-}
-.filter-bar span {
-  margin-right: 0.5em;
-}
-.filter-bar button {
-  margin-bottom: 0.75em;
-}
 #mystuff-filter {
   margin: 0 0 3px;
 }
+#config-editor-page div.btn-group-vertical {
+  padding-left: 2em;
+  width: 90%;
+}
+#config-editor-page div.btn-group-vertical button.btn {
+  width: 80%;
+}
+.query-filter-container {
+  color: #317eac;
+  padding-left: 1em;
+}
+.query-filter-container span.filter,
+.query-filter-container span.sort {
+  white-space: nowrap;
+  margin-right: 0.5em;
+}
+.query-filter-container span.filter select,
+.query-filter-container span.sort select {
+  margin-bottom: 0;
+  margin-left: 1em;
+  padding: 0;
+}
+.query-filter-container span.label {
+  width: 3.2em;
+}
+.query-filter-container button {
+  margin-bottom: 0.75em;
+}
+/*
+ * Hide parameters that are not meant to be changed by users
+ */
 *[data-forParam="workflow"] {
   display: none;
 }

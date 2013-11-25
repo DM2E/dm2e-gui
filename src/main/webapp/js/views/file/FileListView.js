@@ -46,6 +46,10 @@ define([
             if (! this.queryParams.limit) { this.queryParams.limit = 200; }
             if (! this.queryParams.sort) { this.queryParams.sort = RDFNS.expand("dcterms:created"); }
             if (! this.queryParams.order) { this.queryParams.order = 'desc'; }
+            if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+                this.queryParams.user = session.user.id;
+                this.fetchCollection();
+            }
             this.listenTo(session.user, "change", function() {
                 if (session.user.getQN("omnom:globalUserFilter") === 'true') {
                     this.queryParams.user = session.user.id;
@@ -82,9 +86,11 @@ define([
             this.renderModel({ fileService: this.collection.url() });
 //            console.warn(this.el);
             this.renderCollection({}, '.file-list');
+            // TODO check for zombies
             var filterView = new QueryFilterView({
                 $el : this.$(".filter-bar"),
                 parentView: this,
+                showOrHide: 'hide',
                 facets: [
                     {'queryParam': 'user',
                      'label': 'Owner',

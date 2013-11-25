@@ -1,31 +1,32 @@
-<% console.error(obj) %>
-<div class="row">
-    <div class="span3">
+<div class="row" id="config-editor-page">
+    <div class="span2">
+      <div class="btn-group-vertical">
         <button id="save-config" class="btn btn-success">Save</button>
         <button id="validate-config" class="btn btn-info">Validate</button>
-        <button id="run-config" class="btn btn-warning"><span>&nbsp;</span> Run!</button>
-        <a href="#workflow-edit/<%= workflowURL %>" class="btn btn-primary">Edit Workflow</a>
-        <% console.log(model) %>
+        <button id="run-config" class="btn btn-warning">Execute</button>
     </div>
+  </div>
     <div class="span9">
-        Configuration URL : <%= model.id %>
+        Configuration URL: <%= model.id %>
         <br/>
-        For Workflow: <%= rdf_attr("omnom:webservice").id %>
+        For Workflow: <a href="#workflow-edit/<%= workflowURL %>"><%= rdf_attr("omnom:webservice").id %></a>
         <br/>
-        Config Label: <input type="text" id="config-label" value='<%= rdf_attr("rdfs:label") %>' />
+        Config Label: <input class="span7" type="text" id="config-label" placeholder="Description for this configuration" value='<%= rdf_attr("rdfs:label") %>' />
     </div>
 </div>
 <div class="row">
-    <div class="span8">
-        <h2>Resources</h2>
-
-        <ul id="config-resource-nav" class="nav nav-pills nav-stacked span3">
+    <div class="span2">
+      <div>
+        <h3>Services</h3>
+        <ul id="config-resource-nav" class="nav nav-pills nav-stacked">
         </ul>
-        <div class="resource-list tab-content span5">
-        </div>
+      </div>
+    </div>
+    <div class="resource-list tab-content span6">
+      <h3>Resources</h3>
     </div>
     <div class="span4">
-        <h2>Parameters</h2>
+        <h3>Parameters</h3>
 
         <div class="parameter-assignment-list"></div>
 

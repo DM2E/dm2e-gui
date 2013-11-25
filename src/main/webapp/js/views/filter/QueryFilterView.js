@@ -28,6 +28,8 @@ define([
 
         initialize : function(options) {
 
+            this.$el = options.$el;
+
             /*
              * parentView must provide 
              * - a fetchCollection method!
@@ -50,10 +52,20 @@ define([
              */
             this.sortOpts = options.sortOpts;
 
-            this.$el = options.$el;
+            this.showOrHide = options.showOrHide ? options.showOrHide : 'show';
 
-            // this.render();
-            // this.applyFilters();
+            /**
+             * TODO this doesn't work here because it will re-initialize  the QueryFilterView because
+             * it is instantiated in parentView's render (which is bad)
+             */
+            // this.listenTo(session.user, "change", function() {
+            //     if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+            //         this.parentView.queryParams.user = session.user.id;
+            //     } else {
+            //         delete this.parentView.queryParams.user;
+            //     }
+            //     this.parentView.fetchCollection();
+            // }, this);
         },
 
         applyFilters : function() { 
@@ -85,6 +97,9 @@ define([
                     $(sel).val('none');
                 });
                 this.applyFilters();
+            },
+            "click button.toggle-filter-sort": function() {
+                this.$(".query-filter-container").collapse('toggle');
             }
         },
 
@@ -95,18 +110,22 @@ define([
             /**
              * Add Filter options
              */
+            var container = that.$("div.query-filter-container");
             _.each(this.facets, function(facetObj) {
+                container.prepend(" ");
                 var span = $("<span>")
-                             .append(facetObj.label)
-                             .append("&nbsp;:&nbsp;")
+                             .addClass("filter")
+                             .append($("<span>").addClass("label").append(facetObj.label))
+                             // .append("&nbsp;:&nbsp;")
                              .append($("<select>")
                                        .attr("data-filter-prop", facetObj.rdfProp)
                                        .attr("data-filter-query-param", facetObj.queryParam)
                                        .append($("<option>")
                                                  .val("none")
                                                  .append("&mdash;"))
-                                       .append("&nbsp;"))
-                             .prependTo(that.$el);
+                                       .append("&nbsp;")
+                                    )
+                             .prependTo(container);
             });
 
             /**
@@ -151,6 +170,7 @@ define([
                     });
                 }
             });
+            container.collapse(this.showOrHide);
 
             // IMPORTANT to return this (otherwise breaks render hierarchy
             return this;

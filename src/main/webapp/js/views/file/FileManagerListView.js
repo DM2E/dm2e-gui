@@ -53,6 +53,7 @@ define([
             this.collection.on('reset', this.render, this);
             this.collection.on('remove', this.hideLoadingIndicator, this);
             this.collection.on('sync', this.hideLoadingIndicator, this);
+            session.user.on("change", this.render, this);
             // this.collection.on('sync', this.renderFilterBar, this);
         },
 
@@ -86,6 +87,9 @@ define([
             this.renderModel({
                 serviceURL: this.serviceURL,
             });
+            if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+                this.parentView.queryParams.user = session.user.id;
+            }
             // _.each(this.parentView.collection.models, function(it) { console.log(it.attributes['http://onto.dm2e.eu/omnom/fileType']); });
             var filterView = new QueryFilterView({
                 $el : this.$(".filter-bar"),
