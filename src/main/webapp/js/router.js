@@ -282,7 +282,7 @@ define([
                     complete: function(jqXHR, textStatus, err) {
                         if (jqXHR.status === 200) {
                             var jobData = $.parseJSON(jqXHR.responseText);
-                            var jobInst = new JobModel(jobData);
+                            var jobInst = JobModel.findOrCreate(jobData);
                             jobInst.url = jobId;
                             var jobView = Vm.createView(this, 'JobPage', JobPage, {
                                 model: jobInst
