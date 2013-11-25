@@ -192,8 +192,9 @@ define([
         appRouter.on('route:showConfigEditorFrom', function(fromWorkflowUri) {
             require([
                 //                'views/workflow/RunWorkflowPage',
-                'models/config/WorkflowConfigModel'
-            ], function(WorkflowConfigModel) {
+                'models/config/WorkflowConfigModel',
+                'constants/RDFNS',
+            ], function(WorkflowConfigModel, RDFNS) {
                 if (!fromWorkflowUri) {
                     dialogs.errorNotFound();
                     return;
@@ -201,6 +202,9 @@ define([
 
                 // Persist the workflow config
                 var onGenerateSuccess = function(blankConfigData, status, xhr) {
+                    var wf = RDFNS.rdf_attr('omnom:webservice', blankConfigData);
+                    var wfLabel = RDFNS.rdf_attr('rdfs:label', wf);
+                    RDFNS.rdf_attr("rdfs:label", blankConfigData, "Config for: " + wfLabel);
                     $.ajax({
                         async: false,
                         url: '/api/config',

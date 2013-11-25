@@ -12,23 +12,19 @@ define([
         'singletons/UserSession',
         'views/config/ConfigListTableRowView',
         'text!templates/config/ConfigListTemplate.html',
-        'views/FilterView',
-        'text!templates/config/configFilterTemplate.html',
-        'collections/config/WorkflowConfigCollection'
+        'views/filter/QueryFilterView',
 ], function($,
          _,
          logging,
          Vm,
          BaseView,
-         NS,
+         RDFNS,
          dialogs,
          sorttable,
          session,
          ConfigListTableRowView,
          theTemplate,
-         FilterView,
-         configFilterTemplate,
-         WorkflowConfigCollection
+         QueryFilterView
            ) {
 
     var log = logging.getLogger("views.config.ConfigListPage");
@@ -48,54 +44,65 @@ define([
 			this.$(".loading-indicator").hide();
 		},
 
-        renderFilterBar: function() {
-            var that = this;
-            var filterbar = new FilterView({
-                collection: this.collection,
-                el: this.$(".filter-bar"),
-            });
-            filterbar.template = configFilterTemplate;
-            filterbar.tableToFilter = this.$("table");
-            filterbar.render();
-
-            session.user.on("sync", this.renderFilterBar, this);
-
-            var globalUserFilter = {};
-            if (session.user.getQN("omnom:globalUserFilter")) {
-              globalUserFilter[NS.expand("dcterms:creator")] = session.user.id;
+        initialize : function(options) {
+            this.queryParams = options.queryParams ? options.queryParams : {};
+            if (! this.queryParams.start) { this.queryParams.start = 0; }
+            if (! this.queryParams.limit) { this.queryParams.limit = 200; }
+            if (! this.queryParams.sort) { this.queryParams.sort = RDFNS.expand("dcterms:modified"); }
+            if (! this.queryParams.order) { this.queryParams.order = 'desc'; }
+            if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+                this.queryParams.user = session.user.id;
             }
-            filterbar.applyFilters(globalUserFilter);
+            this.listenTo(session.user, "sync", function() {
+                dialogs.notify('Refreshing config list', 'info');
+                if (session.user.getQN("omnom:globalUserFilter") === 'true') {
+                    this.queryParams.user = session.user.id;
+                } else {
+                    delete this.queryParams.user;
+                }
+                this.fetchCollection();
+            }, this);
+            this.listenTo(this.collection, "sync", this.render);
+            this.fetchCollection();
         },
 
-        initialize : function() {
-            this.listenTo(this.collection, "sync", this.render);
-            this.listenTo(this.collection, "sync", this.hideLoadingIndicator);
-            this.listenTo(this.collection, "sync", this.renderFilterBar);
-            this.collection.fetch();
+        fetchCollection : function() {
+            this.collection.fetch({
+                dataType : "json",
+                processData : true,
+                reset : true,   // important to make sort work
+                data : this.queryParams,
+                success : function(collection) {
+                    log.debug("FilesCollection retrieved, size: " + collection.models.length);
+                },
+                error: function(collection, resp) {
+                    log.warn("Error retrieving collection");
+                    console.error(resp);
+                },
+            });
         },
 
         render : function() {
-            // _.each(this.collection.models, function(config) {
-            //     _.each(config.getQN("omnom:assignment").models, function(ass) {
-            //         if (config.get("workflow")) { return; }
-            //         console.log(ass);
-            //         var forParamId = ass.getQN("omnom:forParam").id;
-            //         if(/\/workflow$/.test(forParamId)) {
-            //             config.set("workflow", ass.getQN("omnom:parameterValue"));
-            //         }
-            //     });
-            // });
-
-
-            // this.collection = new WorkflowConfigCollection( this.collection.models
-                // // _.filter(this.collection.models, function(model) { return model.get("workflow") !== null; }));
-                // // _.filter(this.collection.models, function(model) { return true; }));
-            // );
-            // var collectionArray = this.collection.filter(function(model) { return model.get("workflow"); });
             this.renderModel();
-            // this.renderCollection({}, this.listSelector, this.itemView, collectionArray);
             this.renderCollection();
-            sorttable.makeSortable(this.$("table")[0]);
+            // sorttable.makeSortable(this.$("table")[0]);
+            var filterView = new QueryFilterView({
+                $el : this.$(".filter-bar"),
+                parentView: this,
+                showOrHide: 'show',
+                facets: [
+                    {'queryParam': 'user',
+                     'label': 'Creator',
+                     'rdfProp' : RDFNS.expand('dcterms:creator')},
+                ],
+                sortOpts: {
+                    'user' : RDFNS.expand('omnom:fileOwner'),
+                    'modified' : RDFNS.expand('dcterms:modified'),
+                },
+            });
+            filterView.render();
+            this.hideLoadingIndicator();
+            // this.listenTo(this.collection, "sync", this.hideLoadingIndicator);
             return this;
         },
 

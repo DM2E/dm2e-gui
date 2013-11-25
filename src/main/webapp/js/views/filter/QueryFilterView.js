@@ -154,10 +154,13 @@ define([
              * Load facets
              *
              */
+            console.log(that.parentView.collection.url() + '/facets');
             $.ajax({
                 url : that.parentView.collection.url() + '/facets',
+                dataType : "json",
                 success : function(facetMapList) {
                     _.each(facetMapList, function(facetMap){
+                        console.log(facetMapList);
                         _.each(facetMap.values, function(val) {
                             that.$("select[data-filter-prop='" + facetMap.rdfProp + "']")
                                 .append($("<option>")

@@ -12,9 +12,9 @@ define([
 
         model : ConfigModel,
 
-        url : 'api/config/list',
+        url : function() { return 'api/config/list'; }
 
-        comparator : RDFNS.expand('dcterms:created'),
+        // comparator : RDFNS.expand('dcterms:created'),
 
     });
 
