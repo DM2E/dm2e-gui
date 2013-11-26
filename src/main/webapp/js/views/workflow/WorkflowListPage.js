@@ -49,10 +49,11 @@ define([
         fetchCollection : function() {
             var that = this;
             // console.log(this.collection.url());
+            this.collection.reset();
             that.collection.fetch({
                 dataType : "json",
                 processData : true,
-                reset : true,   // important to make sort work
+                reset : true,   // important to make sort work => replaces the collection
                 data : this.queryParams,
                 success : function(collection) {
                     log.debug("WorkflowCollection retrieved, size: " + collection.models.length);
@@ -127,28 +128,21 @@ define([
             var filterView = new QueryFilterView({
                 $el : this.$(".filter-bar"),
                 parentView: this,
-                showOrHide: 'hide',
+                showOrHide: 'show',
                 facets: [
                     {'queryParam': 'user',
                      'label': 'Creator',
                      'rdfProp' : RDFNS.expand('dcterms:creator')},
                 ],
                 sortOpts: {
-                    'created' : RDFNS.expand('dcterms:created'),
+                    'modified' : RDFNS.expand('dcterms:modified'),
                     'creator' : RDFNS.expand('dcterms:creator'),
                 },
             });
             filterView.render();
-            sorttable.makeSortable(this.$("table")[0]);
-            sorttable.innerSortFunction.apply(this.$("th", $("table")[0])[6]);
+            // sorttable.makeSortable(this.$("table")[0]);
             return this;
 		},
 		
-//		saveWorkflow: function() {
-//			log.debug(JSON.stringify(this.model.toJSON(), undefined, 2));
-//			log.debug(this.model.toJSON());
-//			this.model.save();
-//		},
-
 	});
 });

@@ -26,7 +26,7 @@ define([ 'jquery', 'underscore', 'backbone',
         errorInvalid :function(what) {
             new Backbone.BootstrapModal({
                 title : 'Invalid',
-                content : what,
+                content : $("<pre>").html(what).html(),
             }).open();
         },
 

@@ -68,7 +68,7 @@ define([
             $.ajax({
                 url: this.model.id + '/validate',
                 success: function(data) {
-                    dialogs.notify('Config is valid', 'info');
+                    dialogs.notify('Workflow is valid', 'info');
                 },
                 error: function(xhr, textStatus, err) {
                     console.log(arguments);
