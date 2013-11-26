@@ -64,15 +64,22 @@ define([
             },
         },
 
-        validateWorkflow: function() {
+        validateWorkflow: function(callbacks) {
+            if (!callbacks) { callbacks = {}; }
             $.ajax({
                 url: this.model.id + '/validate',
                 success: function(data) {
                     dialogs.notify('Workflow is valid', 'info');
+                    if (callbacks.success) {
+                        callbacks.success();
+                    }
                 },
                 error: function(xhr, textStatus, err) {
                     console.log(arguments);
                     dialogs.errorInvalid(xhr.responseText, 'Workflow');
+                    if (callbacks.error) {
+                        callbacks.error();
+                    }
                 }
             });
         },
@@ -241,8 +248,19 @@ define([
 
         createConfig: function() {
             this.saveWorkflow();
+            // TODO validate
             // Navigate to the config editor
-            window.location.hash = "#config-edit-from/" + this.model.id;
+            var that = this;
+            this.validateWorkflow({
+                success: function() {
+                    dialogs.notify("Workflow is valid, proceed to create config");
+                    // TODO this breaks the back button :-|
+                    window.location.hash = "#config-edit-from/" + that.model.id;
+                },
+                error: function() {
+                    dialogs.notify("Workflow is invalid, refuse to create config", "ERROR");
+                }
+            });
         }
 
     });
