@@ -72,7 +72,7 @@ define([
                 },
                 error: function(xhr, textStatus, err) {
                     console.log(arguments);
-                    dialogs.errorInvalid(xhr.responseText);
+                    dialogs.errorInvalid(xhr.responseText, 'Workflow');
                 }
             });
         },

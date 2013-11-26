@@ -23,10 +23,11 @@ define([ 'jquery', 'underscore', 'backbone',
             }).show();
         },
 
-        errorInvalid :function(what) {
+        errorInvalid :function(what, type) {
+            var content = $("<div>").append($('<pre>').text(what)).html();
             new Backbone.BootstrapModal({
-                title : 'Invalid',
-                content : $("<pre>").html(what).html(),
+                title : 'Invalid ' + type,
+                content : content,
             }).open();
         },
 
