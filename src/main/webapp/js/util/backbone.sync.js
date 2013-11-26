@@ -33,7 +33,7 @@ require([
         var request = originalBackboneSync.call(Backbone, method, model, options);
 
         request.always(function(jqXHR, textStatus, err) {
-            console.log(method, textStatus);
+            log.debug(method, textStatus);
         });
         return request;
     };

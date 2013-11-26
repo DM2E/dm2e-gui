@@ -122,14 +122,13 @@ define([
             ], function(WorkflowEditorPage, WorkflowModel, RDFNS) {
                 var model;
                 if (workflowURL) {
-                    console.error(workflowURL);
                     //                    model = WorkflowModel.findOrCreate({ id: workflowURL});
                     // smelly smelly HACK
                     var TheModel = WorkflowModel.extend({
                         url: workflowURL,
                     });
                     model = new TheModel();
-                    console.warn("Retrieving workflow %o", workflowURL);
+                    log.debug("Retrieving workflow %o", workflowURL);
                     model.url = function() {
                         return workflowURL;
                     };
