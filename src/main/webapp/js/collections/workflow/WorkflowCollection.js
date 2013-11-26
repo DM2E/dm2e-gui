@@ -19,7 +19,7 @@ define([
 
         model : WorkflowModel,
 
-        url : 'api/workflow/list',
+        url : function() { return 'api/workflow/list'; },
 
     });
 });
