@@ -16,6 +16,8 @@ function (
       ParameterModel,
       NS) {
 
+          console.log(WorkflowModel);
+
     var log = logging.getLogger("models.workflow.ConnectorModel");
 
     var theDefaults = {};
@@ -31,13 +33,13 @@ function (
     };
 
     // TODO fix the circular reference: Workflow-Connector-Workflow
-    return RelationalModel.extend({
+    var model = RelationalModel.extend({
 
         defaults: theDefaults,
 
         toJSON : function() {
 //            console.warn(this.getQN("omnom:fromWorkflow"));
-            retJSON = {
+            var retJSON = {
                 id : this.id,
                 uuid : this.cid,
             };
@@ -49,16 +51,18 @@ function (
                 "omnom:toPosition",
                 "omnom:toParam",
             ], function (qname) {
-                if (!this.getQN(qname))
+                if (!this.getQN(qname)) {
                     return;
+                }
 //                console.error(this.getQN(qname));
                 retJSON[NS.expand(qname)] = {};
                 retJSON[NS.expand(qname)][NS.expand("rdf:type")] = NS.expand(rdfRange[qname]);
                 retJSON[NS.expand(qname)].id =  this.getQN(qname).id;
 
                 // THIS IS THE HACK THAT MAKES IT AAAALL WORK
-                if (this.getQN(qname).attributes)
+                if (this.getQN(qname).attributes) {
                     retJSON[NS.expand(qname)].uuid =  this.getQN(qname).attributes.cid;
+                }
             }, this);
             return retJSON;
         },
@@ -104,4 +108,6 @@ function (
             }
         ]
     });
+    model.setup();
+    return model;
 });

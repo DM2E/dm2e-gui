@@ -70,9 +70,11 @@ define([
                     itemClass : "output-param",
                     model : model
                 });
-                console.log(model);
+                // console.log(model);
                 this.appendHTML(subview, ".output-params");
             }, this);
+
+            console.log(this.model);
             return this;
         }
 

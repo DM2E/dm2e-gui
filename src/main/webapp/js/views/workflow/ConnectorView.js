@@ -31,7 +31,8 @@ define([
 
         initialize : function() {
             log.debug("Initializing ConnectorView.");
-//            this.listenTo(this.model, "change", this.render);
+            // this.listenTo(this.model, "change", this.render);
+            // console.log(this.model);
         },
 
         render : function() {

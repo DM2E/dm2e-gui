@@ -157,7 +157,8 @@ define([
              * Positions View
              */
             this.positionListView = Vm.createView(this, 'PositionListView', PositionListView, {
-                collection: this.model.getQN("omnom:workflowPosition")
+                collection: this.model.getQN("omnom:workflowPosition"),
+                workflow: this.model,
             });
 
             /*

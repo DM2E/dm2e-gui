@@ -30,10 +30,11 @@ define([
 
 		template : positionListTemplate,
 
-		initialize : function() {
+		initialize : function(options) {
 			log.debug("Initialized PositionListView.js");
 			this.listenTo(this.collection, "add", this.render);
 			this.listenTo(this.collection, "remove", this.render);
+			this.workflow = options.workflow;
 		},
 		
 //		addItem : function() {
@@ -65,6 +66,7 @@ define([
 					var newPos = {};
 					log.debug("foo");
 					newPos[NS.expand("omnom:webservice")] = ui.draggable.data("model");
+					newPos[NS.expand("omnom:inWorkflow")] = that.workflow.id;
 					that.collection.add(newPos);
 					log.debug("bar");
 				}

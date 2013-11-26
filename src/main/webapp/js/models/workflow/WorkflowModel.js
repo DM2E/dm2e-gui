@@ -1,6 +1,7 @@
 //Filename: WorkflowModel.js
 
 define(['jquery', // lib/jquery/jquery
+    'exports',
     'underscore', // lib/underscore/underscore
     'RelationalModel', // lib/backbone/backbone
     'logging', // logging
@@ -14,6 +15,7 @@ define(['jquery', // lib/jquery/jquery
         'collections/workflow/ConnectorCollection',
         'collections/workflow/WebserviceCollection',
 ], function($,
+    exports,
     _,
     RelationalModel,
     logging,
@@ -28,7 +30,7 @@ define(['jquery', // lib/jquery/jquery
     WebserviceCollection
            ) {
 
-    var log = logging.getLogger("WorkflowModel.js");
+    var log = logging.getLogger("views.workflow.WorkflowModel");
 
     var theDefaults = {};
 

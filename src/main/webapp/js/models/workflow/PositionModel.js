@@ -33,11 +33,12 @@ define([ 'jquery',
 				relatedModel : WebserviceModel,
                 includeInJSON : ["id", "uuid"],
 			},
-////            {
-////				type : Backbone.HasOne,
-////				key : NS.getQN("omnom:inWorkflow"),
-////				relatedModel : WorkflowModel,
-////			},
+           {
+                type : Backbone.HasOne,
+                key : NS.expand("omnom:inWorkflow"),
+                relatedModel : WorkflowModel,
+                includeInJSON : ["id", "uuid"],
+            },
 		],
 
 	});
