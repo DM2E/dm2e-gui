@@ -116,11 +116,21 @@ define([
                     html_escape : HtmlUtils.html_escape,
 
                     /**
-                     * Displays dates nicely
+                     * Displays dates nicely ("xx units ago")
                      */
                     human_readable_date : function(val) {
                       return humaneDate(new Date(val));
                     },
+                    /**
+                     * Displays dates nicely ("YYYY-MM-DD HH:MM:SS")
+                     */
+                    pretty_iso8601 : function(val) {
+                        val = val.replace('T', '&nbsp;');
+                        val = val.replace(/\..*$/, '');
+                        val = val.replace(/-/g, '&#8209;');
+                        return val;
+                    }
+                    
                 },
                 UriUtils,
                 SizeUtils,
