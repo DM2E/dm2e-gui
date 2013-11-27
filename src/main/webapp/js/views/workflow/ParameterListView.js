@@ -79,14 +79,30 @@ define([
             this.$(".add-parameter-dropzone").droppable({
                 accept: function(draggable) {
                     log.debug("Workflow: " + workflow.id);
-                    if (!draggable.hasClass("parameter"))
+
+                    // Don't accept DOM elements that aren't representations of parameters
+                    if (!draggable.hasClass("parameter")) {
                         return false;
+                    }
                     var source = draggable.data("model");
                     var sourceParent = draggable.data("parentModel");
-                    if (source.inputOrOutput !== parameterList.inputOrOutput)
+
+                    // Don't accept output parameters as input parameters
+                    if (source.inputOrOutput !== parameterList.inputOrOutput) {
                         return false;
-                    if (sourceParent === workflow)
+                    }
+                    // Do not allow copying workflow input parameters
+                    if (sourceParent === workflow) {
                         return false;
+                    }
+                    // Don't allow copying the same parameter twice (#61, #3)
+                    // TODO this is a bit crude actually because it only compares the parameter label
+                    // but it works fine for 99% of the cases, i.e. in the gui
+                    var query  = {};
+                    NS.rdf_attr("rdfs:label", query, source.getQN("rdfs:label"));
+                    if (parameterList.collection.where(query).length > 0 ) {
+                        return false;
+                    }
                     return true;
                 },
                 drop: function(event, ui) {
