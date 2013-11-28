@@ -44,10 +44,11 @@ define([
         render : function() {
             this.$el.html(this.createHTML(this.template, { model: this.model.toJSON() }));
 
-            if (this.model.id)
+            if (this.model.id) {
                 this.$el.attr("data-backbone-modelid", this.model.id);
-            else
+            } else {
                 this.$el.attr("data-backbone-modelid", this.model.cid);
+            }
 
             Vm.cleanupSubViews(this);
 
