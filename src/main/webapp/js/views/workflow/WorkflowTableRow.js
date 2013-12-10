@@ -23,5 +23,20 @@ define([
 
         template : workflowTableRowTemplate,
 
-    })
+        events : {
+            "click #delete-workflow" : function() {
+                console.log("Deleting " + this.model.id);
+                var thisModel = this.model;
+                $.ajax({
+                    async: false,
+                    url: thisModel.id,
+                    type: "DELETE",
+                    success: function() {
+                        thisModel.collection.remove(thisModel);
+                    }
+                });
+            }
+        }
+
+    });
 });

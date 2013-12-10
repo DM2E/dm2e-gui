@@ -37,9 +37,6 @@ define([
 
         itemView: WorkflowTableRow,
 
-        events : {
-		},
-
         hideLoadingIndicator : function() {
             this.$(".loading-indicator").hide();
             if (this.collection.models.length === 0) {
@@ -106,6 +103,7 @@ define([
             }, this);
 			
 //			this.listenTo(this.collection, "add", this.render);
+            this.listenTo(this.collection, "remove", this.render);
             this.listenTo(this.collection, "sync", this.render);
             this.listenTo(this.collection, "sync", this.hideLoadingIndicator);
             // this.collection.on('sync', this.renderFilterBar, this);
