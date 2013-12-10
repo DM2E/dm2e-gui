@@ -98,9 +98,12 @@ define([
             // this.listenTo(this.model.getQN("omnom:inputParam"), "remove", this.saveWorkflow);
             // this.listenTo(this.model.getQN("omnom:parameterConnector"), "add", this.saveWorkflow);
             // this.listenTo(this.model.getQN("omnom:parameterConnector"), "remove", this.saveWorkflow);
-            this.listenTo(this.model.getQN("omnom:workflowPosition"), "add", this.saveWorkflow);
+            this.listenTo(this.model.getQN("omnom:workflowPosition"), "add", function(pos) {
+                console.error(pos);
+                dialogs.notify("Saved Workflow because position was added", "INFO");
+                this.saveWorkflow();
+            });
             this.listenTo(this.model.getQN("omnom:workflowPosition"), "remove", function(pos) {
-                console.log(arguments);
                 var toBeRemoved = [];
                 _.each(this.model.getQN("omnom:parameterConnector").models, function(conn) {
                     if(conn.getQN("omnom:toPosition") && pos.id === conn.getQN("omnom:toPosition").id) {
@@ -110,21 +113,22 @@ define([
                     }
                 });
                 that.model.getQN("omnom:parameterConnector").remove(toBeRemoved);
+                dialogs.notify("Saved Workflow because position was removed", "INFO");
                 this.saveWorkflow();
             });
 
-            this.listenTo(this.model.getQN("omnom:outputParam"), "remove", function() {
-              console.error("I NOTICED YOU STEALING MY PARAMZ!");
-              console.error("I NOTICED YOU STEALING MY PARAMZ!");
-              console.error("I NOTICED YOU STEALING MY PARAMZ!");
-              console.error("I NOTICED YOU STEALING MY PARAMZ!");
-              console.error("I NOTICED YOU STEALING MY PARAMZ!");
-              console.error("I NOTICED YOU STEALING MY PARAMZ!");
-              console.error("I NOTICED YOU STEALING MY PARAMZ!");
-              console.error("I NOTICED YOU STEALING MY PARAMZ!");
-              console.error("I NOTICED YOU STEALING MY PARAMZ!");
-              console.error("I NOTICED YOU STEALING MY PARAMZ!");
-            });
+            // this.listenTo(this.model.getQN("omnom:outputParam"), "remove", function() {
+            //   console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            //   console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            //   console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            //   console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            //   console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            //   console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            //   console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            //   console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            //   console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            //   console.error("I NOTICED YOU STEALING MY PARAMZ!");
+            // });
             // NOTE cannot reference $el yet because app.js assigns it to the #page at render time => render
             //            this.$el.attr("data-backbone-modelid", this.model.id);
 
@@ -212,7 +216,7 @@ define([
 
         saveWorkflow: function() {
             // log.debug(JSON.stringify(this.model.toJSON(), undefined, 2));
-            console.debug(this.model.toJSON());
+            // console.debug(this.model.toJSON());
             this.setButtonLoading("button#save-workflow");
             var that = this;
 
