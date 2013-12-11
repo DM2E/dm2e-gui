@@ -53,6 +53,9 @@ define([
             "click button#render": function() {
                 this.render();
             },
+            "click button#auto-wire": function() {
+                this.autoWire();
+            },
             "click button#visualize": function() {
                 this.saveWorkflow();
               var visualizationImage = $('<img />').attr('src', this.model.id + "/png");
@@ -263,6 +266,20 @@ define([
                 },
                 error: function() {
                     dialogs.notify("Workflow is invalid, refuse to create config", "ERROR");
+                }
+            });
+        },
+
+        autoWire: function() {
+            var that = this;
+            var thisModel = this.model;
+            console.log(thisModel);
+            $.ajax({
+                url: thisModel.id + "/autowire",
+                type: "POST",
+                success: function(data) {
+                    dialogs.notify("Auto-Wiring succeeded");
+                    thisModel.fetch();
                 }
             });
         }

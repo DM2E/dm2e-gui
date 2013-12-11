@@ -4,6 +4,7 @@ define([
     'BaseView', // lib/backbone/backbone
     'logging', // logging
     'vm',
+    'util/dialogs',
     'constants/RDFNS',
     'text!templates/workflow/workflowTableRowTemplate.html'
 ], function($,
@@ -11,6 +12,7 @@ define([
             BaseView,
             logging,
             Vm,
+            dialogs,
             NS,
             workflowTableRowTemplate
     ) {
@@ -32,6 +34,7 @@ define([
                     url: thisModel.id,
                     type: "DELETE",
                     success: function() {
+                        dialogs.notify("Deleted workflow");
                         thisModel.collection.remove(thisModel);
                     }
                 });
