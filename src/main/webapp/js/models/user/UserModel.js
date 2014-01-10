@@ -32,7 +32,6 @@ define([
     }));
     NS.rdf_attr("omnom:webservice", theDefaults, _.map([
             'service/xslt',
-            'service/xslt-zip',
             'publish',
             'service/zip-iterator',
             'service/demo'
