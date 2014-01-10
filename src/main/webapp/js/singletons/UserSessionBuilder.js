@@ -72,7 +72,6 @@ define([
             var user_ws = user.getQN("omnom:webservice");
             _.each([
                 'service/xslt',
-                'service/xslt-zip',
                 'publish',
                 'service/zip-iterator',
                 'service/demo'
