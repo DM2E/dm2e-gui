@@ -36,7 +36,6 @@
         <!-- Gateway LOGIN and LOGOUT URLs -->
         <gatewayLoginUrl>$$$DM2E_JOSSO_LOGIN$$$</gatewayLoginUrl>
         <gatewayLogoutUrl>$$$DM2E_JOSSO_LOGOUT$$$</gatewayLogoutUrl>
-        <gatewayLogoutUrl></gatewayLogoutUrl>
         <!--
         <gatewayLoginUrl>http://localhost:8080/josso/signon/login.do</gatewayLoginUrl>
         <gatewayLogoutUrl>http://localhost:8080/josso/signon/logout.do</gatewayLogoutUrl>
@@ -47,7 +46,7 @@
             <!-- Other properties for ws-service-locator :
             username, password, servicesWebContext, transportSecurity
             -->
-            <protocol:ws-service-locator endpoint="dm2e-security.rz-berlin.mpg.de" />
+            <protocol:ws-service-locator endpoint="$$$DM2E_JOSSO_HOST$$$" />
         </gatewayServiceLocator>
 
         <configuration>

@@ -28,7 +28,7 @@
     </fileSets>
     <!-- <dependencySets> -->
         <!-- <dependencySet> -->
-            <!-- <outputDirectory>/webapps/omnom</outputDirectory> -->
+            <!-- <outputDirectory>/webapps/ROOT</outputDirectory> -->
             <!-- <includes> -->
                 <!-- <include>${project.groupId}:${project.artifactId}</include> -->
             <!-- </includes> -->

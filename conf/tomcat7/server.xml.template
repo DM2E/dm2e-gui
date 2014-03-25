@@ -60,7 +60,7 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL HTTP/1.1 Connector on port 8080
     -->
-    <Connector connectionTimeout="20000" port="8080" protocol="HTTP/1.1" redirectPort="8443"/>
+    <Connector connectionTimeout="20000" port="$$$DM2E_LOCALPORT$$$" protocol="HTTP/1.1" redirectPort="8443"/>
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"
@@ -86,10 +86,11 @@
          http://tomcat.apache.org/tomcat-7.0-doc/proxy-howto.html 
         kb Tue Jul 23 15:35:16 CEST 2013
     -->
-    <!-- CHANGE_ME:  -->
+    <!-- CHANGE_ME: 
      <Connector port="$$$DM2E_LOCALPORT$$$" 
          proxyName="$$$DM2E_HOSTNAME$$$" 
          proxyPort="$$$DM2E_PORT$$$"/>
+ -->
     <!-- An Engine represents the entry point (within Catalina) that processes
          every request.  The Engine implementation for Tomcat stand alone
          analyzes the HTTP headers included with the request, and passes them
