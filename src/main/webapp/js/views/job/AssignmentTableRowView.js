@@ -30,10 +30,8 @@ define([
           if (parameterValue.substring(0, 19) === "http://data.dm2e.eu") {
               this.$("div.assignment-actions").append($("<a></a>")
                                                       .addClass("btn btn-success btn-small")
-                                                      .attr("href", parameterValue.replace(
-                                                          /http:\/\/data.dm2e.eu\/data/, 
-                                                          'http://lelystad.informatik.uni-mannheim.de:3000/data/ingested'))
-                                                          .append("Show in Pubby"))
+                                                      .attr("href", parameterValue)
+                                                      .append("Show in Pubby"))
                                                           ;
           } else if (parameterValue.substring(0, 7) === "http://") {
               this.$("div.assignment-actions").append($("<a></a>")
